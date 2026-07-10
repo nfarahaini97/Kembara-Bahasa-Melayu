@@ -599,7 +599,63 @@
             ]
         };
 
-        // DATA TAHUN 2 & TAHUN 3 
+            // ================= BANK SOALAN TAHUN 2 (LENGKAP 7 AKTIVITI, 10-20 SOALAN) =================
+        const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
+        // TOPIK 1: KATA NAMA KHAS (15 SOALAN)
+            // ==========================================
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Nama sekolah saya ialah ____.", a: ["SJKC Chung Hua", "sekolah"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Nama kucing saya ialah ____.", a: ["Si Comel", "kucing"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Perayaan ____ disambut oleh orang Cina.", a: ["Tahun Baru Cina", "hari raya"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "____ ialah guru kelas saya.", a: ["Cikgu Aminah", "cikgu"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Hari lahir saya pada bulan ____.", a: ["Mac", "bulan"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Negara kita ialah ____.", a: ["Malaysia", "negara"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "____ ialah sahabat baik saya.", a: ["Ali", "kawan"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Nama bank itu ialah ____.", a: ["Maybank", "bank"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "____ ialah sungai yang terpanjang di Malaysia.", a: ["Sungai Rajang", "sungai"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Hari cuti hujung minggu jatuh pada hari ____.", a: ["Ahad", "hari"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Adik suka makan biskut jenama ____.", a: ["Julie's", "biskut"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Ayah memandu kereta ____ ke tempat kerja.", a: ["Proton Saga", "kereta"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Buku cerita itu diterbitkan oleh ____.", a: ["Dewan Bahasa dan Pustaka", "penerbit"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Ibu membeli belah di pasar raya ____.", a: ["Lotus's", "pasar raya"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Nama Khas", q: "Ibu kota negara kita ialah ____.", a: ["Kuala Lumpur", "bandar"], c: 0 },
+             ]
+        };
+        // TOPIK 2: KATA KERJA (15 SOALAN)
+             // ==========================================
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Adik ____ susu di dalam cawan.", a: ["minum", "makan"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Bapa ____ surat khabar setiap pagi.", a: ["membaca", "menulis"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Murid-murid ____ dengan laju di padang.", a: ["berlari", "tidur"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Ibu ____ sayur kubis di dapur.", a: ["memotong", "berenang"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Datuk ____ pokok bunga di taman.", a: ["menyiram", "makan"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Kakak ____ baju yang basah di ampaian.", a: ["menjemur", "melompat"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Saya ____ gigi dua kali sehari.", a: ["memberus", "memotong"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Pekerja itu ____ sampah ke dalam lori.", a: ["membuang", "menyimpan"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Ali ____ bola dengan kuat ke arah gol.", a: ["menendang", "menarik"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Burung helang itu ____ tinggi di langit.", a: ["terbang", "berjalan"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Ibu ____ nasi lemak yang sangat lazat.", a: ["memasak", "mencuci"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Adik ____ gambar bunga matahari.", a: ["melukis", "menjahit"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Kami ____ buku dengan senyap di perpustakaan.", a: ["membaca", "bermain"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Abang ____ basikal baharunya pusing kampung.", a: ["menunggang", "memandu"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Kerja", q: "Siti ____ lantai yang kotor itu sehingga bersih.", a: ["mempunyai", "mengesat"], c: 1 },
+        // TOPIK 3: KATA ADJEKTIF (15 SOALAN)
+            // ==========================================
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Bunga mawar merah itu sangat ____.", a: ["cantik", "tajam"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Badan gajah itu sangat ____.", a: ["besar", "kecil"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Masakan sup ayam ibu sangat ____.", a: ["sedap", "bising"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Bantal yang baharu dibeli itu terasa ____.", a: ["lembut", "keras"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Lawan bagi perkataan 'panjang' ialah ____.", a: ["pendek", "tinggi"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Batu di sungai itu sangat ____.", a: ["keras", "empuk"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Lorong ke rumah nenek sangat ____.", a: ["sempit", "luas"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Air kopi yang baru dibancuh itu masih ____.", a: ["panas", "sejuk"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Amir berasa ____ apabila mendapat hadiah.", a: ["gembira", "takut"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Lampu bilik itu sangat ____.", a: ["terang", "malas"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Kasut yang kotor itu perlu dicuci hingga ____.", a: ["bersih", "wangi"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Suara penyanyi jemputan itu sangat ____.", a: ["merdu", "pahit"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Murid yang ____ akan disayangi oleh guru.", a: ["rajin", "nakal"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Pisau yang ____ itu disimpan di tempat selamat.", a: ["tajam", "tumpul"], c: 0 },
+            { jenis: "mcq", tajuk: "Kata Adjektif", q: "Buah tembikai yang masak itu rasanya ____.", a: ["manis", "masam"], c: 0 },
+        
+
         for(let t=2; t<=3; t++) {
             for(let a=1; a<=10; a++) {
                 let mType = (a === 2 || a === 5 || a === 7) ? "blank" : ((a === 6) ? "drag_drop" : "mcq");
