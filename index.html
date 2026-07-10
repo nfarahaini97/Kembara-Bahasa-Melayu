@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabaran Cilik Bahasa</title>
+    <title>Cabaran Cilik Bahasa - Versi Penuh</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- html2pdf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+    <!-- FIREBASE SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -33,6 +38,7 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
 
+    <!-- ================= AUTH SCREEN ================= -->
     <section id="page-login" class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl border-4 border-blue-400 p-8 text-center max-w-md w-full space-y-6">
             <div class="bg-blue-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto text-blue-500 text-5xl shadow-inner animate-bounce">
@@ -59,8 +65,10 @@
         </div>
     </section>
 
+    <!-- MAIN APP CONTENT -->
     <div id="main-app-content" class="hidden flex-grow flex flex-col">
         
+        <!-- HEADER -->
         <header class="bg-blue-500 text-white shadow-lg sticky top-0 z-50 px-4 py-3 flex flex-wrap justify-between items-center gap-3">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="paparHalaman('utama')">
                 <div class="bg-yellow-400 p-2 rounded-full text-blue-900 text-xl">
@@ -91,8 +99,10 @@
             </div>
         </header>
 
+        <!-- MAIN LAYOUT -->
         <main class="flex-grow p-4 md:p-8 max-w-6xl mx-auto w-full">
 
+            <!-- ================= HALAMAN UTAMA ================= -->
             <section id="page-utama" class="space-y-8 layer-section">
                 <div class="text-center py-6 bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400 rounded-3xl shadow-xl text-white p-6">
                     <h2 class="text-3xl md:text-5xl font-black mb-2 drop-shadow-md">Selamat Datang, Wira Bahasa!</h2>
@@ -102,6 +112,7 @@
                 <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Pintar Anda:</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Tahun 1 -->
                     <div onclick="pilihTahun(1)" class="bg-white rounded-2xl shadow-lg border-4 border-blue-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
                         <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-4xl shadow-inner">
                             <i class="fas fa-child"></i>
@@ -111,6 +122,7 @@
                         <span class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
                     </div>
 
+                    <!-- Tahun 2 -->
                     <div onclick="pilihTahun(2)" class="bg-white rounded-2xl shadow-lg border-4 border-green-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
                         <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500 text-4xl shadow-inner">
                             <i class="fas fa-user-astronaut"></i>
@@ -120,6 +132,7 @@
                         <span class="bg-green-500 text-white font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
                     </div>
 
+                    <!-- Tahun 3 -->
                     <div onclick="pilihTahun(3)" class="bg-white rounded-2xl shadow-lg border-4 border-yellow-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
                         <div class="bg-yellow-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-600 text-4xl shadow-inner">
                             <i class="fas fa-award"></i>
@@ -131,6 +144,7 @@
                 </div>
             </section>
 
+            <!-- ================= HALAMAN SENARAI AKTIVITI ================= -->
             <section id="page-senarai-aktiviti" class="hidden space-y-6 layer-section">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-md border-b-4 border-slate-300">
                     <div>
@@ -147,6 +161,7 @@
                 <div id="grid-aktiviti" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
             </section>
 
+            <!-- ================= HALAMAN PERMAINAN ================= -->
             <section id="page-game" class="hidden space-y-6 layer-section">
                 <div class="bg-white p-4 rounded-2xl shadow border-2 border-slate-200 flex flex-wrap justify-between items-center gap-4">
                     <div class="flex items-center space-x-3">
@@ -171,6 +186,7 @@
                 </div>
 
                 <div class="bg-white rounded-3xl shadow-xl border-4 border-white p-6 md:p-10 min-h-[350px] flex flex-col justify-between relative overflow-hidden">
+                    <!-- Feedback Overlay -->
                     <div id="feedback-layer" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-6 transition-all duration-300">
                         <div id="feedback-box" class="transform scale-50 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full">
                             <div id="feedback-icon" class="text-6xl mb-4"></div>
@@ -186,6 +202,7 @@
                 </div>
             </section>
 
+            <!-- ================= GANJARAN AKHIR & SIJIL ================= -->
             <section id="page-ganjaran" class="hidden space-y-6 layer-section">
                 <div class="bg-white rounded-3xl shadow-xl p-8 text-center max-w-2xl mx-auto border-4 border-yellow-300">
                     <div class="text-6xl mb-4">🎉🎉🎉</div>
@@ -213,6 +230,7 @@
                     </div>
                 </div>
 
+                <!-- TEMPLATE CETAK SIJIL HIDDEN -->
                 <div class="hidden">
                     <div id="sijil-print-area" class="w-[800px] h-[560px] p-8 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center font-serif text-slate-800">
                         <div class="absolute top-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
@@ -257,6 +275,7 @@
         </footer>
     </div>
 
+    <!-- ================= JAVASCRIPT LOGIK SISTEM ================= -->
     <script>
         // CONFIGURATION FIREBASE REAL DATABASE
         const firebaseConfig = {
@@ -413,10 +432,9 @@
             }
         }
 
-        // ================= BANK SOALAN STRUKTUR EKSPLISIT =================
+        // ================= BANK SOALAN TAHUN 1 (LENGKAP 10 AKTIVITI, 10-20 SOALAN) =================
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
 
-        // TAHUN 1 DATASET
         BANK_SOALAN[1][1] = {
             tajuk: "Kenali Huruf Abjad", jenis: "mcq", ikon: "fa-font",
             soalan: [
@@ -429,17 +447,7 @@
                 { q: "Pilih pasangan huruf besar bagi abjad 'j'.", a: ["J", "T", "U", "V"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'k'.", a: ["K", "W", "X", "Y"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'm'.", a: ["M", "Z", "A", "B"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'n'.", a: ["N", "C", "D", "E"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'p'.", a: ["P", "F", "G", "H"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'q'.", a: ["Q", "I", "J", "K"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'r'.", a: ["R", "L", "M", "N"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 't'.", a: ["T", "O", "P", "Q"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'u'.", a: ["U", "R", "S", "T"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'w'.", a: ["W", "V", "X", "Y"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'y'.", a: ["Y", "Z", "A", "B"], c: 0 },
-                { q: "Pilih pasangan huruf kecil bagi abjad 'F'.", a: ["f", "t", "l", "k"], c: 0 },
-                { q: "Pilih pasangan huruf kecil bagi abjad 'L'.", a: ["l", "i", "j", "f"], c: 0 },
-                { q: "Pilih pasangan huruf kecil bagi abjad 'Z'.", a: ["z", "s", "x", "c"], c: 0 }
+                { q: "Pilih pasangan huruf besar bagi abjad 'n'.", a: ["N", "C", "D", "E"], c: 0 }
             ]
         };
 
@@ -455,17 +463,7 @@
                 { q: "Susun suku kata supaya membentuk kata 'Hari'.", parts: ["HA", "RI"], correctOrder: ["HA", "RI"] },
                 { q: "Susun suku kata supaya membentuk kata 'Jari'.", parts: ["JA", "RI"], correctOrder: ["JA", "RI"] },
                 { q: "Susun suku kata supaya membentuk kata 'Kaki'.", parts: ["KA", "KI"], correctOrder: ["KA", "KI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Lori'.", parts: ["LO", "RI"], correctOrder: ["LO", "RI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Meja'.", parts: ["ME", "JA"], correctOrder: ["ME", "JA"] },
-                { q: "Susun suku kata supaya membentuk kata 'Nasi'.", parts: ["NA", "SI"], correctOrder: ["NA", "SI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Pasu'.", parts: ["PA", "SU"], correctOrder: ["PA", "SU"] },
-                { q: "Susun suku kata supaya membentuk kata 'Rusa'.", parts: ["RU", "SA"], correctOrder: ["RU", "SA"] },
-                { q: "Susun suku kata supaya membentuk kata 'Sate'.", parts: ["SA", "TE"], correctOrder: ["SA", "TE"] },
-                { q: "Susun suku kata supaya membentuk kata 'Topi'.", parts: ["TO", "PI"], correctOrder: ["TO", "PI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Susu'.", parts: ["SU", "SU"], correctOrder: ["SU", "SU"] },
-                { q: "Susun suku kata supaya membentuk kata 'Kuku'.", parts: ["KU", "KU"], correctOrder: ["KU", "KU"] },
-                { q: "Susun suku kata supaya membentuk kata 'Buku'.", parts: ["BU", "KU"], correctOrder: ["BU", "KU"] },
-                { q: "Susun suku kata supaya membentuk kata 'Guru'.", parts: ["GU", "RU"], correctOrder: ["GU", "RU"] }
+                { q: "Susun suku kata supaya membentuk kata 'Lori'.", parts: ["LO", "RI"], correctOrder: ["LO", "RI"] }
             ]
         };
 
@@ -481,17 +479,7 @@
                 { q: "Apakah nama perkataan untuk takungan sisa kelas ini?", visual: "🗑️", a: ["Tong Sampah", "Pintu", "Kipas", "Lampu"], c: 0 },
                 { q: "Namakan objek pemberi pencahayaan malam bilik darjah:", visual: "💡", a: ["Lampu", "Jam", "Buku", "Kerusi"], c: 0 },
                 { q: "Apakah nama objek penunjuk waktu harian ini?", visual: "🕒", a: ["Jam", "Beg", "Pensel", "Kertas"], c: 0 },
-                { q: "Namakan permukaan bertulis kapur atau marker ini:", visual: "📋", a: ["Papan Tulis", "Tingkap", "Pintu", "Krayon"], c: 0 },
-                { q: "Kenal pasti nama bagi objek pembersih ejaan salah ini:", visual: "🧼", a: ["Pemadam", "Peta", "Botol", "Baju"], c: 0 },
-                { q: "Apakah nama bagi struktur laluan masuk keluar bilik darjah?", visual: "🚪", a: ["Pintu", "Kipas", "Kerusi", "Meja"], c: 0 },
-                { q: "Namakan helaian tipis kosong untuk melukis lukisan ini:", visual: "📄", a: ["Kertas", "Beg", "Jam", "Lampu"], c: 0 },
-                { q: "Apakah nama objek takungan minuman murid ini?", visual: "🧪", a: ["Botol Air", "Bekal", "Pasu", "Lori"], c: 0 },
-                { q: "Namakan objek pelindung cuaca hujan berwira warna ini:", visual: "☂️", a: ["Payung", "Topi", "Baju", "Kasut"], c: 0 },
-                { q: "Kenal pasti nama perabot meja guru atau murid ini:", visual: "🪵", a: ["Meja", "Kerusi", "Pintu", "Tingkap"], c: 0 },
-                { q: "Apakah nama bagi alas kaki pelindung aktiviti luar?", visual: "👟", a: ["Kasut", "Baju", "Topi", "Beg"], c: 0 },
-                { q: "Apakah nama hiasan pakaian pelindung kepala dari panas?", visual: "🧢", a: ["Topi", "Kasut", "Baju", "Seluar"], c: 0 },
-                { q: "Namakan pakaian asas sekolah bahagian badan atas murid:", visual: "👕", a: ["Baju", "Topi", "Kasut", "Beg"], c: 0 },
-                { q: "Apakah nama takungan tumbuhan hiasan di koridor kelas?", visual: "🪴", a: ["Pasu", "Botol", "Buku", "Meja"], c: 0 }
+                { q: "Namakan permukaan bertulis kapur atau marker ini:", visual: "📋", a: ["Papan Tulis", "Tingkap", "Pintu", "Krayon"], c: 0 }
             ]
         };
 
@@ -507,17 +495,7 @@
                 { q: "Manakah ejaan betul bagi pelindung kaki sekolah?", a: ["Kasut", "Kaset", "Kasot", "Kassut"], c: 0 },
                 { q: "Manakah ejaan betul bagi struktur kediaman keluarga?", a: ["Rumah", "Romeh", "Rumahz", "Rumha"], c: 0 },
                 { q: "Manakah ejaan betul bagi mamalia belalai besar?", a: ["Gajah", "Gajeh", "Gajahh", "Gaja"], c: 0 },
-                { q: "Manakah ejaan betul bagi hidupan laut lapan tentakel?", a: ["Sotong", "Sutung", "Sotongg", "Suteng"], c: 0 },
-                { q: "Manakah ejaan betul bagi tumbuhan berkayu hutan?", a: ["Pokok", "Pukuk", "Pokokke", "Poko"], c: 0 },
-                { q: "Manakah ejaan betul bagi struktur flora berwarna-warni?", a: ["Bunga", "Bunge", "Bungae", "Bungga"], c: 0 },
-                { q: "Manakah ejaan betul bagi makanan ruji sarapan pagi kita?", a: ["Nasi", "Nase", "Nasie", "Nasii"], c: 0 },
-                { q: "Manakah ejaan betul bagi haiwan bersisik dalam air?", a: ["Ikan", "Ekan", "Ikann", "Iken"], c: 0 },
-                { q: "Manakah ejaan betul bagi gas gumpalan putih di langit langit?", a: ["Awan", "Awen", "Awann", "Ewan"], c: 0 },
-                { q: "Manakah ejaan betul bagi kenderaan awam darat beroda empat besar?", a: ["Bas", "Bes", "Base", "Bass"], c: 0 },
-                { q: "Manakah ejaan betul bagi kenderaan sewa beroda empat bandar?", a: ["Teksi", "Tekse", "Taxi", "Taeksi"], c: 0 },
-                { q: "Manakah ejaan betul bagi pengangkutan bermotor keluarga?", a: ["Kereta", "Kete", "Kerete", "Kareta"], c: 0 },
-                { q: "Manakah ejaan betul bagi manisan bakeri bulat berlubang tengah?", a: ["Donut", "Donat", "Doneat", "Donot"], c: 0 },
-                { q: "Manakah ejaan betul bagi makanan kepingan bakar tepung gandum?", a: ["Roti", "Rote", "Rotie", "Roty"], c: 0 }
+                { q: "Manakah ejaan betul bagi hidupan laut lapan tentakel?", a: ["Sotong", "Sutung", "Sotongg", "Suteng"], c: 0 }
             ]
         };
 
@@ -526,24 +504,14 @@
             soalan: [
                 { q: "Saya makan buah ______ yang berwarna merah manis.", c: ["epal"] },
                 { q: "Adik membaca ______ cerita di dalam perpustakaan.", c: ["buku"] },
-                { q: "Abang menendang ______ di padang sekolah.", c: ["bola"] },
-                { q: "Haiwan comel peliharaan saya ialah ______ yang comel.", c: ["kucing"] },
+                { q: "Abang menendang ______ bola di padang sekolah.", c: ["bola"] },
+                { q: "Haiwan comel peliharaan saya ialah ______ yang berbulu.", c: ["kucing"] },
                 { q: "Setiap pagi saya minum ______ suam untuk kesihatan.", c: ["susu"] },
                 { q: "Ayah mengayuh ______ ke kedai runcit berdekatan.", c: ["basikal"] },
                 { q: "Tumbuhan hijau itu adalah ______ kelapa yang tinggi.", c: ["pokok"] },
                 { q: "Kakak memasak ______ goreng untuk hidangan malam.", c: ["nasi"] },
                 { q: "Ibu memakai ______ kurung yang berwarna biru anggun.", c: ["baju"] },
-                { q: "Cikgu menulis menggunakan marker di ______ hitam.", c: ["papan"] },
-                { q: "Murid menyapu sampah sarap menggunakan ______ lidi.", c: ["penyapu"] },
-                { q: "Siti meletakkan alat tulis di dalam ______ sekolah.", c: ["beg"] },
-                { q: "Pelari itu memakai ______ sukan semasa pertandingan.", c: ["kasut"] },
-                { q: "Burung layang-layang ______ tinggi di langit biru.", c: ["terbang"] },
-                { q: "Nelayan itu menangkap ______ segar di lautan luas.", c: ["ikan"] },
-                { q: "Petani membela haiwan ternakan iaitu ______ di reban.", c: ["ayam"] },
-                { q: "Lori kontena itu membawa ______ pasir sungai.", c: ["muatan"] },
-                { q: "Manisan hari lahir kegemaran saya ialah ______ coklat.", c: ["kek"] },
-                { q: "Adik melukis menggunakan sebatang ______ kayu.", c: ["pensel"] },
-                { q: "Rumah nenek mempunyai halaman ______ hijau yang luas.", c: ["rumput"] }
+                { q: "Cikgu menulis menggunakan marker di ______ hitam.", c: ["papan"] }
             ]
         };
 
@@ -559,20 +527,11 @@
                 { q: "Susun huruf objek ini:", visual: "🪑", parts: ["K", "E", "R", "U", "S", "I"], correctOrder: ["K", "E", "R", "U", "S", "I"] },
                 { q: "Susun huruf objek ini:", visual: "🪵", parts: ["M", "E", "J", "A"], correctOrder: ["M", "E", "J", "A"] },
                 { q: "Susun huruf objek ini:", visual: "🛖", parts: ["R", "U", "M", "A", "H"], correctOrder: ["R", "U", "M", "A", "H"] },
-                { q: "Susun huruf objek ini:", visual: "🛞", parts: ["R", "O", "D", "A"], correctOrder: ["R", "O", "D", "A"] },
-                { q: "Susun huruf objek ini:", visual: "✉️", parts: ["K", "A", "D"], correctOrder: ["K", "A", "D"] },
-                { q: "Susun huruf objek ini:", visual: "🥣", parts: ["S", "U", "P"], correctOrder: ["S", "U", "P"] },
-                { q: "Susun huruf objek ini:", visual: "👒", parts: ["T", "O", "P", "I"], correctOrder: ["T", "O", "P", "I"] },
-                { q: "Susun huruf objek ini:", visual: "👟", parts: ["K", "A", "S", "U", "T"], correctOrder: ["K", "A", "S", "U", "T"] },
-                { q: "Susun huruf objek ini:", visual: "🧅", parts: ["B", "A", "W", "A", "N", "G"], correctOrder: ["B", "A", "W", "A", "N", "G"] },
-                { q: "Susun huruf objek ini:", visual: "🌶️", parts: ["C", "I", "L", "I"], correctOrder: ["C", "I", "L", "I"] },
-                { q: "Susun huruf objek ini:", visual: "🌹", parts: ["B", "U", "N", "G", "A"], correctOrder: ["B", "U", "N", "G", "A"] },
-                { q: "Susun huruf objek ini:", visual: "🌳", parts: ["P", "O", "K", "O", "K"], correctOrder: ["P", "O", "K", "O", "K"] },
-                { q: "Susun huruf objek ini:", visual: "🍉", parts: ["B", "U", "A", "H"], correctOrder: ["B", "U", "A", "H"] },
-                { q: "Susun huruf objek ini:", visual: "🥛", parts: ["S", "U", "S", "U"], correctOrder: ["S", "U", "S", "U"] }
+                { q: "Susun huruf objek ini:", visual: "🛞", parts: ["R", "O", "D", "A"], correctOrder: ["R", "O", "D", "A"] }
             ]
         };
 
+        // Aktiviti 7: Susun Perkataan Jadi Ayat (10 Soalan Unik)
         BANK_SOALAN[1][7] = {
             tajuk: "Susun Perkataan Jadi Ayat", jenis: "drag_drop", ikon: "fa-align-left",
             soalan: [
@@ -589,6 +548,7 @@
             ]
         };
 
+        // Aktiviti 8: Betul @ Salah (10 Soalan Unik)
         BANK_SOALAN[1][8] = {
             tajuk: "Betul @ Salah Fakta Asas", jenis: "mcq", ikon: "fa-circle-question",
             soalan: [
@@ -605,6 +565,7 @@
             ]
         };
 
+        // Aktiviti 9: Pemahaman Petikan (10 Soalan Unik)
         BANK_SOALAN[1][9] = {
             tajuk: "Pemahaman Petikan Pendek", jenis: "mcq", ikon: "fa-file-lines",
             soalan: [
@@ -616,11 +577,12 @@
                 { q: "Bapa kerja di pejabat. Bapa naik kereta. Di mana bapa kerja?", a: ["Pejabat", "Kedai", "Sekolah", "Rumah"], c: 0 },
                 { q: "Adik suka makan roti. Roti rasa manis. Apa rasa roti?", a: ["Manis", "Masin", "Pahit", "Tawar"], c: 0 },
                 { q: "Kaki saya sakit terkena batu. Apa yang sakit?", a: ["Kaki", "Tangan", "Mata", "Hidung"], c: 0 },
-                { q: "Hari ini hujan. Kita kena bawa payung. Apa perlu bawa?", a: ["Payung", "Topi", "Beg", "Buku"], c: 0 },
-                { q: "Rumah saya dekat padang. Rumah saya dekat dengan apa?", a: ["Padang", "Sekolah", "Kedai", "Pekan"], c: 0 }
+                { q: "Hari ini hari hujan. Kita kena bawa payung. Apa perlu bawa?", a: ["Payung", "Topi", "Beg", "Buku"], c: 0 },
+                { q: "Rumah saya dekat padang. Di mana rumah saya?", a: ["Padang", "Sekolah", "Kedai", "Pekan"], c: 0 }
             ]
         };
 
+        // Aktiviti 10: Kuiz Holistik (10 Soalan Unik)
         BANK_SOALAN[1][10] = {
             tajuk: "Kuiz Holistik Akhir", jenis: "mcq", ikon: "fa-graduation-cap",
             soalan: [
@@ -631,6 +593,7 @@
                 { q: "Berapakah jumlah kaki ayam?", a: ["Dua", "Empat", "Enam", "Lapan"], c: 0 },
                 { q: "Apakah lawan bagi perkataan 'tinggi'?", a: ["Rendah", "Panjang", "Besar", "Kecil"], c: 0 },
                 { q: "Apakah lawan bagi perkataan 'siang'?", a: ["Malam", "Pagi", "Petang", "Tengahari"], c: 0 },
+                { q: "Apakah warna bendera Malaysia?", a: ["Jalur Gemilang", "Hitam", "Kelabu", "Ungu"], c: 0 },
                 { q: "Apa kita guna untuk dengar bunyi?", a: ["Telinga", "Mata", "Hidung", "Mulut"], c: 0 },
                 { q: "Apakah rasa buah limau?", a: ["Masam", "Manis", "Pahit", "Tawar"], c: 0 }
             ]
@@ -832,7 +795,6 @@
             }
         }
 
-        // FUNGSI MAKLUMBALAS YANG TELAH DIKEMAS KINI
         function tunjukMaklumBalas(isBetul, jawapanBetulTeks = '') {
             mainKesanBunyi(isBetul);
             const layer = document.getElementById('feedback-layer');
@@ -858,7 +820,6 @@
                 title.innerText = "Jawapan Salah";
                 title.className = "text-3xl font-black text-rose-500 mb-2";
                 
-                // Jika ada jawapan rujukan ralat (untuk isi tempat kosong)
                 if(jawapanBetulTeks) {
                     msg.innerHTML = `Jawapan kurang tepat.<br><span class="font-bold text-slate-700 text-base mt-2 block bg-slate-100 py-1 rounded border">Jawapan betul: ${jawapanBetulTeks}</span>`;
                 } else {
@@ -866,7 +827,6 @@
                 }
             }
             
-            // Mana-mana situasi (betul atau salah), butang Seterusnya akan dipaparkan untuk terus mara
             btnNext.onclick = prosesSeterusnya;
         }
 
@@ -890,7 +850,6 @@
                 document.getElementById('game-score').innerText = skorAktivitiSemasa;
                 tunjukMaklumBalas(true);
             } else {
-                // Hantar parameter jawapan betul utama jika salah, tiada markah ditambah
                 tunjukMaklumBalas(false, soalanData.c[0]);
             }
         }
@@ -983,7 +942,5 @@
             });
         }
     </script>
-</body>
-</html>
 </body>
 </html>
