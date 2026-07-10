@@ -29,10 +29,11 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
 
+    <audio id="bg-music" src="https://assets.mixkit.co/active_storage/sfx/123/123.wav" loop preload="auto"></audio>
     <audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" preload="auto"></audio>
     <audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav" preload="auto"></audio>
 
-    <header class="bg-blue-500 text-white shadow-lg sticky top-0 z-50 px-4 py-3 flex justify-between items-center">
+    <header class="bg-blue-500 text-white shadow-lg sticky top-0 z-50 px-4 py-3 flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="paparHalaman('utama')">
             <div class="bg-yellow-400 p-2 rounded-full text-blue-900 text-xl animate-bounce">
                 <i class="fas fa-book-open"></i>
@@ -42,7 +43,17 @@
                 <p class="text-xs text-yellow-200 font-comic">Belajar Sambil Bermain</p>
             </div>
         </div>
-        <div class="flex items-center space-x-4">
+        
+        <div class="flex items-center space-x-2 bg-blue-600/50 px-3 py-1.5 rounded-xl border border-blue-400">
+            <button id="btn-toggle-music" onclick="toggleMuzik()" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
+                <i id="icon-music" class="fas fa-music"></i> <span id="txt-music">Muzik: ON</span>
+            </button>
+            <button id="btn-toggle-sfx" onclick="toggleSfx()" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
+                <i id="icon-sfx" class="fas fa-volume-up"></i> <span id="txt-sfx">Bunyi: ON</span>
+            </button>
+        </div>
+
+        <div class="flex items-center space-x-3">
             <button onclick="paparHalaman('utama')" class="bg-white text-blue-600 px-4 py-1.5 rounded-full font-bold shadow hover:bg-yellow-100 transition btn-bounce text-sm">
                 <i class="fas fa-home mr-1"></i> Utama
             </button>
@@ -225,7 +236,56 @@
     </footer>
 
     <script>
-        // PENJANAAN AUTOMATIK BANK SOALAN (20 SOALAN UNTUK SETIAP INDEKS TOPIK)
+        // CONFIG AUDIO KONTROL GLOBAL
+        let isMusicOn = true;
+        let isSfxOn = true;
+
+        function mainMuzikLatar() {
+            const bgMusic = document.getElementById('bg-music');
+            if (isMusicOn) {
+                bgMusic.play().catch(err => console.log("Muzik memerlukan interaksi pengguna terlebih dahulu."));
+            } else {
+                bgMusic.pause();
+            }
+        }
+
+        function toggleMuzik() {
+            isMusicOn = !isMusicOn;
+            const btn = document.getElementById('btn-toggle-music');
+            const icon = document.getElementById('icon-music');
+            const txt = document.getElementById('txt-music');
+
+            if(isMusicOn) {
+                btn.className = "bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-music";
+                txt.innerText = "Muzik: ON";
+                mainMuzikLatar();
+            } else {
+                btn.className = "bg-rose-500 hover:bg-rose-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-music-slash";
+                txt.innerText = "Muzik: OFF";
+                document.getElementById('bg-music').pause();
+            }
+        }
+
+        function toggleSfx() {
+            isSfxOn = !isSfxOn;
+            const btn = document.getElementById('btn-toggle-sfx');
+            const icon = document.getElementById('icon-sfx');
+            const txt = document.getElementById('txt-sfx');
+
+            if(isSfxOn) {
+                btn.className = "bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-volume-up";
+                txt.innerText = "Bunyi: ON";
+            } else {
+                btn.className = "bg-rose-500 hover:bg-rose-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-volume-mute";
+                txt.innerText = "Bunyi: OFF";
+            }
+        }
+
+        // BANK SOALAN AUTOMATIK (20 SOALAN SETIAP TOPIK = TOTAL 600 SOALAN)
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
 
         // --- TAHUN 1 ---
@@ -445,7 +505,7 @@
             }))
         };
 
-        // PEMUBAH UBAH GLOBAL
+        // PEMUBAH UBAH SISTEM GLOBAL
         let tahunSemasa = 1;
         let topikSemasa = 1;
         let indexSoalanSemasa = 0;
@@ -456,6 +516,10 @@
 
         window.onload = function() {
             kemasKiniSkorPaparan();
+            // Pasang event klik pertama pada dokumen untuk memulakan audio (Sarat keselamatan pelayar/browser)
+            document.body.addEventListener('click', function() {
+                mainMuzikLatar();
+            }, { once: true });
         };
 
         function paparHalaman(idHalaman) {
@@ -479,6 +543,7 @@
             document.getElementById('tajuk-tahun').innerText = `Aktiviti Bahasa Melayu: Tahun ${tahun}`;
             binaSenaraiAktiviti();
             paparHalaman('senarai-aktiviti');
+            mainMuzikLatar(); 
         }
 
         function binaSenaraiAktiviti() {
@@ -551,6 +616,7 @@
 
             paparHalaman('game');
             janaSoalan();
+            mainMuzikLatar();
         }
 
         function janaSoalan() {
@@ -619,27 +685,17 @@
             }
         }
 
-        function mainBunyi(isBetul) {
+        function mainKesanBunyi(isBetul) {
+            if (!isSfxOn) return; // Langpau jika SFX di-tutup
             const snd = document.getElementById(isBetul ? 'snd-correct' : 'snd-wrong');
             if(snd) {
                 snd.currentTime = 0;
-                snd.play().catch(e => {
-                    const context = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = context.createOscillator();
-                    const gainNode = context.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(context.destination);
-                    oscillator.type = isBetul ? 'sine' : 'sawtooth';
-                    oscillator.frequency.setValueAtTime(isBetul ? 523.25 : 130.81, context.currentTime);
-                    gainNode.gain.setValueAtTime(0.1, context.currentTime);
-                    oscillator.start();
-                    oscillator.stop(context.currentTime + 0.2);
-                });
+                snd.play().catch(e => console.log("Gagal mematikan sekatan pelayar audio"));
             }
         }
 
         function tunjukMaklumBalas(isBetul) {
-            mainBunyi(isBetul);
+            mainKesanBunyi(isBetul);
 
             const layer = document.getElementById('feedback-layer');
             const box = document.getElementById('feedback-box');
@@ -746,7 +802,7 @@
             if (indexSoalanSemasa < senaraiSoalanAktif.length) {
                 janaSoalan();
             } else {
-                const markahSediaAda = rekodKemajuan[tahunSemasa][topikSemasa] || 0;
+                const markahSediaAda = rekokKemajuan = rekodKemajuan[tahunSemasa][topikSemasa] || 0;
                 if (skorAktivitiSemasa > markahSediaAda) {
                     rekodKemajuan[tahunSemasa][topikSemasa] = skorAktivitiSemasa;
                     localStorage.setItem('cilik_bahasa_progress', JSON.stringify(rekodKemajuan));
