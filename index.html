@@ -138,11 +138,12 @@
         // ==========================================
         // PANGKALAN DATA SILABUS DSKP KSSR SEPENUHNYA
         // Mapped Berdasarkan: Tahun -> Tema -> Unit -> Topik -> SK -> SP
+        // Dilengkapkan merangkumi kesemua Tahun 1 hingga 6 (Setiap tahun ada unit masing-masing)
         // ==========================================
         const pangkalanDataDSKP = {
             1: {
                 "Tema 1: Kekeluargaan": {
-                    "Unit 1: Rumah Saya": {
+                    "Unit 1: Keluargaku Sayang": {
                         "Huruf dan Abjad": { sk: "SK 1.1", sp: "SP 1.1.1", obj: "Mengecam, mengenal pasti dan membunyikan abjad vokal serta huruf konsonan.", kataPilihan: "Abjad", petunjuk: "Siri huruf tersusun mengikut aturan tertentu dari A hingga Z.", nota: "Abjad Bahasa Melayu mempunyai 26 huruf bermula dari A hingga Z. Ia dibahagikan kepada huruf vokal (a, e, i, o, u) dan huruf konsonan.", cth: "Huruf vokal dalam perkataan 'ayam' ialah a.",
                             latihan: [
                                 { q: "Manakah antara berikut merupakan huruf vokal?", a: "A", b: "B", c: "C", jawapan: "A", huraian: "Huruf vokal ialah a, e, i, o, u." },
@@ -155,11 +156,29 @@
                                 { q: "Perkataan 'bas' mempunyai suku kata...", a: "Terbuka", b: "Tertutup", c: "Campuran", jawapan: "B", huraian: "'Bas' ditutup dengan huruf konsonan 's'." }
                             ]
                         }
+                    },
+                    "Unit 2: Rumah Selesa": {
+                        "Perkataan Mudah": { sk: "SK 2.1", sp: "SP 2.1.2(i)", obj: "Membaca perkataan yang mengandungi suku kata terbuka.", kataPilihan: "Meja", petunjuk: "Perabot tempat menulis atau meletakkan barang.", nota: "Perkataan mudah dibina daripada gabungan suku kata terbuka yang mudah disebut dan difahami makna konseptualnya.", cth: "buku, meja, bola, pasu.",
+                            latihan: [
+                                { q: "Pilih perkataan yang bermaksud tempat duduk.", a: "Meja", b: "Kerusi", c: "Pintu", jawapan: "B", huraian: "Kerusi digunakan secara khusus untuk duduk." },
+                                { q: "Perkataan 'pasu' terdiri daripada suku kata...", a: "Terbuka + Terbuka", b: "Terbuka + Tertutup", c: "Tertutup + Tertutup", jawapan: "A", huraian: "pa (terbuka) dan su (terbuka)." }
+                            ]
+                        }
+                    }
+                },
+                "Tema 2: Kemasyarakatan": {
+                    "Unit 3: Rakan Sekampung": {
+                        "Kata Nama Am Asas": { sk: "SK 5.1", sp: "SP 5.1.1(i)", obj: "Mengenal pasti kata nama am hidup bukan manusia mengikut konteks.", kataPilihan: "Kucing", petunjuk: "Haiwan peliharaan yang comel dan berbulu.", nota: "Kata nama am bagi benda hidup bukan manusia merujuk kepada kumpulan haiwan dan tumbuhan secara umum.", cth: "kucing, burung, pokok, bunga.",
+                            latihan: [
+                                { q: "Manakah contoh kata nama am bagi tumbuhan?", a: "Pokok", b: "Batu", c: "Kereta", jawapan: "A", huraian: "Pokok ialah kata nama am kategori tumbuhan." },
+                                { q: "Perkataan 'kucing' merujuk kepada kategori...", a: "Benda", b: "Haiwan", c: "Tempat", jawapan: "B", huraian: "Kucing ialah jenis hidupan haiwan." }
+                            ]
+                        }
                     }
                 }
             },
             2: {
-                "Tema 2: Kesihatan dan Kebersihan": {
+                "Tema 1: Kesihatan dan Kebersihan": {
                     "Unit 4: Bersih Selalu": {
                         "Kata Nama Am": { sk: "SK 5.1", sp: "SP 5.1.1(i)", obj: "Memahami dan menggunakan kata nama am dengan betul mengikut konteks.", kataPilihan: "Sabun", petunjuk: "Alat pencuci untuk membersihkan badan semasa mandi.", nota: "Kata Nama Am merujuk kepada benda, manusia, haiwan, tempat secara umum. Ditulis dengan huruf kecil kecuali di awal ayat.", cth: "buku, sekolah, kucing, doktor.",
                             latihan: [
@@ -173,13 +192,31 @@
                                 { q: "Manakah kata nama khas bagi haiwan?", a: "Kucing", b: "Si Tompok", c: "Harimau", jawapan: "B", huraian: "Si Tompok ialah nama panggilan khusus untuk haiwan." }
                             ]
                         }
+                    },
+                    "Unit 5: Makanan Berkhasiat": {
+                        "Kata Ganti Nama Diri": { sk: "SK 5.1", sp: "SP 5.1.1(iii)", obj: "Menggunakan kata ganti nama diri pertama dan kedua dengan betul.", kataPilihan: "Saya", petunjuk: "Kata ganti diri merujuk kepada diri sendiri.", nota: "Kata ganti nama diri merujuk kepada manusia. Contoh diri pertama (saya, aku, kami) dan diri kedua (kamu, awak, anda).", cth: "Saya suka makan sayur-sayuran segar.",
+                            latihan: [
+                                { q: "____ dan abang pergi ke kedai runcit membeli buah.", a: "Saya", b: "Kamu", c: "Beliau", jawapan: "A", huraian: "Saya paling sesuai untuk melengkapkan penuturan diri sendiri." },
+                                { q: "Pilih kata ganti nama diri yang digunakan untuk orang kedua.", a: "Dia", b: "Kamu", c: "Mereka", jawapan: "B", huraian: "Kamu digunakan apabila bercakap dengan pihak kedua." }
+                            ]
+                        }
+                    }
+                },
+                "Tema 2: Keselamatan": {
+                    "Unit 6: Selamat di Jalan Raya": {
+                        "Kata Hubung Asas": { sk: "SK 5.1", sp: "SP 5.1.4(i)", obj: "Memahami dan menggunakan kata hubung mudah mengikut konteks.", kataPilihan: "Dan", petunjuk: "Kata hubung gabungan untuk menyambungkan idea setara.", nota: "Kata hubung digunakan untuk menghubungkan dua ayat atau klausa menjadi satu ayat majmuk.", cth: "Ali dan Abu memakai tali pinggang keledar.",
+                            latihan: [
+                                { q: "Siti memegang hulu payung ____ melangkah dengan berhati-hati.", a: "lalu", b: "atau", c: "kerana", jawapan: "A", huraian: "'Lalu' menunjukkan urutan perbuatan secara langsung." },
+                                { q: "Manakah kata hubung pilihan?", a: "Dan", b: "Atau", c: "Tetapi", jawapan: "B", huraian: "'Atau' menunjukkan pilihan antara dua perkara." }
+                            ]
+                        }
                     }
                 }
             },
             3: {
-                "Tema 3: Kebudayaan Kita": {
-                    "Unit 7: Adat Resam": {
-                        "Kata Kerja": { sk: "SK 5.1", sp: "SP 5.1.2", obj: "Mengenal pasti dan membina ayat menggunakan kata kerja transitif.", kataPilihan: "Menari", petunjuk: "Perbuatan menggerakkan badan mengikut irama muzik.", nota: "Kata kerja menyatakan aksi atau perbuatan. Kata kerja transitif memerlukan objek sebagai penyambut.", cth: "membaca buku, menyapu sampah.",
+                "Tema 1: Kebudayaan Kita": {
+                    "Unit 7: Adat Resam & Budaya": {
+                        "Kata Kerja Transitif": { sk: "SK 5.1", sp: "SP 5.1.2", obj: "Mengenal pasti dan membina ayat menggunakan kata kerja transitif.", kataPilihan: "Menari", petunjuk: "Perbuatan menggerakkan badan mengikut irama muzik.", nota: "Kata kerja menyatakan aksi atau perbuatan. Kata kerja transitif memerlukan objek sebagai penyambut.", cth: "membaca buku, menyapu sampah.",
                             latihan: [
                                 { q: "Murid itu sedang ____ buku di perpustakaan.", a: "membaca", b: "membuang", c: "memasak", jawapan: "A", huraian: "Buku ialah objek yang sesuai dibaca." },
                                 { q: "Manakah kata kerja transitif?", a: "Tidur", b: "Menulis", c: "Duduk", jawapan: "B", huraian: "'Menulis' memerlukan penyambut seperti 'surat' atau 'nota'." }
@@ -191,11 +228,29 @@
                                 { q: "Pilih kata adjektif bagi sifat manusia.", a: "Rajin", b: "Panjang", c: "Kuning", jawapan: "A", huraian: "Rajin menunjukkan sifat kelakuan individu." }
                             ]
                         }
+                    },
+                    "Unit 8: Kesenian Bangsa": {
+                        "Kata Tanya Asas": { sk: "SK 5.1", sp: "SP 5.1.4(ii)", obj: "Memahami dan menggunakan kata tanya dengan betul.", kataPilihan: "Apakah", petunjuk: "Digunakan untuk menanyakan hal benda atau perkara.", nota: "Kata tanya digunakan untuk membentuk ayat tanya. Jika diletakkan di awal ayat, ia mesti menerima partikel '-kah'.", cth: "Apakah nama tarian kebudayaan itu?",
+                            latihan: [
+                                { q: "____kah yang sedang memukul gong itu?", a: "Apakah", b: "Siapakah", c: "Mengapakah", jawapan: "B", huraian: "Siapakah digunakan khusus untuk menanyakan manusia." },
+                                { q: "Kata tanya 'Mengapa' digunakan untuk menanyakan...", a: "Sebab", b: "Tempat", c: "Masa", jawapan: "A", huraian: "Mengapa berfungsi merujuk alasan atau sebab." }
+                            ]
+                        }
+                    }
+                },
+                "Tema 2: Kelestarian Alam": {
+                    "Unit 9: Indahnya Alamku": {
+                        "Kata Perintah": { sk: "SK 5.1", sp: "SP 5.1.4(iv)", obj: "Menggunakan kata perintah dalam ayat dengan betul.", kataPilihan: "Sila", petunjuk: "Kata perintah untuk meminta melakukan sesuatu dengan sopan.", nota: "Kata perintah digunakan untuk memberikan arahan, larangan, silaan, atau permintaan dalam perbualan.", cth: "Sila buang sampah ke dalam tong kitar semula.",
+                            latihan: [
+                                { q: "____ buang sisa plastik ini ke dalam sungai.", a: "Jangan", b: "Jemput", c: "Tolong", jawapan: "A", huraian: "Jangan menunjukkan larangan tegas merosakkan alam." },
+                                { q: "Manakah kata perintah jenis pelawaan?", a: "Harap", b: "Jemput", c: "Minta", jawapan: "B", huraian: "Jemput digunakan untuk mempelawa tetamu." }
+                            ]
+                        }
                     }
                 }
             },
             4: {
-                "Tema 4: Kebudayaan, Kesenian dan Estetika": {
+                "Tema 1: Kebudayaan, Kesenian dan Estetika": {
                     "Unit 10: Semarakkan Budaya": {
                         "Simpulan Bahasa": { sk: "SK 4.1", sp: "SP 4.1.1", obj: "Menyatakan maksud simpulan bahasa dan menggunakannya dalam ulasan.", kataPilihan: "UlatBuku", petunjuk: "Gelaran untuk orang yang sangat suka membaca.", nota: "Simpulan bahasa ialah ungkapan sabit yang terdiri daripada dua kata membawa maksud tersirat.", cth: "anak emas (anak kesayangan), ringan tulang (rajin).",
                             latihan: [
@@ -203,11 +258,29 @@
                                 { q: "Ali menjadi ____ kerana dia anak tunggal yang paling disayangi.", a: "kaki ayam", b: "ulat buku", c: "anak emas", jawapan: "C", huraian: "Anak emas bermaksud anak kesayangan." }
                             ]
                         }
+                    },
+                    "Unit 11: Warisan Kita": {
+                        "Bandingan Semacam": { sk: "SK 4.1", sp: "SP 4.1.1(ii)", obj: "Menggunakan bandingan semacam dalam penulisan kreatif.", kataPilihan: "Bijak", petunjuk: "Sifat kualiti intelektual seperti Sang Kancil.", nota: "Bandingan semacam menggunakan kata perbandingan 'seperti', 'umpama', atau 'bak' untuk membandingkan sifat objek.", cth: "Bijak seperti kancil, garang seperti harimau.",
+                            latihan: [
+                                { q: "Lengkapkan: Budak itu malas seperti ____.", a: "keldai", b: "arnab", c: "semut", jawapan: "A", huraian: "Malas seperti keldai ialah perumpamaan bandingan semacam klasik." },
+                                { q: "Manakah pasangan bandingan warna yang tepat?", a: "Hitam seperti arang", b: "Putih seperti langit", c: "Merah seperti daun", jawapan: "A", huraian: "Arang melambangkan warna hitam legam." }
+                            ]
+                        }
+                    }
+                },
+                "Tema 2: Jati Diri dan Kewarganegaraan": {
+                    "Unit 12: Wira Bangsa": {
+                        "Kata Sendi Nama": { sk: "SK 5.1", sp: "SP 5.1.4(iii)", obj: "Memahami penggunaan kata sendi nama dalam penulisan.", kataPilihan: "Kepada", petunjuk: "Kata sendi untuk manusia, institusi, atau pembahagian.", nota: "Kata sendi nama diletakkan di hadapan kata nama atau frasa nama untuk menunjukkan arah, tempat, masa, atau tujuan.", cth: "Sumbangan dihantar kepada persatuan veteran tentera.",
+                            latihan: [
+                                { q: "Wira negara itu berjuang ____ mempertahankan tanah air.", a: "demi", b: "tentang", c: "sejak", jawapan: "A", huraian: "Demi merujuk kepada tujuan atau matlamat perjuangan mulia." },
+                                { q: "Ayah membaca buku sejarah perjuangan Kemerdekaan ____ bilik bacaan.", a: "di", b: "ke", c: "daripada", jawapan: "A", huraian: "Di digunakan khusus untuk kedudukan/lokasi tetap." }
+                            ]
+                        }
                     }
                 }
             },
             5: {
-                "Tema 5: Jati Diri, Patriotisme dan Kewarganegaraan": {
+                "Tema 1: Jati Diri, Patriotisme dan Kewarganegaraan": {
                     "Unit 13: Citra Malaysia": {
                         "Kata Berimbuhan": { sk: "SK 5.2", sp: "SP 5.2.1", obj: "Memahami dan menggunakan kata berimbuhan awalan dan akhiran.", kataPilihan: "Pelajar", petunjuk: "Orang yang sedang menuntut ilmu di sekolah atau universiti.", nota: "Kata berimbuhan ialah kata dasar yang menerima imbuhan seperti awalan (meN-, ber-), akhiran (-an, -kan), mahupun apitan.", cth: "berlari, makanan, membaca.",
                             latihan: [
@@ -215,16 +288,52 @@
                                 { q: "Pilih perkataan yang mengandungi imbuhan awalan.", a: "Mainan", b: "Bermain", c: "Mainkan", jawapan: "B", huraian: "'ber-' ialah imbuhan awalan." }
                             ]
                         }
+                    },
+                    "Unit 14: Kedaulatan Negara": {
+                        "Kata Imbuhan Apitan": { sk: "SK 5.2", sp: "SP 5.2.1(iii)", obj: "Menggunakan kata berimbuhan apitan dalam membina perenggan karangan.", kataPilihan: "Pertahanan", petunjuk: "Sistem atau cara mengekalkan keamanan daripada ancaman luar.", nota: "Imbuhan apitan ditambah secara serentak di awal dan di akhir kata dasar (contoh: peN-...-an, ke-...-an).", cth: "Kementerian Pertahanan menjaga keselamatan sempadan tanah air.",
+                            latihan: [
+                                { q: "Pilih perkataan yang menerima imbuhan apitan kata nama.", a: "Perpaduan", b: "Bersatu", c: "Satukan", jawapan: "A", huraian: "peR-...-an mengepit kata dasar satu menjadi perpaduan." },
+                                { q: "Apakah makna kata berimbuhan 'kedaulatan'?", a: "Kuasa tertinggi", b: "Kelemahan", c: "Penjajahan", jawapan: "A", huraian: "Kedaulatan bermaksud hak kekuasaan tertinggi negara berdaulat." }
+                            ]
+                        }
+                    }
+                },
+                "Tema 2: Sains, Teknologi dan Inovasi": {
+                    "Unit 15: Inovasi Kreatif": {
+                        "Kata Arah": { sk: "SK 5.1", sp: "SP 5.1.4(v)", obj: "Menggunakan kata arah bagi menerangkan pelan reka cipta.", kataPilihan: "Hadapan", petunjuk: "Bahagian muka atau kedudukan sebelum bahagian belakang.", nota: "Kata arah didahului oleh kata sendi nama untuk menunjukkan hala atau kedudukan geografi objek.", cth: "Skrin digital dipasang di bahagian hadapan alat reka cipta.",
+                            latihan: [
+                                { q: "Alat pengesan automatik diletakkan di ____ bumbung prototaip itu.", a: "atas", b: "luar", c: "dalam", jawapan: "A", huraian: "Atas menunjukkan ruang posisi tinggi permukaan fizikal." },
+                                { q: "Manakah yang bukan merupakan kata arah?", a: "Selatan", b: "Berlari", c: "Belakang", jawapan: "B", huraian: "Berlari ialah kata kerja perbuatan." }
+                            ]
+                        }
                     }
                 }
             },
             6: {
-                "Tema 6: Sains, Teknologi dan Inovasi": {
+                "Tema 1: Sains, Teknologi dan Inovasi": {
                     "Unit 16: Dunia Sains": {
-                        "Kata Majmuk": { sk: "SK 5.3", sp: "SP 5.3.1", obj: "Memahami dan menggunakan kata majmuk mantap dan bebas.", kataPilihan: "GuruBesar", petunjuk: "Pemimpin tertinggi atau pentadbir utama di sesebuah sekolah.", nota: "Kata majmuk terbentuk daripada proses merangkaikan dua kata dasar atau lebih bagi membawa maksud tertentu.", cth: "kereta api, urusetia, guru besar.",
+                        "Kata Majmuk Mantap": { sk: "SK 5.3", sp: "SP 5.3.1", obj: "Memahami dan menggunakan kata majmuk mantap dan bebas.", kataPilihan: "GuruBesar", petunjuk: "Pemimpin tertinggi atau pentadbir utama di sesebuah sekolah.", nota: "Kata majmuk terbentuk daripada proses merangkaikan dua kata dasar atau lebih bagi membawa maksud tertentu.", cth: "kereta api, urusetia, guru besar.",
                             latihan: [
                                 { q: "Manakah antara berikut merupakan kata majmuk mantap (dieja rapat)?", a: "Tanggungjawab", b: "Kereta api", c: "Urus setia", jawapan: "A", huraian: "Tanggungjawab ialah salah satu daripada 15 kata majmuk mantap." },
                                 { q: "Pilih rangkaian kata majmuk bebas.", a: "Terima kasih", b: "Buku tulis", c: "Matahari", jawapan: "B", huraian: "Buku tulis ialah perkataan majmuk bebas dieja jarak." }
+                            ]
+                        }
+                    },
+                    "Unit 17: Teknologi Hijau": {
+                        "Ayat Tunggal & Ayat Majmuk": { sk: "SK 5.3", sp: "SP 5.3.3", obj: "Membina dan menukar ayat tunggal kepada ayat majmuk perluasan.", kataPilihan: "Tenaga", petunjuk: "Kuasa yang digunakan untuk menggerakkan atau menjalankan mesin.", nota: "Ayat tunggal mempunyai satu subjek dan satu predikat. Ayat majmuk terdiri daripada cantuman beberapa ayat tunggal menggunakan kata hubung.", cth: "Panel solar menjana tenaga elektrik yang mesra alam sekitar.",
+                            latihan: [
+                                { q: "Gabungkan: 'Zaki beli kereta solar.' 'Zaki beli motorsikal elektrik.'", a: "Zaki beli kereta solar dan motorsikal elektrik.", b: "Zaki beli kereta solar kerana motorsikal elektrik.", c: "Zaki beli kereta solar atau motorsikal elektrik.", jawapan: "A", huraian: "Dan bertindak menggabungkan fakta setara barangan pembelian." },
+                                { q: "Ayat tunggal mengandungi berapa klausa utama?", a: "Satu", b: "Dua", c: "Banyak", jawapan: "A", huraian: "Satu klausa sahaja (Satu subjek dan satu predikat tunggal)." }
+                            ]
+                        }
+                    }
+                },
+                "Tema 2: Kelestarian Ekosistem": {
+                    "Unit 18: Sayangi Sungai Kita": {
+                        "Peribahasa Bertopik": { sk: "SK 4.2", sp: "SP 4.2.1", obj: "Memahami dan menggunakan peribahasa dalam penulisan rumusan.", kataPilihan: "Muafakat", petunjuk: "Sikap bekerjasama membawa kata sepakat demi kebaikan.", nota: "Peribahasa merangkumi simpulan bahasa, perumpamaan, bidalan dan pepatah yang menjadi pedoman hidup bermasyarakat.", cth: "Bagai aur dengan tebing (saling membantu menjaga kebersihan tebing sungai).",
+                            latihan: [
+                                { q: "Apakah peribahasa yang sesuai untuk amalan gotong-royong membersihkan sungai?", a: "Bagai air mencari timba", b: "Bagai aur dengan tebing", c: "Bagai melukut di tepi gantang", jawapan: "B", huraian: "Menggambarkan muafakat kerjasama erat saling menyokong." },
+                                { q: "Bulat air kerana pembetung, bulat kata kerana ____.", a: "muafakat", b: "paksaan", c: "kejayaan", jawapan: "A", huraian: "Muafakat melambangkan persetujuan bersatu hati." }
                             ]
                         }
                     }
@@ -403,7 +512,6 @@
                 `;
 
                 const latBox = document.getElementById('kotak-senarai-latihan');
-                // Menjana 10 soalan berasaskan item asas dalam pangkalan data soalan khusus bagi topik tersebut
                 for (let i = 1; i <= 10; i++) {
                     let referItem = dataTopik.latihan[(i - 1) % dataTopik.latihan.length];
                     latBox.innerHTML += `
@@ -432,7 +540,7 @@
 
                 const kuizBox = document.getElementById('kotak-senarai-kuiz');
                 for (let q = 1; q <= 10; q++) {
-                    let referItem = dataTopik.latihan[(q) % dataTopicLengthOrIndex(dataTopik.latihan.length)];
+                    let referItem = dataTopik.latihan[(q) % dataTopik.latihan.length];
                     kuizBox.innerHTML += `
                         <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                             <p class="font-bold text-slate-800 text-xs mb-2.5">${q}. [Sila jawab kandungan khusus bagi ${topikSemasa}]: ${referItem.q}</p>
@@ -484,10 +592,6 @@
                     </div>
                 `;
             }
-        }
-
-        function dataTopicLengthOrIndex(len) {
-            return len > 0 ? len : 1;
         }
 
         // SEMAK LATIHAN BESERTA PENERANGAN KHUSUS TOPIK
