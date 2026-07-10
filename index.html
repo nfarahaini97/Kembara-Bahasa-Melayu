@@ -100,9 +100,15 @@
 
             <!-- ================= HALAMAN UTAMA ================= -->
             <section id="page-utama" class="space-y-8 layer-section">
-                <div class="text-center py-6 bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400 rounded-3xl shadow-xl text-white p-6">
+                <div class="text-center py-6 bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400 rounded-3xl shadow-xl text-white p-6 relative overflow-hidden">
                     <h2 class="text-3xl md:text-5xl font-black mb-2 drop-shadow-md">Selamat Datang, Wira Bahasa!</h2>
-                    <p class="text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow">Pilih tahun persekolahan anda dan kuasai cabaran pembelajaran digital cemerlang.</p>
+                    <p class="text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow mb-4">Pilih tahun persekolahan anda dan kuasai cabaran pembelajaran digital cemerlang.</p>
+                    
+                    <!-- TOGGLE BUTTON PAPARAN SIJIL DI HOME MENU -->
+                    <button onclick="bukaSijilTerus()" class="bg-white text-yellow-600 font-bold py-2 px-5 rounded-full shadow-md hover:bg-yellow-50 transition btn-bounce inline-flex items-center space-x-2 text-sm">
+                        <i class="fas fa-certificate text-lg animate-pulse"></i>
+                        <span>Lihat Sijil Pencapaian Saya</span>
+                    </button>
                 </div>
 
                 <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Pintar Anda:</h3>
@@ -182,13 +188,13 @@
             <section id="page-ganjaran" class="hidden space-y-6 layer-section">
                 <div class="bg-white rounded-3xl shadow-xl p-8 text-center max-w-2xl mx-auto border-4 border-yellow-300">
                     <div class="text-6xl mb-4">🎉🎉🎉</div>
-                    <h2 class="text-3xl font-black text-slate-700 mb-2">Tahniah! Tahap Selesai!</h2>
-                    <p class="text-gray-500 font-medium mb-6">Anda cemerlang menjawab semua siri aktiviti pembelajaran.</p>
+                    <h2 class="text-3xl font-black text-slate-700 mb-2">Paparan Sijil Penghargaan</h2>
+                    <p class="text-gray-500 font-medium mb-6">Tahniah atas usaha dan markah pencapaian pembelajaran anda!</p>
                     
                     <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-inner">
                         <div>
-                            <span class="text-xs text-gray-400 font-bold block uppercase">Gred Markah</span>
-                            <span id="final-score-percent" class="text-4xl font-black text-blue-600">0%</span>
+                            <span class="text-xs text-gray-400 font-bold block uppercase">Jumlah Mata</span>
+                            <span id="final-score-percent" class="text-4xl font-black text-blue-600">0</span>
                         </div>
                         <div>
                             <span class="text-xs text-gray-400 font-bold block uppercase">Lencana Dicapai</span>
@@ -328,14 +334,18 @@
             kemaskiniJumlahMataSemua();
         }
 
-        function kemaskiniJumlahMataSemua() {
+        function dapatkanJumlahMata() {
             let total = 0;
             for (let t in rekodKemajuan) {
                 for (let a in rekodKemajuan[t]) {
                     total += rekodKemajuan[t][a] || 0;
                 }
             }
-            document.getElementById('total-score-badge').innerText = total;
+            return total;
+        }
+
+        function kemaskiniJumlahMataSemua() {
+            document.getElementById('total-score-badge').innerText = dapatkanJumlahMata();
         }
 
         // ================= ENGINE MUZIK =================
@@ -472,7 +482,7 @@
             tajuk: "Kenali Huruf Abjad", jenis: "mcq", ikon: "fa-font",
             soalan: [
                 { q: "Pilih pasangan huruf besar bagi abjad 'a'.", a: ["A", "B", "C", "D"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'b'.", a: ["B", "B", "F", "G"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'b'.", a: ["B", "E", "F", "G"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'd'.", a: ["D", "H", "I", "J"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'e'.", a: ["E", "K", "L", "M"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'g'.", a: ["G", "N", "O", "P"], c: 0 },
@@ -882,11 +892,15 @@
                 simpanKemajuanKeFirebase();
             }
             
-            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
-            const mataMaksimum = dataAktiviti.soalan.length * 10;
-            const peratusAkhir = Math.round((skorSemasa / mataMaksimum) * 100);
+            bukaSijilTerus();
+        }
+
+        // FUNGSI TOGGLE UNTUK MEMBUKA KAWASAN SIJIL TERUS DARI HOME / AKTIVITI TAMAT
+        function bukaSijilTerus() {
+            aktifkanAudioContextPenuh();
+            const jumlahMata = dapatkanJumlahMata();
             
-            document.getElementById('final-score-percent').innerText = `${peratusAkhir}%`;
+            document.getElementById('final-score-percent').innerText = `${jumlahMata} Mata`;
             const bContainer = document.getElementById('badge-container');
             bContainer.innerHTML = '';
             
@@ -894,11 +908,12 @@
             let warnaLencana = "text-amber-700 bg-amber-100";
             let ikonLencana = "fa-medal";
             
-            if(peratusAkhir >= 80) {
+            // Penilaian gred berdasarkan pencapaian mata semasa murid
+            if(jumlahMata >= 200) {
                 lencana = "Pingat Emas";
                 warnaLencana = "text-yellow-600 bg-yellow-100";
                 ikonLencana = "fa-trophy";
-            } else if(peratusAkhir >= 50) {
+            } else if(jumlahMata >= 50) {
                 lencana = "Pingat Perak";
                 warnaLencana = "text-slate-500 bg-slate-100";
                 ikonLencana = "fa-medal";
@@ -921,56 +936,31 @@
         }
 
         // ================= STABLE IMAGE DOWNLOAD ENGINE (PNG) =================
-       function janaSijilSebagaiImej() {
+        function janaSijilSebagaiImej() {
             const elemenSijil = document.getElementById('sijil-print-area');
             
-            if (!elemenSijil) {
-                alert("Ralat: Elemen '#sijil-print-area' tidak dijumpai.");
-                return;
-            }
-
-            // Pastikan semua imej di dalam sijil ada atribut crossorigin sebelum diproses
-            const semuaImej = elemenSijil.getElementsByTagName('img');
-            for (let img of semuaImej) {
-                if (img.src.startsWith('http') && !img.hasAttribute('crossorigin')) {
-                    img.setAttribute('crossorigin', 'anonymous');
-                }
-            }
-            
-            // Konfigurasi yang dibetulkan: Buang allowTaint untuk mengelakkan canvas tercemar
+            // allowTaint ditukar kepada false bagi mengelakkan ralat keselamatan sekatan canvas pelayar
             const opt = {
                 scale: 2, 
                 logging: false,
-                useCORS: true,       // Wajib true untuk font/imej luaran
-                allowTaint: false,   // MESTI FALSE supaya canvas boleh ditukar ke DataURL (Imej)
+                useCORS: true,
+                allowTaint: false,
                 backgroundColor: "#ffffff"
             };
 
-            // Tambah delay sedikit jika font luaran (Google Fonts) lambat dimuatkan oleh html2canvas
-            setTimeout(() => {
-                html2canvas(elemenSijil, opt).then(canvas => {
-                    try {
-                        const imejDataUrl = canvas.toDataURL("image/png");
-                        
-                        // Dapatkan pembolehubah tahunSemasa (jika tiada, gunakan tahun komputer)
-                        const tahun = typeof tahunSemasa !== 'undefined' ? tahunSemasa : new Date().getFullYear();
-                        
-                        const pautanDownload = document.createElement('a');
-                        pautanDownload.href = imejDataUrl;
-                        pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahun}.png`;
-                        
-                        document.body.appendChild(pautanDownload);
-                        pautanDownload.click();
-                        document.body.removeChild(pautanDownload);
-                    } catch (e) {
-                        console.error(e);
-                        alert("Gagal menukar canvas kepada imej. Sila pastikan tiada imej sekatan keselamatan (CORS) dalam sijil.");
-                    }
-                }).catch(err => {
-                    console.error(err);
-                    alert("Gagal memproses imej sijil: " + err.message);
-                });
-            }, 500); // ditangguhkan 500ms supaya browser bersedia melukis elemen
+            html2canvas(elemenSijil, opt).then(canvas => {
+                const imejDataUrl = canvas.toDataURL("image/png");
+                
+                const pautanDownload = document.createElement('a');
+                pautanDownload.href = imejDataUrl;
+                pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahunSemasa}.png`;
+                
+                document.body.appendChild(pautanDownload);
+                pautanDownload.click();
+                document.body.removeChild(pautanDownload);
+            }).catch(err => {
+                alert("Gagal memproses imej sijil: " + err);
+            });
         }
     </script>
 </body>
