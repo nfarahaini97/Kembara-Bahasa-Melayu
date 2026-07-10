@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kembara Bahasa Melayu</title>
+    <!-- Tailwind CSS untuk reka bentuk ceria -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Kebangsaan & Mesra Kanak-kanak -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0fdf4; /* Hijau Lembut */
+        }
+        h1, h2, h3, .font-kids {
+            font-family: 'Fredoka One', cursive;
+        }
+        .bg-orange-fun { background-color: #ff9f43; }
+        .bg-blue-fun { background-color: #54a0ff; }
+        .bg-yellow-fun { background-color: #feca57; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- TOP BAR / DASHBOARD PROFIL -->
+    <div class="bg-blue-fun text-white p-4 shadow-lg flex justify-between items-center rounded-b-3xl">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="kembaliKeUtama()">
+            <i class="fa-solid fa-map-location-dot text-3xl text-yellow-300 animate-bounce"></i>
+            <h1 class="text-xl md:text-2xl tracking-wide">Kembara BM</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Stats Gamifikasi -->
+            <div class="bg-white/20 px-3 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-bold">
+                <i class="fa-solid fa-star text-yellow-300"></i> <span id="txt-bintang">120</span>
+            </div>
+            <div class="bg-white/20 px-3 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-bold">
+                <i class="fa-solid fa-gem text-cyan-300"></i> <span id="txt-berlian">45</span>
+            </div>
+            <div class="bg-amber-500 px-3 py-1.5 rounded-full text-xs font-bold shadow">
+                Lv.<span id="txt-level">3</span>
+            </div>
+            <!-- Avatar Murid -->
+            <div class="w-10 h-10 rounded-full bg-white border-2 border-yellow-300 flex items-center justify-center text-xl cursor-pointer" onclick="bukaProfil()">
+                👦
+            </div>
+        </div>
+    </div>
+
+    <!-- KANDUNGAN UTAMA (DINAMIK) -->
+    <main class="container mx-auto px-4 py-6 max-w-4xl" id="app-container">
+        
+        <!-- HALAMAN UTAMA: PILIHAN TAHUN -->
+        <div id="view-utama" class="space-y-6">
+            <div class="text-center my-6">
+                <img src="https://placehold.co/150x150/ff9f43/white?text=Kembara+BM" alt="Logo" class="mx-auto rounded-full shadow-lg border-4 border-white mb-3">
+                <h2 class="text-2xl md:text-3xl text-green-700">Pilih Tahun Pengembaraan KSSR!</h2>
+                <p class="text-gray-600 text-sm">Mulakan kembara bahasa anda mengikut sukatan pelajaran DSKP KPM.</p>
+            </div>
+
+            <!-- Grid Tahun -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button onclick="pilihTahun(1)" class="bg-emerald-400 hover:bg-emerald-500 text-white p-6 rounded-2xl shadow-md transition transform hover:-translate-y-1 text-center">
+                    <span class="block text-4xl mb-2">🌱</span>
+                    <span class="font-kids text-lg block">Tahun 1</span>
+                </button>
+                <button onclick="pilihTahun(2)" class="bg-cyan-400 hover:bg-cyan-500 text-white p-6 rounded-2xl shadow-md transition transform hover:-translate-y-1 text-center">
+                    <span class="block text-4xl mb-2">🌿</span>
+                    <span class="font-kids text-lg block">Tahun 2</span>
+                </button>
+                <button onclick="pilihTahun(3)" class="bg-amber-400 hover:bg-amber-500 text-white p-6 rounded-2xl shadow-md transition transform hover:-translate-y-1 text-center">
+                    <span class="block text-4xl mb-2">🌳</span>
+                    <span class="font-kids text-lg block">Tahun 3</span>
+                </button>
+                <button onclick="pilihTahun(4)" class="bg-orange-fun hover:bg-orange-600 text-white p-6 rounded-2xl shadow-md transition transform hover:-translate-y-1 text-center">
+                    <span class="block text-4xl mb-2">🦊</span>
+                    <span class="font-kids text-lg block">Tahun 4</span>
+                </button>
+                <button onclick="pilihTahun(5)" class="bg-indigo-400 hover:bg-indigo-500 text-white p-6 rounded-2xl shadow-md transition transform hover:-translate-y-1 text-center">
+                    <span class="block text-4xl mb-2">🦅</span>
+                    <span class="font-kids text-lg block">Tahun 5</span>
+                </button>
+                <button onclick="pilihTahun(6)" class="bg-rose-400 hover:bg-rose-500 text-white p-6 rounded-2xl shadow-md transition transform hover:-translate-y-1 text-center">
+                    <span class="block text-4xl mb-2">🏆</span>
+                    <span class="font-kids text-lg block">Tahun 6</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- HALAMAN MENU MODUL TAHUN (DIPAPARKAN SELEPAS PILIH TAHUN) -->
+        <div id="view-menu-tahun" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="kembaliKeUtama()" class="text-sm bg-gray-200 px-4 py-2 rounded-full font-bold text-gray-700 hover:bg-gray-300">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                <h2 id="tajuk-tahun" class="text-2xl text-blue-600 font-kids">Tahun X</h2>
+            </div>
+
+            <!-- Grid Menu Modul -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div onclick="bukaModul('nota')" class="bg-white p-4 rounded-xl shadow border-2 border-dashed border-emerald-300 flex items-center gap-4 cursor-pointer hover:bg-emerald-50 transition">
+                    <span class="text-3xl bg-emerald-100 p-3 rounded-xl">📚</span>
+                    <div>
+                        <h3 class="font-bold text-lg text-emerald-700">Nota Pembelajaran</h3>
+                        <p class="text-xs text-gray-500">Mendengar, membaca, tatabahasa mengikut tema.</p>
+                    </div>
+                </div>
+                <div onclick="bukaModul('latihan')" class="bg-white p-4 rounded-xl shadow border-2 border-dashed border-amber-300 flex items-center gap-4 cursor-pointer hover:bg-amber-50 transition">
+                    <span class="text-3xl bg-amber-100 p-3 rounded-xl">📝</span>
+                    <div>
+                        <h3 class="font-bold text-lg text-amber-700">Latihan Interaktif</h3>
+                        <p class="text-xs text-gray-500">Isi tempat kosong, susun perkataan & kuiz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENGASINGAN KANDUNGAN: NOTA PEMBELAJARAN -->
+        <div id="view-nota" class="hidden space-y-4">
+            <button onclick="kembaliKeMenuTahun()" class="text-sm bg-gray-200 px-4 py-2 rounded-full font-bold text-gray-700"><i class="fa-solid fa-arrow-left"></i> Menu</button>
+            <div class="bg-white p-6 rounded-2xl shadow-md border-4 border-emerald-400">
+                <span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">Tema: Kekeluargaan</span>
+                <h2 class="text-2xl text-emerald-800 mt-2 font-kids" id="nota-tajuk">Kata Nama Am</h2>
+                <p class="text-gray-600 my-3 text-sm md:text-base leading-relaxed">
+                    Kata nama am ialah perkataan yang digunakan untuk menyebut benda, manusia, haiwan, tempat, atau tumbuhan secara <strong>umum</strong>. Ditulis dengan huruf kecil kecuali pada awal ayat.
+                </p>
+                <!-- Visual Contoh -->
+                <div class="grid grid-cols-2 gap-2 my-4">
+                    <div class="bg-slate-50 p-3 rounded-xl text-center border">
+                        <span class="text-2xl">👨‍🦱</span>
+                        <p class="font-bold text-sm">ayah / abang</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl text-center border">
+                        <span class="text-2xl">🚗</span>
+                        <p class="font-bold text-sm">kereta / sekolah</p>
+                    </div>
+                </div>
+                <!-- Audio Contoh Ayat -->
+                <div class="bg-blue-50 p-3 rounded-xl flex items-center justify-between border border-blue-200">
+                    <div>
+                        <p class="text-xs text-blue-500 uppercase font-bold tracking-wider">Contoh Ayat</p>
+                        <p class="italic text-sm font-bold text-gray-700">"Ayah memandu kereta baharu."</p>
+                    </div>
+                    <button onclick="sebutAyat('Ayah memandu kereta baharu')" class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-blue-600">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENGASINGAN KANDUNGAN: LATIHAN INTERAKTIF -->
+        <div id="view-latihan" class="hidden space-y-4">
+            <button onclick="kembaliKeMenuTahun()" class="text-sm bg-gray-200 px-4 py-2 rounded-full font-bold text-gray-700"><i class="fa-solid fa-arrow-left"></i> Menu</button>
+            
+            <!-- Aktiviti 1: Isi Tempat Kosong -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border-4 border-amber-400">
+                <span class="bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold">Latihan 1: Tatabahasa</span>
+                <h3 class="text-xl text-amber-800 mt-2 mb-4 font-kids">Pilih Kata Kerja yang Betul</h3>
+                
+                <p class="text-base md:text-lg text-gray-800 leading-loose">
+                    Adik sedang <select id="jawapan-1" class="border-2 border-amber-300 rounded-lg p-1 bg-amber-50 font-bold text-amber-800 focus:outline-none">
+                        <option value="">--- pilih ---</option>
+                        <option value="salah">tidur</option>
+                        <option value="betul">membaca</option>
+                        <option value="salah">memasak</option>
+                    </select> buku cerita di ruang tamu.
+                </p>
+
+                <div class="mt-6 flex gap-2">
+                    <button onclick="semakLatihan()" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-md w-full md:w-auto">Semak Jawapan</button>
+                </div>
+                <!-- Maklum balas (Ulasan Automatik) -->
+                <div id="maklumbalas-latihan" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- AI TUTOR BUTTON & MODAL (FLOATING ACTION) -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="bukaAITutor()" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-4 rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition duration-200 relative border-2 border-white group">
+            <i class="fa-solid fa-robot text-2xl animate-pulse"></i>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-[10px] text-white px-1.5 py-0.5 rounded-full font-bold uppercase">AI Tutor</span>
+        </button>
+    </div>
+
+    <!-- AI Tutor Modal -->
+    <div id="modal-ai" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[80vh]">
+            <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-robot text-xl text-purple-300"></i>
+                    <div>
+                        <h3 class="font-kids text-base">Cikgu AI Kembara</h3>
+                        <p class="text-[10px] text-indigo-200">Sedia membetulkan ejaan & tatabahasa anda</p>
+                    </div>
+                </div>
+                <button onclick="tutupAITutor()" class="text-white hover:text-gray-200 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <!-- Ruang Chat -->
+            <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 text-sm" id="chat-box">
+                <div class="bg-indigo-50 border border-indigo-100 text-indigo-900 p-3 rounded-xl max-w-[85%]">
+                    Hai! Saya Cikgu AI. Tuliskan ayat anda atau tanya sebarang soalan tentang Bahasa Melayu, saya akan semak sekarang! 🎯
+                </div>
+            </div>
+            <!-- Input Chat -->
+            <div class="p-3 bg-white border-t flex gap-2">
+                <input type="text" id="input-ai" placeholder="Tulis ayat di sini (cth: Saya suka makan nasi...)" class="flex-1 border rounded-xl px-3 py-2 text-sm focus:outline-indigo-500">
+                <button onclick="hantarKeAI()" class="bg-indigo-600 text-white px-4 rounded-xl text-sm font-bold hover:bg-indigo-700">Hantar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SDK Firebase (Kompatibel dengan v9/v10 modul web) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Konfigurasi Firebase dari pengguna
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1R4xI_OBXuDx8xDnXtrfN5zHdgfx_gqs",
+            authDomain: "kembara-bahasa-melayu.firebaseapp.com",
+            databaseURL: "https://kembara-bahasa-melayu-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "kembara-bahasa-melayu",
+            storageBucket: "kembara-bahasa-melayu.firebasestorage.app",
+            messagingSenderId: "755582332569",
+            appId: "1:755582332569:web:c7e71534e74268aa9dd208"
+        };
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // State Aplikasi Global
+        window.stateMurid = {
+            tahunTerpilih: null,
+            bintang: 120,
+            berlian: 45,
+            level: 3
+        };
+
+        // Fungsi Global Navigasi & Logik
+        window.pilihTahun = function(tahun) {
+            window.stateMurid.tahunTerpilih = tahun;
+            document.getElementById('view-utama').classList.add('hidden');
+            document.getElementById('view-menu-tahun').classList.remove('hidden');
+            document.getElementById('tajuk-tahun').innerText = `Pengembaraan: Tahun ${tahun}`;
+            
+            // Dinamik Tukar Kandungan Mengikut Tahun (Simulasi Penapisan Kandungan)
+            if(tahun >= 4) {
+                document.getElementById('nota-tajuk').innerText = "Kata Nama Am & Abstrak (Tahap 2)";
+            } else {
+                document.getElementById('nota-tajuk').innerText = "Kata Nama Am (Tahap 1)";
+            }
+        };
+
+        window.kembaliKeUtama = function() {
+            document.getElementById('view-menu-tahun').classList.add('hidden');
+            document.getElementById('view-nota').classList.add('hidden');
+            document.getElementById('view-latihan').classList.add('hidden');
+            document.getElementById('view-utama').classList.remove('hidden');
+        };
+
+        window.bukaModul = function(modul) {
+            document.getElementById('view-menu-tahun').classList.add('hidden');
+            if(modul === 'nota') document.getElementById('view-nota').classList.remove('hidden');
+            if(modul === 'latihan') document.getElementById('view-latihan').classList.remove('hidden');
+        };
+
+        window.kembaliKeMenuTahun = function() {
+            document.getElementById('view-nota').classList.add('hidden');
+            document.getElementById('view-latihan').classList.add('hidden');
+            document.getElementById('view-menu-tahun').classList.remove('hidden');
+        };
+
+        // Audio Berasaskan Web Speech API (Mesra Kanak-kanak & Pantas)
+        window.sebutAyat = function(teks) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(teks);
+                utterance.lang = 'ms-MY'; // Set Bahasa Melayu
+                utterance.rate = 0.85;     // Kelajuan perlahan sedikit supaya mudah diikuti murid
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Sistem audio tidak disokong pada peranti anda.");
+            }
+        };
+
+        // Semakan Latihan Automatik & Gamifikasi (Ulasan Automatik)
+        window.semakLatihan = function() {
+            const jwn1 = document.getElementById('jawapan-1').value;
+            const kotakFeedback = document.getElementById('maklumbalas-latihan');
+            
+            kotakFeedback.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800');
+
+            if(jwn1 === 'betul') {
+                kotakFeedback.classList.add('bg-green-100', 'text-green-800');
+                kotakFeedback.innerHTML = "🎉 Tahniah! Jawapan betul. Anda mendapat <strong>+10 Bintang</strong>.";
+                
+                // Kemas kini Skor & Gamifikasi
+                window.stateMurid.bintang += 10;
+                document.getElementById('txt-bintang').innerText = window.stateMurid.bintang;
+                
+                // Simpan rekod ke Firebase Realtime Database
+                set(ref(db, 'users/murid_raw/skor'), window.stateMurid);
+            } else if(jwn1 === 'salah') {
+                kotakFeedback.classList.add('bg-red-100', 'text-red-800');
+                kotakFeedback.innerHTML = "❌ Kurang tepat. <strong>Penerangan:</strong> Kata kerja yang sesuai untuk 'buku cerita' ialah 'membaca', bukannya tidur atau memasak.";
+            } else {
+                alert("Sila pilih satu jawapan dahulu!");
+            }
+        };
+
+        // AI Tutor Pintar (Simulasi Pemprosesan Bahasa & Cadangan Penambahbaikan)
+        window.bukaAITutor = function() {
+            document.getElementById('modal-ai').classList.remove('hidden');
+        };
+        window.tutupAITutor = function() {
+            document.getElementById('modal-ai').classList.add('hidden');
+        };
+
+        window.hantarKeAI = function() {
+            const input = document.getElementById('input-ai');
+            const chatBox = document.getElementById('chat-box');
+            if(!input.value.trim()) return;
+
+            // Mesej Murid
+            let userDiv = document.createElement('div');
+            userDiv.className = "bg-white border text-gray-800 p-3 rounded-xl max-w-[85%] self-end ml-auto shadow-sm";
+            userDiv.innerText = input.value;
+            chatBox.appendChild(userDiv);
+
+            // Tindakan Respons AI (Simulasi Logik AI Kebangsaan)
+            let aiResponse = "Ayat yang menarik! Pastikan struktur subjek dan predikat anda jelas ya. Ada soalan tatabahasa lain?";
+            const teksMurid = input.value.toLowerCase();
+
+            if(teksMurid.includes('makan') && !teksMurid.includes('saya')) {
+                aiResponse = "💡 **Tip Ejaan/Tatabahasa:** Ayat anda tergantung. Sila tambah kata ganti nama di hadapan (Contoh: *Saya* makan nasi).";
+            } else if (teksMurid.includes('suka memandu')) {
+                aiResponse = "🌟 Gred Penulisan: Cemerlang! Struktur ayat aktif anda betul mengikut hukum tatabahasa.";
+            }
+
+            // Letak delay respons untuk simulasi berfikir
+            setTimeout(() => {
+                let aiDiv = document.createElement('div');
+                aiDiv.className = "bg-indigo-50 border border-indigo-100 text-indigo-900 p-3 rounded-xl max-w-[85%]";
+                aiDiv.innerHTML = aiResponse;
+                chatBox.appendChild(aiDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+
+            input.value = "";
+        };
+    </script>
+</body>
+</html>
