@@ -56,7 +56,7 @@
                 <p><i class="fas fa-check text-emerald-500 mr-1"></i> Menjana sijil eksklusif dengan nama profil anda.</p>
             </div>
 
-            <button id="logMasukGoogle()" class="w-full bg-white border-2 border-slate-300 hover:border-slate-400 text-slate-700 font-bold py-3 px-4 rounded-xl shadow transition btn-bounce flex items-center justify-center space-x-3 text-base">
+            <button id="btn-login-google" onclick="logMasukGoogle()" class="w-full bg-white border-2 border-slate-300 hover:border-slate-400 text-slate-700 font-bold py-3 px-4 rounded-xl shadow transition btn-bounce flex items-center justify-center space-x-3 text-base">
                 <svg class="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.227C18.216 1.414 15.424 0 12.24 0 5.58 0 0 5.58 0 12.24s5.58 12.24 12.24 12.24c6.96 0 11.57-4.894 11.57-11.79 0-.795-.085-1.402-.19-1.905H12.24z"/>
                 </svg>
@@ -111,9 +111,10 @@
 
                 <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Pintar Anda:</h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Diubah suai supayar berada di tengah (flex items-center justify-center) -->
+                <div class="flex items-center justify-center">
                     <!-- Tahun 1 -->
-                    <div onclick="pilihTahun(1)" class="bg-white rounded-2xl shadow-lg border-4 border-blue-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                    <div onclick="pilihTahun(1)" class="bg-white rounded-2xl shadow-lg border-4 border-blue-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between max-w-sm w-full">
                         <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-4xl shadow-inner">
                             <i class="fas fa-child"></i>
                         </div>
@@ -173,7 +174,7 @@
                             <h4 id="feedback-title" class="text-3xl font-black mb-2">Hebat!</h4>
                             <p id="feedback-msg" class="text-sm font-medium mb-6">Jawapan anda betul tepat sekali.</p>
                             <div class="flex justify-center space-x-4">
-                                <button id="btn-next-q" class="bg-emerald-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-emerald-600 transition btn-bounce">Seterusnya <i class="fas fa-arrow-right ml-1"></i></button>
+                                <button id="btn-next-q" onclick="seterusnyaSoalan()" class="bg-emerald-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-emerald-600 transition btn-bounce">Seterusnya <i class="fas fa-arrow-right ml-1"></i></button>
                             </div>
                         </div>
                     </div>
@@ -242,7 +243,7 @@
                             </div>
                             <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
                                 <p class="font-bold">TARIKH KELULUSAN</p>
-                                <p id="cert-tarikh" class="text-gray-500">10/07/2026</p>
+                                <p id="cert-tarikh" class="text-gray-500">11/07/2026</p>
                             </div>
                         </div>
                     </div>
@@ -273,6 +274,11 @@
 
         let penggunaSemasa = null;
         let rekodKemajuan = { 1: {}, 2: {}, 3: {} };
+        let tahunSemasa = 1;
+        let aktivitiSemasa = 1;
+        let soalanIndexSemasa = 0;
+        let skorSemasa = 0;
+        let jawapanTerpilihDrag = [];
 
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -281,6 +287,7 @@
                 document.getElementById('main-app-content').classList.remove('hidden');
                 document.getElementById('user-display-name').innerText = user.displayName || user.email;
                 muatKemajuanDariFirebase(user.uid);
+                mainMuzikLatar();
             } else {
                 penggunaSemasa = null;
                 document.getElementById('main-app-content').classList.add('hidden');
@@ -300,6 +307,33 @@
                 tutupMuzikLatar();
                 auth.signOut();
             }
+        }
+
+        function muatKemajuanDariFirebase(uid) {
+            database.ref('kemajuan/' + uid).once('value').then((snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    rekodKemajuan = data;
+                }
+                kemaskiniJumlahMataSemua();
+            });
+        }
+
+        function simpanKemajuanKeFirebase() {
+            if (penggunaSemasa) {
+                database.ref('kemajuan/' + penggunaSemasa.uid).set(rekodKemajuan);
+            }
+            kemaskiniJumlahMataSemua();
+        }
+
+        function kemaskiniJumlahMataSemua() {
+            let total = 0;
+            for (let t in rekodKemajuan) {
+                for (let a in rekodKemajuan[t]) {
+                    total += rekodKemajuan[t][a] || 0;
+                }
+            }
+            document.getElementById('total-score-badge').innerText = total;
         }
 
         // CONTROL MUSIC & SFX CONTEXT
@@ -412,7 +446,7 @@
             }
         }
 
-        // ================= BANK SOALAN TAHUN 1 (LENGKAP 10 AKTIVITI, 10-20 SOALAN) =================
+        // ================= BANK SOALAN TAHUN 1 =================
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
 
         BANK_SOALAN[1][1] = {
@@ -434,16 +468,16 @@
         BANK_SOALAN[1][2] = {
             tajuk: "Cantum Suku Kata Terbuka", jenis: "drag_drop", ikon: "fa-cubes",
             soalan: [
-                { q: "Susun suku kata supaya membentuk kata 'Baju'.", parts: ["BA", "JU"], correctOrder: ["BA", "JU"] },
-                { q: "Susun suku kata supaya membentuk kata 'Bola'.", parts: ["BO", "LA"], correctOrder: ["BO", "LA"] },
-                { q: "Susun suku kata supaya membentuk kata 'Caci'.", parts: ["CA", "CI"], correctOrder: ["CA", "CI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Dadu'.", parts: ["DA", "DU"], correctOrder: ["DA", "DU"] },
-                { q: "Susun suku kata supaya membentuk kata 'Feri'.", parts: ["FE", "RI"], correctOrder: ["FE", "RI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Geli'.", parts: ["GE", "LI"], correctOrder: ["GE", "LI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Hari'.", parts: ["HA", "RI"], correctOrder: ["HA", "RI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Jari'.", parts: ["JA", "RI"], correctOrder: ["JA", "RI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Kaki'.", parts: ["KA", "KI"], correctOrder: ["KA", "KI"] },
-                { q: "Susun suku kata supaya membentuk kata 'Lori'.", parts: ["LO", "RI"], correctOrder: ["LO", "RI"] }
+                { q: "Susun suku kata supaya membentuk kata 'Baju'.", parts: ["JU", "BA"], correctOrder: ["BA", "JU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Bola'.", parts: ["LA", "BO"], correctOrder: ["BO", "LA"] },
+                { q: "Susun suku kata supaya membentuk kata 'Caci'.", parts: ["CI", "CA"], correctOrder: ["CA", "CI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Dadu'.", parts: ["DU", "DA"], correctOrder: ["DA", "DU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Feri'.", parts: ["RI", "FE"], correctOrder: ["FE", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Geli'.", parts: ["LI", "GE"], correctOrder: ["GE", "LI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Hari'.", parts: ["RI", "HA"], correctOrder: ["HA", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Jari'.", parts: ["RI", "JA"], correctOrder: ["JA", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Kaki'.", parts: ["KI", "KA"], correctOrder: ["KA", "KI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Lori'.", parts: ["RI", "LO"], correctOrder: ["LO", "RI"] }
             ]
         };
 
@@ -469,7 +503,7 @@
                 { q: "Manakah ejaan yang betul bagi hidupan berkokok?", a: ["Ayam", "Ayem", "Ayamm", "Aeyam"], c: 0 },
                 { q: "Manakah ejaan bahasa Melayu yang betul bagi sumber cahaya api?", a: ["Obor", "Obeor", "Ubur", "Oborr"], c: 0 },
                 { q: "Manakah ejaan betul bagi reptilia menjalar panjang?", a: ["Ular", "Olar", "Uler", "Ullar"], c: 0 },
-                { q: "Manakah ejaan betul bagi haiwan unggas berenang air?", a: ["Itik", "Etek", "Ittek", "Idik"], c: 0 },
+                { q: "Manakah ejaan betul bagi hidupan unggas berenang air?", a: ["Itik", "Etek", "Ittek", "Idik"], c: 0 },
                 { q: "Manakah ejaan betul bagi buah merah manis import?", a: ["Epal", "Epeal", "Epel", "Eppal"], c: 0 },
                 { q: "Manakah ejaan betul bagi bekas takungan minuman bercawan?", a: ["Cawan", "Cawen", "Cawann", "Cewan"], c: 0 },
                 { q: "Manakah ejaan betul bagi pelindung kaki sekolah?", a: ["Kasut", "Kaset", "Kasot", "Kassut"], c: 0 },
@@ -482,60 +516,58 @@
         BANK_SOALAN[1][5] = {
             tajuk: "Isi Tempat Kosong Mudah", jenis: "blank", ikon: "fa-pen-clip",
             soalan: [
-                { q: "Saya makan buah ______ yang berwarna merah manis.", c: ["epal"] },
-                { q: "Adik membaca ______ cerita di dalam perpustakaan.", c: ["buku"] },
-                { q: "Abang menendang ______ bola di padang sekolah.", c: ["bola"] },
-                { q: "Haiwan comel peliharaan saya ialah ______ yang berbulu.", c: ["kucing"] },
-                { q: "Setiap pagi saya minum ______ suam untuk kesihatan.", c: ["susu"] },
-                { q: "Ayah mengayuh ______ ke kedai runcit berdekatan.", c: ["basikal"] },
-                { q: "Tumbuhan hijau itu adalah ______ kelapa yang tinggi.", c: ["pokok"] },
-                { q: "Kakak memasak ______ goreng untuk hidangan malam.", c: ["nasi"] },
-                { q: "Ibu memakai ______ kurung yang berwarna biru anggun.", c: ["baju"] },
-                { q: "Cikgu menulis menggunakan marker di ______ hitam.", c: ["papan"] }
+                { q: "Saya makan buah ______ yang berwarna merah manis.", c: "epal" },
+                { q: "Adik membaca ______ cerita di dalam perpustakaan.", c: "buku" },
+                { q: "Abang menendang ______ di padang sekolah.", c: "bola" },
+                { q: "Haiwan comel peliharaan saya ialah ______ yang comel.", c: "kucing" },
+                { q: "Setiap pagi saya minum ______ suam untuk kesihatan.", c: "susu" },
+                { q: "Ayah mengayuh ______ ke kedai runcit berdekatan.", c: "basikal" },
+                { q: "Tumbuhan hijau itu adalah ______ kelapa yang tinggi.", c: "pokok" },
+                { q: "Kakak memasak ______ goreng untuk hidangan malam.", c: "nasi" },
+                { q: "Ibu memakai ______ kurung yang berwarna biru anggun.", c: "baju" },
+                { q: "Cikgu menulis menggunakan marker di ______ hitam.", c: "papan" }
             ]
         };
 
         BANK_SOALAN[1][6] = {
             tajuk: "Susun Huruf Objek", jenis: "drag_drop", ikon: "fa-font-awesome",
             soalan: [
-                { q: "Susun huruf objek ini:", visual: "🎒", parts: ["B", "E", "G"], correctOrder: ["B", "E", "G"] },
-                { q: "Susun huruf objek ini:", visual: "🕒", parts: ["J", "A", "M"], correctOrder: ["J", "A", "M"] },
-                { q: "Susun huruf objek ini:", visual: "🚌", parts: ["B", "A", "S"], correctOrder: ["B", "A", "S"] },
-                { q: "Susun huruf objek ini:", visual: "🥚", parts: ["T", "E", "L", "U", "R"], correctOrder: ["T", "E", "L", "U", "R"] },
-                { q: "Susun huruf objek ini:", visual: "🐟", parts: ["I", "K", "A", "N"], correctOrder: ["I", "K", "A", "N"] },
-                { q: "Susun huruf objek ini:", visual: "🐓", parts: ["A", "Y", "A", "M"], correctOrder: ["A", "Y", "A", "M"] },
-                { q: "Susun huruf objek ini:", visual: "🪑", parts: ["K", "E", "R", "U", "S", "I"], correctOrder: ["K", "E", "R", "U", "S", "I"] },
-                { q: "Susun huruf objek ini:", visual: "🪵", parts: ["M", "E", "J", "A"], correctOrder: ["M", "E", "J", "A"] },
-                { q: "Susun huruf objek ini:", visual: "🛖", parts: ["R", "U", "M", "A", "H"], correctOrder: ["R", "U", "M", "A", "H"] },
-                { q: "Susun huruf objek ini:", visual: "🛞", parts: ["R", "O", "D", "A"], correctOrder: ["R", "O", "D", "A"] }
+                { q: "Susun huruf objek ini:", visual: "🎒", parts: ["E", "B", "G"], correctOrder: ["B", "E", "G"] },
+                { q: "Susun huruf objek ini:", visual: "🕒", parts: ["A", "J", "M"], correctOrder: ["J", "A", "M"] },
+                { q: "Susun huruf objek ini:", visual: "🚌", parts: ["S", "B", "A"], correctOrder: ["B", "A", "S"] },
+                { q: "Susun huruf objek ini:", visual: "🥚", parts: ["L", "T", "E", "U", "R"], correctOrder: ["T", "E", "L", "U", "R"] },
+                { q: "Susun huruf objek ini:", visual: "🐟", parts: ["K", "I", "A", "N"], correctOrder: ["I", "K", "A", "N"] },
+                { q: "Susun huruf objek ini:", visual: "🐓", parts: ["Y", "A", "A", "M"], correctOrder: ["A", "Y", "A", "M"] },
+                { q: "Susun huruf objek ini:", visual: "🪑", parts: ["R", "K", "E", "U", "S", "I"], correctOrder: ["K", "E", "R", "U", "S", "I"] },
+                { q: "Susun huruf objek ini:", visual: "🪵", parts: ["E", "M", "J", "A"], correctOrder: ["M", "E", "J", "A"] },
+                { q: "Susun huruf objek ini:", visual: "🛖", parts: ["U", "R", "M", "A", "H"], correctOrder: ["R", "U", "M", "A", "H"] },
+                { q: "Susun huruf objek ini:", visual: "🛞", parts: ["O", "R", "D", "A"], correctOrder: ["R", "O", "D", "A"] }
             ]
         };
 
-        // Aktiviti 7: Susun Perkataan Jadi Ayat (10 Soalan Unik)
         BANK_SOALAN[1][7] = {
             tajuk: "Susun Perkataan Jadi Ayat", jenis: "drag_drop", ikon: "fa-align-left",
             soalan: [
-                { q: "Susun frasa:", parts: ["Ini", "buku", "cerita", "saya."], correctOrder: ["Ini", "buku", "cerita", "saya."] },
-                { q: "Susun frasa:", parts: ["Kakak", "suka", "makan", "nasi."], correctOrder: ["Kakak", "suka", "makan", "nasi."] },
-                { q: "Susun frasa:", parts: ["Saya", "ada", "kucing", "comel."], correctOrder: ["Saya", "ada", "kucing", "comel."] },
-                { q: "Susun frasa:", parts: ["Baju", "baharu", "ini", "biru."], correctOrder: ["Baju", "baharu", "ini", "biru."] },
-                { q: "Susun frasa:", parts: ["Ayah", "pandu", "kereta", "merah."], correctOrder: ["Ayah", "pandu", "kereta", "merah."] },
-                { q: "Susun frasa:", parts: ["Adik", "main", "bola", "padang."], correctOrder: ["Adik", "main", "bola", "padang."] },
-                { q: "Susun frasa:", parts: ["Ibu", "masak", "sup", "ayam."], correctOrder: ["Ibu", "masak", "sup", "ayam."] },
-                { q: "Susun frasa:", parts: ["Burung", "terbang", "tinggi", "awan."], correctOrder: ["Burung", "terbang", "tinggi", "awan."] },
-                { q: "Susun frasa:", parts: ["Nenek", "baca", "surat", "khabar."], correctOrder: ["Nenek", "baca", "surat", "khabar."] },
-                { q: "Susun frasa:", parts: ["Kami", "belajar", "bahasa", "Melayu."], correctOrder: ["Kami", "belajar", "bahasa", "Melayu."] }
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["buku", "Ini", "cerita", "saya."], correctOrder: ["Ini", "buku", "cerita", "saya."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["suka", "Kakak", "makan", "nasi."], correctOrder: ["Kakak", "suka", "makan", "nasi."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["ada", "Saya", "kucing", "comel."], correctOrder: ["Saya", "ada", "kucing", "comel."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["baharu", "Baju", "ini", "biru."], correctOrder: ["Baju", "baharu", "ini", "biru."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["pandu", "Ayah", "kereta", "merah."], correctOrder: ["Ayah", "pandu", "kereta", "merah."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["main", "Adik", "bola", "padang."], correctOrder: ["Adik", "main", "bola", "padang."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["masak", "Ibu", "sup", "ayam."], correctOrder: ["Ibu", "masak", "sup", "ayam."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["terbang", "Burung", "tinggi", "awan."], correctOrder: ["Burung", "terbang", "tinggi", "awan."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["baca", "Nenek", "surat", "khabar."], correctOrder: ["Nenek", "baca", "surat", "khabar."] },
+                { q: "Susun frasa menjadi ayat sempurna:", parts: ["belajar", "Kami", "bahasa", "Melayu."], correctOrder: ["Kami", "belajar", "bahasa", "Melayu."] }
             ]
         };
 
-        // Aktiviti 8: Betul @ Salah (10 Soalan Unik)
         BANK_SOALAN[1][8] = {
             tajuk: "Betul @ Salah Fakta Asas", jenis: "mcq", ikon: "fa-circle-question",
             soalan: [
                 { q: "Kucing adalah haiwan yang bertelur.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Epal biasanya berwarna merah atau hijau.", a: ["Betul", "Salah"], c: 0 },
                 { q: "Buku digunakan untuk menulis dan membaca.", a: ["Betul", "Salah"], c: 0 },
-                { q: "Ikan bernafas menggunakan peparu.", a: ["Salah", "Betul"], c: 1 },
+                { q: "Ikan bernafas menggunakan peparu.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Lori lebih kecil daripada basikal.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Matahari terbit pada waktu malam.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Kereta mempunyai empat tayar.", a: ["Betul", "Salah"], c: 0 },
@@ -545,11 +577,10 @@
             ]
         };
 
-        // Aktiviti 9: Pemahaman Petikan (10 Soalan Unik)
         BANK_SOALAN[1][9] = {
             tajuk: "Pemahaman Petikan Pendek", jenis: "mcq", ikon: "fa-file-lines",
             soalan: [
-                { q: "Jamil bela arnab. Arnab makan lobak. Apa makan arnab?", a: ["Lobak", "Ikan", "Nasi", "Susu"], c: 0 },
+                { q: "Jamil bela arnab. Arnab makan lobak. Apa makanan arnab?", a: ["Lobak", "Ikan", "Nasi", "Susu"], c: 0 },
                 { q: "Siti beli beg merah. Apa warna beg Siti?", a: ["Merah", "Biru", "Kuning", "Hitam"], c: 0 },
                 { q: "Ali pergi sekolah naik bas. Ali naik apa?", a: ["Bas", "Basikal", "Lori", "Kereta"], c: 0 },
                 { q: "Kucing Abu suka tidur. Apa hobi kucing Abu?", a: ["Tidur", "Lari", "Makan", "Main"], c: 0 },
@@ -562,7 +593,6 @@
             ]
         };
 
-        // Aktiviti 10: Kuiz Holistik (10 Soalan Unik)
         BANK_SOALAN[1][10] = {
             tajuk: "Kuiz Holistik Akhir", jenis: "mcq", ikon: "fa-graduation-cap",
             soalan: [
@@ -579,7 +609,316 @@
             ]
         };
 
+        // NAVIGATION SYSTEMS
+        function paparHalaman(idHalaman) {
+            document.querySelectorAll('.layer-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('page-' + idHalaman).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function pilihTahun(tahun) {
+            tahunSemasa = tahun;
+            document.getElementById('tajuk-tahun').innerText = `Aktiviti Pembelajaran Tahun ${tahun}`;
             
+            const grid = document.getElementById('grid-aktiviti');
+            grid.innerHTML = '';
+            
+            let diselesaikan = 0;
+            const senaraiAktiviti = BANK_SOALAN[tahun];
+            
+            for (let idAktiviti in senaraiAktiviti) {
+                const akt = senaraiAktiviti[idAktiviti];
+                const statusSkor = (rekodKemajuan[tahun] && rekodKemajuan[tahun][idAktiviti]) ? rekodKemajuan[tahun][idAktiviti] : 0;
+                if(statusSkor > 0) diselesaikan++;
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-2xl shadow hover:shadow-md border-2 border-slate-200 flex items-center justify-between cursor-pointer transition";
+                card.onclick = () => mulaAktiviti(idAktiviti);
+                
+                card.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fas ${akt.ikon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-base md:text-lg">${akt.tajuk}</h4>
+                            <p class="text-xs text-gray-400">Status: ${statusSkor > 0 ? `<span class="text-emerald-500 font-bold">Selesai (${statusSkor} m)</span>` : '<span class="text-amber-500">Belum Selesai</span>'}</p>
+                        </div>
+                    </div>
+                    <div class="text-blue-500"><i class="fas fa-chevron-right"></i></div>
+                `;
+                grid.appendChild(card);
+            }
+            
+            document.getElementById('progress-tahun-text').innerText = `${diselesaikan}/${Object.keys(senaraiAktiviti).length}`;
+            paparHalaman('senarai-aktiviti');
+        }
+
+        function kembaliKeSenarai() {
+            pilihTahun(tahunSemasa);
+        }
+
+        // GAME LOGIC ENGINE
+        function mulaAktiviti(idAktiviti) {
+            aktivitiSemasa = idAktiviti;
+            soalanIndexSemasa = 0;
+            skorSemasa = 0;
+            
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][idAktiviti];
+            document.getElementById('game-tag-topik').innerText = `Aktiviti ${idAktiviti}`;
+            document.getElementById('game-tajuk-topik').innerText = dataAktiviti.tajuk;
+            document.getElementById('game-total-q').innerText = dataAktiviti.soalan.length;
+            
+            paparSoalan();
+            paparHalaman('game');
+        }
+
+        function paparSoalan() {
+            document.getElementById('feedback-layer').classList.add('hidden');
+            jawapanTerpilihDrag = [];
+
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
+            
+            document.getElementById('game-current-q').innerText = soalanIndexSemasa + 1;
+            document.getElementById('game-score').innerText = skorSemasa;
+            
+            const peratus = ((soalanIndexSemasa) / dataAktiviti.soalan.length) * 100;
+            document.getElementById('game-progress-bar').style.width = `${peratus}%`;
+
+            const area = document.getElementById('quiz-dynamic-area');
+            area.innerHTML = '';
+
+            // Render soalan visual jika ada emoji
+            let htmlVisual = infoSoalan.visual ? `<div class="text-7xl text-center my-4">${infoSoalan.visual}</div>` : '';
+            
+            if (dataAktiviti.jenis === 'mcq') {
+                let htmlPilihan = '';
+                infoSoalan.a.forEach((pilihan, idx) => {
+                    htmlPilihan += `
+                        <button onclick="semakJawapanMCQ(${idx})" class="w-full text-left bg-slate-50 hover:bg-blue-50 border-2 border-slate-200 hover:border-blue-400 p-4 rounded-xl font-medium transition flex items-center space-x-3 text-slate-700 text-base">
+                            <span class="bg-blue-500 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold">${String.fromCharCode(65 + idx)}</span>
+                            <span>${pilihan}</span>
+                        </button>
+                    `;
+                });
+
+                area.innerHTML = `
+                    <div class="text-center font-bold text-lg md:text-xl text-slate-800 mb-4">${infoSoalan.q}</div>
+                    ${htmlVisual}
+                    <div class="grid grid-cols-1 gap-3 max-w-xl mx-auto mt-4">${htmlPilihan}</div>
+                `;
+            } 
+            else if (dataAktiviti.jenis === 'blank') {
+                area.innerHTML = `
+                    <div class="text-center font-bold text-lg md:text-xl text-slate-800 mb-4">${infoSoalan.q}</div>
+                    <div class="flex flex-col items-center space-y-4 max-w-md mx-auto mt-6">
+                        <input type="text" id="input-blank" placeholder="Taip jawapan anda di sini..." class="w-full border-3 border-blue-300 rounded-xl px-4 py-3 text-center text-lg font-bold focus:outline-none focus:border-blue-500 bg-slate-50 shadow-inner text-slate-700" autocomplete="off">
+                        <button onclick="semakJawapanBlank()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl transition shadow btn-bounce">Hantar Jawapan</button>
+                    </div>
+                `;
+                setTimeout(() => document.getElementById('input-blank').focus(), 300);
+            }
+            else if (dataAktiviti.jenis === 'drag_drop') {
+                let htmlSeret = '';
+                infoSoalan.parts.forEach((p, idx) => {
+                    htmlSeret += `
+                        <div onclick="pilihBlokSukuKata(this, '${p}')" class="bg-amber-100 hover:bg-amber-200 border-2 border-amber-300 px-5 py-3 rounded-xl font-bold text-lg cursor-pointer transition shadow text-amber-800 select-none">
+                            ${p}
+                        </div>
+                    `;
+                });
+
+                area.innerHTML = `
+                    <div class="text-center font-bold text-lg md:text-xl text-slate-800 mb-2">${infoSoalan.q}</div>
+                    ${htmlVisual}
+                    <div class="min-h-[60px] max-w-xl mx-auto border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl flex flex-wrap items-center justify-center gap-3 p-3 my-6" id="jawapan-drop-container">
+                        <span class="text-gray-400 text-xs font-bold uppercase tracking-wider select-none">Sentuh suku kata di bawah untuk susun</span>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-3 max-w-xl mx-auto" id="suku-kata-container">
+                        ${htmlSeret}
+                    </div>
+                    <div class="flex justify-center space-x-3 max-w-md mx-auto mt-6">
+                        <button onclick="padamSusunanDrag()" class="bg-slate-300 hover:bg-slate-400 text-slate-700 font-bold px-4 py-2.5 rounded-xl transition text-sm shadow"><i class="fas fa-rotate-left"></i> Set Semula</button>
+                        <button onclick="semakJawapanDrag()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl transition text-sm shadow flex-grow btn-bounce">Semak Keputusan</button>
+                    </div>
+                `;
+            }
+        }
+
+        function pilihBlokSukuKata(elemen, nilai) {
+            if (elemen.classList.contains('opacity-30')) return;
+            elemen.classList.add('opacity-30');
+            
+            const dropContainer = document.getElementById('jawapan-drop-container');
+            if(jawapanTerpilihDrag.length === 0) dropContainer.innerHTML = '';
+            
+            jawapanTerpilihDrag.push({ nilai: nilai, ref: elemen });
+            
+            const badge = document.createElement('span');
+            badge.className = "bg-blue-500 text-white font-black px-4 py-2 rounded-lg text-lg shadow-md";
+            badge.innerText = nilai;
+            dropContainer.appendChild(badge);
+        }
+
+        function padamSusunanDrag() {
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
+            paparSoalan();
+        }
+
+        // EVALUATION ENGINES
+        function tunjukMaklumBalas(isBetul, tajuk, mesej) {
+            mainKesanBunyi(isBetul);
+            
+            const box = document.getElementById('feedback-box');
+            const icon = document.getElementById('feedback-icon');
+            const title = document.getElementById('feedback-title');
+            const msg = document.getElementById('feedback-msg');
+            const layer = document.getElementById('feedback-layer');
+            
+            if (isBetul) {
+                box.className = "transform scale-100 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full bg-emerald-50 border-4 border-emerald-400 text-emerald-800";
+                icon.innerHTML = '<i class="fas fa-circle-check text-emerald-500"></i>';
+                confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+            } else {
+                box.className = "transform scale-100 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full bg-rose-50 border-4 border-rose-400 text-rose-800";
+                icon.innerHTML = '<i class="fas fa-circle-xmark text-rose-500"></i>';
+            }
+            
+            title.innerText = tajuk;
+            msg.innerText = mesej;
+            layer.classList.remove('hidden');
+        }
+
+        function semakJawapanMCQ(indeksPilihan) {
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
+            
+            if (indeksPilihan === infoSoalan.c) {
+                skorSemasa += 10;
+                tunjukMaklumBalas(true, "Syabas, Betul!", "Jawapan anda tepat sekali.");
+            } else {
+                tunjukMaklumBalas(false, "Kurang Tepat", `Jawapan betul ialah: ${infoSoalan.a[infoSoalan.c]}`);
+            }
+        }
+
+        function semakJawapanBlank() {
+            const input = document.getElementById('input-blank').value.trim().toLowerCase();
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
+            
+            if (input === infoSoalan.c.toLowerCase()) {
+                skorSemasa += 10;
+                tunjukMaklumBalas(true, "Hebat, Betul!", "Ejaan dan jawapan anda sangat tepat.");
+            } else {
+                tunjukMaklumBalas(false, "Salah Ejaan/Jawapan", `Jawapan yang betul ialah: "${infoSoalan.c}"`);
+            }
+        }
+
+        function semakJawapanDrag() {
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
+            
+            if(jawapanTerpilihDrag.length !== infoSoalan.correctOrder.length) {
+                alert("Sila susun semua elemen suku kata/perkataan terlebih dahulu!");
+                return;
+            }
+            
+            let betul = true;
+            for(let i=0; i<jawapanTerpilihDrag.length; i++) {
+                if(jawapanTerpilihDrag[i].nilai !== infoSoalan.correctOrder[i]) {
+                    betul = false;
+                    break;
+                }
+            }
+            
+            if(betul) {
+                skorSemasa += 10;
+                tunjukMaklumBalas(true, "Tepat Sekali!", "Susunan perkataan/suku kata anda amat sempurna.");
+            } else {
+                tunjukMaklumBalas(false, "Susunan Salah", `Susunan betul: ${infoSoalan.correctOrder.join(' ')}`);
+            }
+        }
+
+        function seterusnyaSoalan() {
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            soalanIndexSemasa++;
+            
+            if (soalanIndexSemasa < dataAktiviti.soalan.length) {
+                paparSoalan();
+            } else {
+                tamatAktiviti();
+            }
+        }
+
+        function tamatAktiviti() {
+            if (!rekodKemajuan[tahunSemasa]) rekodKemajuan[tahunSemasa] = {};
+            
+            const skorLama = rekodKemajuan[tahunSemasa][aktivitiSemasa] || 0;
+            if (skorSemasa > skorLama) {
+                rekodKemajuan[tahunSemasa][aktivitiSemasa] = skorSemasa;
+                simpanKemajuanKeFirebase();
+            }
+            
+            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
+            const mataMaksimum = dataAktiviti.soalan.length * 10;
+            const peratusAkhir = Math.round((skorSemasa / mataMaksimum) * 100);
+            
+            document.getElementById('final-score-percent').innerText = `${peratusAkhir}%`;
+            
+            const bContainer = document.getElementById('badge-container');
+            bContainer.innerHTML = '';
+            
+            let lencana = "Gangsa";
+            let warnaLencana = "text-amber-700 bg-amber-100";
+            let ikonLencana = "fa-medal";
+            
+            if(peratusAkhir >= 80) {
+                lencana = "Pingat Emas";
+                warnaLencana = "text-yellow-600 bg-yellow-100";
+                ikonLencana = "fa-trophy";
+            } else if(peratusAkhir >= 50) {
+                lencana = "Pingat Perak";
+                warnaLencana = "text-slate-500 bg-slate-100";
+                ikonLencana = "fa-medal";
+            }
+            
+            bContainer.innerHTML = `
+                <div class="text-4xl ${warnaLencana} p-3 rounded-full w-14 h-14 flex items-center justify-center border-2 border-current shadow-md"><i class="fas ${ikonLencana}"></i></div>
+                <span class="text-xs font-bold mt-1 text-slate-600">${lencana}</span>
+            `;
+            
+            // Set data untuk cetakan sijil digital
+            document.getElementById('cert-user-name').innerText = penggunaSemasa ? (penggunaSemasa.displayName || penggunaSemasa.email) : "Wira Pintar";
+            document.getElementById('cert-tahun-nama').innerText = `CABARAN BAHASA MELAYU TAHUN ${tahunSemasa}`;
+            document.getElementById('cert-lencana-nama').innerText = lencana.toUpperCase();
+            
+            const hariIni = new Date();
+            document.getElementById('cert-tarikh').innerText = `${String(hariIni.getDate()).padStart(2,'0')}/${String(hariIni.getMonth()+1).padStart(2,'0')}/${hariIni.getFullYear()}`;
+            
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            paparHalaman('ganjaran');
+        }
+
+        // PDF GENERATION SYSTEM
+        function janaSijil() {
+            const elemen = document.getElementById('sijil-print-area');
+            const parentTersembunyi = elemen.parentElement;
+            parentTersembunyi.classList.remove('hidden');
+
+            const opt = {
+                margin:       0,
+                filename:     `Sijil_Cabaran_Bahasa_Tahun_${tahunSemasa}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'px', format: [800, 560], orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(elemen).save().then(() => {
+                parentTersembunyi.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 </html>
