@@ -29,10 +29,6 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
 
-    <audio id="bg-music" src="https://assets.mixkit.co/active_storage/sfx/123/123.wav" loop preload="auto"></audio>
-    <audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" preload="auto"></audio>
-    <audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav" preload="auto"></audio>
-
     <header class="bg-blue-500 text-white shadow-lg sticky top-0 z-50 px-4 py-3 flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="paparHalaman('utama')">
             <div class="bg-yellow-400 p-2 rounded-full text-blue-900 text-xl animate-bounce">
@@ -236,16 +232,96 @@
     </footer>
 
     <script>
-        // CONFIG AUDIO KONTROL GLOBAL
+        // CONFIG AUDIO KONTROL GLOBAL & WEB AUDIO API SYNTHESIZER
         let isMusicOn = true;
         let isSfxOn = true;
+        let audioCtx = null;
+        let bleepOsculator = null;
+        let bleepGainNode = null;
 
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // PENJANA BUNYI SYNTHETIC BACKGROUND MUSIC (Melodi Gelung Mudah)
         function mainMuzikLatar() {
-            const bgMusic = document.getElementById('bg-music');
-            if (isMusicOn) {
-                bgMusic.play().catch(err => console.log("Muzik memerlukan interaksi pengguna terlebih dahulu."));
+            initAudioContext();
+            if (!isMusicOn) {
+                tutupMuzikLatar();
+                return;
+            }
+            if (bleepOsculator) return; // Muzik sedang berjalan
+
+            // Bina synthesizer ringkas untuk muzik latar
+            bleepOsculator = audioCtx.createOscillator();
+            bleepGainNode = audioCtx.createGain();
+            
+            bleepOsculator.type = 'triangle'; // Bunyi lembut mesra kanak-kanak
+            bleepOsculator.frequency.setValueAtTime(261.63, audioCtx.currentTime); // Kunci Do Utama
+            
+            // Buat kesan vibrato berayun lambat
+            bleepOsculator.frequency.linearRampToValueAtTime(329.63, audioCtx.currentTime + 1.5);
+            bleepOsculator.frequency.linearRampToValueAtTime(392.00, audioCtx.currentTime + 3.0);
+            
+            bleepGainNode.gain.setValueAtTime(0.04, audioCtx.currentTime); // Volume perlahan untuk latar belakang
+            
+            bleepOsculator.connect(bleepGainNode);
+            bleepGainNode.connect(audioCtx.destination);
+            bleepOsculator.start();
+
+            // Membina sistem 'looping' buatan untuk nada muzik lembut
+            setInterval(() => {
+                if (bleepOsculator && isMusicOn) {
+                    let freks = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
+                    let randyFreq = freks[Math.floor(Math.random() * freks.length)];
+                    bleepOsculator.frequency.setValueAtTime(randyFreq, audioCtx.currentTime);
+                }
+            }, 1000);
+        }
+
+        function tutupMuzikLatar() {
+            if (bleepOsculator) {
+                try { bleepOsculator.stop(); } catch(e){}
+                bleepOsculator = null;
+            }
+        }
+
+        // PENJANA KESAN BUNYI SINTETIK ("Horaa" & "Buzz")
+        function mainKesanBunyi(isBetul) {
+            if (!isSfxOn) return;
+            initAudioContext();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (isBetul) {
+                // BUNYI "HORAA!" (Melodi Chime Naik yang Gembira)
+                osc.type = 'sine';
+                let masa = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(392.00, masa); // G4
+                osc.frequency.setValueAtTime(523.25, masa + 0.08); // C5
+                osc.frequency.setValueAtTime(659.25, masa + 0.16); // E5
+                osc.frequency.setValueAtTime(783.99, masa + 0.24); // G5 ("Horaa!")
+                
+                gain.gain.setValueAtTime(0.2, masa);
+                gain.gain.linearRampToValueAtTime(0.01, masa + 0.5);
+                osc.start(masa);
+                osc.stop(masa + 0.5);
             } else {
-                bgMusic.pause();
+                // BUNYI "BUZZ!" (Gelombang Kasar Frekuensi Rendah)
+                osc.type = 'sawtooth';
+                let masa = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(120.00, masa); // Rendah keras
+                osc.frequency.linearRampToValueAtTime(80.00, masa + 0.3); // Menurun keras
+                
+                gain.gain.setValueAtTime(0.25, masa);
+                gain.gain.linearRampToValueAtTime(0.01, masa + 0.35);
+                osc.start(masa);
+                osc.stop(masa + 0.35);
             }
         }
 
@@ -264,7 +340,7 @@
                 btn.className = "bg-rose-500 hover:bg-rose-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
                 icon.className = "fas fa-music-slash";
                 txt.innerText = "Muzik: OFF";
-                document.getElementById('bg-music').pause();
+                tutupMuzikLatar();
             }
         }
 
@@ -516,8 +592,9 @@
 
         window.onload = function() {
             kemasKiniSkorPaparan();
-            // Pasang event klik pertama pada dokumen untuk memulakan audio (Sarat keselamatan pelayar/browser)
+            // Aktifkan Audio pada klik pertama pengguna (Syarat pelayar moden)
             document.body.addEventListener('click', function() {
+                initAudioContext();
                 mainMuzikLatar();
             }, { once: true });
         };
@@ -685,15 +762,6 @@
             }
         }
 
-        function mainKesanBunyi(isBetul) {
-            if (!isSfxOn) return; // Langpau jika SFX di-tutup
-            const snd = document.getElementById(isBetul ? 'snd-correct' : 'snd-wrong');
-            if(snd) {
-                snd.currentTime = 0;
-                snd.play().catch(e => console.log("Gagal mematikan sekatan pelayar audio"));
-            }
-        }
-
         function tunjukMaklumBalas(isBetul) {
             mainKesanBunyi(isBetul);
 
@@ -712,7 +780,7 @@
                 confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
                 box.className = "bg-white border-4 border-emerald-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-transform duration-300";
                 icon.innerHTML = "🌟";
-                title.innerText = "Tahniah! Betul!";
+                title.innerText = "Horaa! Betul!";
                 title.className = "text-3xl font-black text-emerald-600 mb-2 font-comic";
                 msg.innerText = "Bijak sekali jawapan anda. Teruskan usaha!";
                 btnTry.classList.add('hidden');
@@ -720,7 +788,7 @@
             } else {
                 box.className = "bg-white border-4 border-rose-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-transform duration-300";
                 icon.innerHTML = "❌";
-                title.innerText = "Cuba Lagi!";
+                title.innerText = "Buzz! Salah";
                 title.className = "text-3xl font-black text-rose-500 mb-2 font-comic";
                 msg.innerText = "Jangan berputus asa, mari kita fikirkan semula.";
                 btnTry.classList.remove('hidden');
@@ -802,7 +870,7 @@
             if (indexSoalanSemasa < senaraiSoalanAktif.length) {
                 janaSoalan();
             } else {
-                const markahSediaAda = rekokKemajuan = rekodKemajuan[tahunSemasa][topikSemasa] || 0;
+                const markahSediaAda = rekodKemajuan[tahunSemasa][topikSemasa] || 0;
                 if (skorAktivitiSemasa > markahSediaAda) {
                     rekodKemajuan[tahunSemasa][topikSemasa] = skorAktivitiSemasa;
                     localStorage.setItem('cilik_bahasa_progress', JSON.stringify(rekodKemajuan));
