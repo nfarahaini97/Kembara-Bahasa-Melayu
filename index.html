@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabaran Cilik Bahasa - Versi Muzik Rancak</title>
+    <title>Cabaran Cilik Bahasa - Versi Sijil Imej</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- html2pdf -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- html2canvas untuk Auto Simpan Imej (PNG) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- FIREBASE SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -29,10 +29,6 @@
         }
         .btn-bounce:active {
             transform: scale(0.95);
-        }
-        .drop-zone.hover {
-            background-color: #bbf7d0;
-            border-color: #22c55e;
         }
     </style>
 </head>
@@ -56,7 +52,6 @@
                 <p><i class="fas fa-check text-emerald-500 mr-1"></i> Menjana sijil eksklusif dengan nama profil anda.</p>
             </div>
 
-            <!-- Interaksi Klik pada butang ini wajib digunakan untuk membuka sekatan audio pelayar web -->
             <button id="btn-login-google" onclick="mulakanSesiDanAudio()" class="w-full bg-white border-2 border-slate-300 hover:border-slate-400 text-slate-700 font-bold py-3 px-4 rounded-xl shadow transition btn-bounce flex items-center justify-center space-x-3 text-base">
                 <svg class="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.227C18.216 1.414 15.424 0 12.24 0 5.58 0 0 5.58 0 12.24s5.58 12.24 12.24 12.24c6.96 0 11.57-4.894 11.57-11.79 0-.795-.085-1.402-.19-1.905H12.24z"/>
@@ -202,46 +197,48 @@
                     </div>
 
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="janaSijil()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
-                            <i class="fas fa-print mr-2"></i> Muat Turun Sijil (PDF)
+                        <!-- Butang Auto Simpan sebagai Imej PNG -->
+                        <button onclick="janaSijilSebagaiImej()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
+                            <i class="fas fa-image mr-2"></i> Muat Turun Sijil (Simpan Imej)
                         </button>
+                        <!-- Butang Menu Utama yang Telah Dipastikan Berfungsi Semula -->
                         <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
                             <i class="fas fa-home mr-2"></i> Menu Utama
                         </button>
                     </div>
                 </div>
 
-                <!-- TEMPLATE CETAK SIJIL HIDDEN -->
-                <div class="hidden">
-                    <div id="sijil-print-area" class="w-[800px] h-[560px] p-8 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center font-serif text-slate-800">
+                <!-- TEMPLATE REKABENTUK SIJIL (DISEMBUNYIKAN UNTUK PENGESANAN CANVAS) -->
+                <div style="position: absolute; left: -9999px; top: -9999px;">
+                    <div id="sijil-print-area" class="w-[800px] h-[560px] p-10 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center font-serif text-slate-800" style="box-sizing: border-box;">
                         <div class="absolute top-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
                         <div class="absolute top-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
                         <div class="absolute bottom-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
                         <div class="absolute bottom-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
 
                         <div>
-                            <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1">Sijil Penghargaan</h1>
+                            <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1" style="font-family: serif;">Sijil Penghargaan</h1>
                             <p class="text-sm italic text-gray-500">Kecemerlangan Pentaksiran Kendiri Maya</p>
                         </div>
 
                         <div class="space-y-4 my-4">
                             <p class="text-lg">Dengan ini diperakukan bahawa murid pintar</p>
-                            <h4 id="cert-user-name" class="text-xl font-bold text-slate-800 underline uppercase">NAMA MURID</h4>
+                            <h4 id="cert-user-name" class="text-2xl font-bold text-slate-800 underline uppercase" style="font-family: sans-serif;">NAMA MURID</h4>
                             <p class="text-base">telah menyempurnakan keseluruhan modul pembelajaran digital</p>
-                            <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-1">CABARAN BAHASA MELAYU TAHUN 1</h2>
+                            <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-1" style="font-family: sans-serif;">CABARAN BAHASA MELAYU TAHUN 1</h2>
                             <p class="text-lg">dengan keputusan pencapaian gred kecemerlangan bertaraf</p>
-                            <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest">PINGAT EMAS</h3>
+                            <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest" style="font-family: sans-serif;">PINGAT EMAS</h3>
                         </div>
 
-                        <div class="w-full flex justify-between items-end px-12 mt-4">
-                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
+                        <div class="w-full flex justify-between items-end px-12 mt-4" style="font-family: sans-serif;">
+                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs">
                                 <p class="font-bold">SISTEM PINTAR AI</p>
                                 <p class="text-gray-400">Pakar Didik Bahasa</p>
                             </div>
                             <div class="bg-yellow-100 p-4 rounded-full border-4 border-yellow-400 text-yellow-600 text-3xl shadow">
                                 <i class="fas fa-medal"></i>
                             </div>
-                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
+                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs">
                                 <p class="font-bold">TARIKH KELULUSAN</p>
                                 <p id="cert-tarikh" class="text-gray-500">11/07/2026</p>
                             </div>
@@ -288,7 +285,6 @@
                 document.getElementById('user-display-name').innerText = user.displayName || user.email;
                 muatKemajuanDariFirebase(user.uid);
                 
-                // Jika user sedia login dari session lama, mulakan muzik sebaik sahaja mereka melihat menu
                 setTimeout(() => { mainMuzikLatar(); }, 800);
             } else {
                 penggunaSemasa = null;
@@ -298,9 +294,7 @@
         });
 
         function mulakanSesiDanAudio() {
-            // Mesti trigger bina AudioContext dari event klik manusia untuk bypass anti-autoplay pelayar web
             aktifkanAudioContextPenuh();
-            
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).catch((error) => {
                 alert("Gagal log masuk: " + error.message);
@@ -362,7 +356,6 @@
             if (!isMusicOn) { tutupMuzikLatar(); return; }
             if (mainLoopInterval) return;
 
-            // Melodi rancak & ceria - Gembira C-Major Arpeggio Up & Down (Tempo Pantas)
             const melodiRancak = [
                 261.63, 329.63, 392.00, 523.25, 392.00, 329.63,
                 293.66, 349.23, 440.00, 587.33, 440.00, 349.23,
@@ -370,26 +363,18 @@
                 392.00, 440.00, 493.88, 587.33, 493.88, 440.00
             ];
 
-            // Selang masa 220ms menghasilkan tempo lagu yang rancak, laju dan menceriakan murid
             mainLoopInterval = setInterval(() => {
                 if (!isMusicOn || !audioCtx) return;
-                
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                    return;
-                }
+                if (audioCtx.state === 'suspended') { audioCtx.resume(); return; }
 
                 let masaKini = audioCtx.currentTime;
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 
-                // Guna jenis 'triangle' untuk bunyi retro-game rancak 8-bit yang amat disukai kanak-kanak
                 osc.type = 'triangle'; 
-                
                 let frekuensiNota = melodiRancak[tatasusunanNotaIndex];
                 osc.frequency.setValueAtTime(frekuensiNota, masaKini);
                 
-                // Volume dikekalkan optimum (0.02) supaya muzik latar tetap rancak tanpa mengganggu tumpuan membaca
                 gain.gain.setValueAtTime(0.025, masaKini);
                 gain.gain.linearRampToValueAtTime(0.0001, masaKini + 0.2);
                 
@@ -403,10 +388,7 @@
         }
 
         function tutupMuzikLatar() {
-            if (mainLoopInterval) { 
-                clearInterval(mainLoopInterval); 
-                mainLoopInterval = null; 
-            }
+            if (mainLoopInterval) { clearInterval(mainLoopInterval); mainLoopInterval = null; }
         }
 
         function mainKesanBunyi(isBetul) {
@@ -415,7 +397,6 @@
             let masaKini = audioCtx.currentTime;
 
             if (isBetul) {
-                // Bunyi keriangan (Kemenangan gembira laju)
                 [523.25, 659.25, 783.99, 1046.50].forEach((freq, index) => {
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
@@ -429,7 +410,6 @@
                     osc.stop(masaKini + (index * 0.06) + 0.3);
                 });
             } else {
-                // Bunyi ralat lucu (Aduhai!)
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
@@ -447,7 +427,6 @@
         function toggleMuzik(e) {
             if(e) e.stopPropagation();
             aktifkanAudioContextPenuh(); 
-            
             isMusicOn = !isMusicOn;
             const btn = document.getElementById('btn-toggle-music');
             const icon = document.getElementById('icon-music');
@@ -468,7 +447,6 @@
         function toggleSfx(e) {
             if(e) e.stopPropagation();
             aktifkanAudioContextPenuh();
-            
             isSfxOn = !isSfxOn;
             const btn = document.getElementById('btn-toggle-sfx');
             const icon = document.getElementById('icon-sfx');
@@ -784,56 +762,41 @@
             }
         }
 
-        // DRAG AND DROP ENGINE CORE FUNCTIONS
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
+        // DRAG AND DROP SYSTEMS
+        function allowDrop(ev) { ev.preventDefault(); }
         function fungsiDrag(ev) {
             ev.dataTransfer.setData("text/plain", ev.target.getAttribute('data-value'));
             window.draggedElementRef = ev.target;
         }
-
         function fungsiDrop(ev) {
             ev.preventDefault();
             const dataVal = ev.dataTransfer.getData("text/plain");
             const element = window.draggedElementRef;
-
-            if (element && !element.classList.contains('opacity-30')) {
-                tambahKeKawasanDrop(element, dataVal);
-            }
+            if (element && !element.classList.contains('opacity-30')) { tambahKeKawasanDrop(element, dataVal); }
         }
-
         function alternatifKlikSentuh(element) {
             if (element.classList.contains('opacity-30')) return;
             const dataVal = element.getAttribute('data-value');
             tambahKeKawasanDrop(element, dataVal);
         }
-
         function tambahKeKawasanDrop(element, value) {
             element.classList.add('opacity-30');
             element.setAttribute('draggable', 'false');
-            
             const dropContainer = document.getElementById('jawapan-drop-container');
             const placeholder = document.getElementById('placeholder-drag-text');
             if (placeholder) placeholder.remove();
             
             susunanSemasaDrag.push({ nilai: value, ref: element });
-            
             const badge = document.createElement('span');
-            badge.className = "bg-blue-500 text-white font-black px-4 py-2 rounded-lg text-lg shadow-md animate-fade-in";
+            badge.className = "bg-blue-500 text-white font-black px-4 py-2 rounded-lg text-lg shadow-md";
             badge.innerText = value;
             dropContainer.appendChild(badge);
         }
+        function padamSusunanDrag() { paparSoalan(); }
 
-        function padamSusunanDrag() {
-            paparSoalan();
-        }
-
-        // EVALUATION ENGINES
+        // EVALUATION SYSTEMS
         function tunjukMaklumBalas(isBetul, tajuk, mesej) {
             mainKesanBunyi(isBetul);
-            
             const box = document.getElementById('feedback-box');
             const icon = document.getElementById('feedback-icon');
             const title = document.getElementById('feedback-title');
@@ -848,7 +811,6 @@
                 box.className = "transform scale-100 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full bg-rose-50 border-4 border-rose-400 text-rose-800";
                 icon.innerHTML = '<i class="fas fa-circle-xmark text-rose-500"></i>';
             }
-            
             title.innerText = tajuk;
             msg.innerText = mesej;
             layer.classList.remove('hidden');
@@ -857,7 +819,6 @@
         function semakJawapanMCQ(indeksPilihan) {
             const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
             const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
-            
             if (indeksPilihan === infoSoalan.c) {
                 skorSemasa += 10;
                 tunjukMaklumBalas(true, "Syabas, Betul!", "Jawapan anda tepat sekali.");
@@ -870,7 +831,6 @@
             const input = document.getElementById('input-blank').value.trim().toLowerCase();
             const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
             const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
-            
             if (input === infoSoalan.c.toLowerCase()) {
                 skorSemasa += 10;
                 tunjukMaklumBalas(true, "Hebat, Betul!", "Ejaan dan jawapan anda sangat tepat.");
@@ -882,20 +842,14 @@
         function semakJawapanDrag() {
             const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
             const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
-            
             if(susunanSemasaDrag.length !== infoSoalan.correctOrder.length) {
                 alert("Sila susun semua elemen kad perkataan/suku kata terlebih dahulu!");
                 return;
             }
-            
             let betul = true;
             for(let i=0; i<susunanSemasaDrag.length; i++) {
-                if(susunanSemasaDrag[i].nilai !== infoSoalan.correctOrder[i]) {
-                    betul = false;
-                    break;
-                }
+                if(susunanSemasaDrag[i].nilai !== infoSoalan.correctOrder[i]) { betul = false; break; }
             }
-            
             if(betul) {
                 skorSemasa += 10;
                 tunjukMaklumBalas(true, "Tepat Sekali!", "Susunan perkataan/suku kata anda amat sempurna.");
@@ -907,7 +861,6 @@
         function seterusnyaSoalan() {
             const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
             soalanIndexSemasa++;
-            
             if (soalanIndexSemasa < dataAktiviti.soalan.length) {
                 paparSoalan();
             } else {
@@ -917,7 +870,6 @@
 
         function tamatAktiviti() {
             if (!rekodKemajuan[tahunSemasa]) rekodKemajuan[tahunSemasa] = {};
-            
             const skorLama = rekodKemajuan[tahunSemasa][aktivitiSemasa] || 0;
             if (skorSemasa > skorLama) {
                 rekodKemajuan[tahunSemasa][aktivitiSemasa] = skorSemasa;
@@ -929,7 +881,6 @@
             const peratusAkhir = Math.round((skorSemasa / mataMaksimum) * 100);
             
             document.getElementById('final-score-percent').innerText = `${peratusAkhir}%`;
-            
             const bContainer = document.getElementById('badge-container');
             bContainer.innerHTML = '';
             
@@ -963,22 +914,29 @@
             paparHalaman('ganjaran');
         }
 
-        // PDF GENERATION SYSTEM
-        function janaSijil() {
-            const elemen = document.getElementById('sijil-print-area');
-            const parentTersembunyi = elemen.parentElement;
-            parentTersembunyi.classList.remove('hidden');
-
-            const opt = {
-                margin:       0,
-                filename:     `Sijil_Cabaran_Bahasa_Tahun_${tahunSemasa}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'px', format: [800, 560], orientation: 'landscape' }
-            };
-
-            html2pdf().set(opt).from(elemen).save().then(() => {
-                parentTersembunyi.classList.add('hidden');
+        // ================= IMAGE AUTO-DOWNLOAD SYSTEM (PNG) =================
+        function janaSijilSebagaiImej() {
+            const elemenSijil = document.getElementById('sijil-print-area');
+            
+            // html2canvas menukarkan kod struktur sijil terus menjadi imej pixel fizikal
+            html2canvas(elemenSijil, {
+                scale: 2, // Gandaan skala 2 memastikan kualiti teks sijil tidak pecah apabila dizoom
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
+                const imejDataUrl = canvas.toDataURL("image/png");
+                
+                // Menjana fungsi pautan download halimunan
+                const pautanDownload = document.createElement('a');
+                pautanDownload.href = imejDataUrl;
+                pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahunSemasa}.png`;
+                
+                // Melakukan simulasi klik automatik
+                document.body.appendChild(pautanDownload);
+                pautanDownload.click();
+                document.body.removeChild(pautanDownload);
+            }).catch(err => {
+                alert("Ralat tidak dijangka ketika menyimpan imej: " + err);
             });
         }
     </script>
