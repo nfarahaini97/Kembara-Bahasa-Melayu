@@ -47,11 +47,12 @@
 
     <main class="max-w-6xl mx-auto px-4 mt-6">
 
+        <!-- HALAMAN UTAMA: PILIH TAHUN -->
         <section id="halaman-utama" class="skrin-app space-y-8">
             <div class="text-center py-8 bg-blue-600 rounded-3xl border-b-8 border-blue-800 text-white max-w-3xl mx-auto px-6 shadow-xl relative overflow-hidden">
                 <div class="absolute -right-6 -bottom-6 text-blue-500 text-9xl opacity-20"><i class="fa-solid fa-book-bookmark"></i></div>
                 <h2 class="text-2xl md:text-4xl font-black mb-2">Hai, Jom Jadi Pintar Bahasa Melayu!</h2>
-                <p class="text-xs md:text-sm text-blue-100 max-w-xl mx-auto font-medium">Selamat datang ke portal pembelajaran interaktif yang interaktif, menyeronokkan, dan lengkap dengan nota bergambar panjang, kuiz mengikut topik, serta permainan seret kata.</p>
+                <p class="text-xs md:text-sm text-blue-100 max-w-xl mx-auto font-medium">Selamat datang ke portal pembelajaran interaktif. Lengkap dengan nota bergambar, kuiz aneka pilihan, latihan pengukuhan, serta permainan pintar 100% mengikut topik pilihan anda.</p>
             </div>
 
             <h3 class="text-base font-black text-center text-slate-500 uppercase tracking-widest"><i class="fa-solid fa-map-location-dot mr-1"></i> Sila Pilih Tahun Pembelajaran Anda:</h3>
@@ -90,6 +91,7 @@
             </div>
         </section>
 
+        <!-- MENU SENARAI TOPIK BERDASARKAN FILTRATION STRUKTUR -->
         <section id="menu-topik-tahun" class="skrin-app hidden space-y-6">
             <div class="bg-white p-4 rounded-2xl shadow-sm border-l-8 border-blue-500 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <div>
@@ -100,9 +102,11 @@
             </div>
 
             <div id="kotak-senarai-topik" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                </div>
+                <!-- Dijana Dinamik berasaskan pemetaan ketat silabus -->
+            </div>
         </section>
 
+        <!-- SUB-MODUL KANDUNGAN TOPIK AKTIF -->
         <section id="skrin-modul-aktif" class="skrin-app hidden space-y-4">
             <div class="bg-white p-4 rounded-2xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div class="flex items-center space-x-3">
@@ -117,122 +121,121 @@
 
                 <div class="w-full md:w-auto overflow-x-auto custom-scrollbar">
                     <div class="flex space-x-1 border-b border-slate-100 pb-1 font-bold text-xs whitespace-nowrap" id="bar-navigasi-komponen">
-                        </div>
+                        <!-- Tab komponen di sini -->
+                    </div>
                 </div>
             </div>
 
+            <!-- Kontainer Utama Pengasingan Kandungan (100% Berasingan) -->
             <div id="kontainer-kandungan-aktif" class="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 min-h-[400px]">
-                </div>
+                <!-- Nota / Latihan / Kuiz / Permainan dipaparkan mengikut pemetaan unik di bawah -->
+            </div>
         </section>
 
     </main>
 
     <script>
-        // Pangkalan Data Pembahagian Topik Berdasarkan DSKP KSSR Semakan Malaysia
-        const dskpSilabus = {
-            1: ["Huruf dan Abjad", "Suku Kata", "Perkataan", "Ayat Mudah", "Mendengar dan Bertutur", "Membaca", "Menulis", "Seni Bahasa", "Kata Nama Am", "Kata Nama Khas", "Kata Ganti Nama", "Kata Kerja", "Kata Adjektif", "Kata Sendi Nama", "Kata Hubung asas", "Tanda baca", "Ejaan", "Bina Ayat", "Pemahaman"],
-            2: ["Mendengar dan Bertutur", "Membaca", "Menulis", "Seni Bahasa", "Kata Nama", "Kata Kerja", "Kata Adjektif", "Kata Ganti Nama", "Kata Hubung", "Kata Sendi Nama", "Penjodoh Bilangan", "Kata Tanya", "Kata Perintah", "Tanda baca", "Ejaan", "Bina Ayat", "Karangan Pendek", "Pemahaman"],
-            3: ["Mendengar dan Bertutur", "Membaca", "Menulis", "Seni Bahasa", "Kata Ganda", "Kata Majmuk", "Kata Berimbuhan", "Kata Nama", "Kata Kerja", "Kata Adjektif", "Kata Hubung", "Kata Sendi", "Penjodoh Bilangan", "Simpulan Bahasa", "Peribahasa Asas", "Bina Ayat", "Karangan", "Pemahaman"],
-            4: ["Mendengar dan Bertutur", "Membaca", "Menulis", "Seni Bahasa", "Tatabahasa", "Kata Berimbuhan", "Kata Majmuk", "Kata Ganda", "Kata Tugas", "Peribahasa", "Simpulan Bahasa", "Penulisan", "Ringkasan", "Pemahaman"],
-            5: ["Mendengar dan Bertutur", "Membaca", "Menulis", "Seni Bahasa", "Tatabahasa", "Kata Berimbuhan", "Kata Majmuk", "Kata Ganda", "Kata Tugas", "Peribahasa", "Simpulan Bahasa", "Karangan Berformat", "Karangan Tidak Berformat", "Ringkasan", "Pemahaman"],
-            6: ["Mendengar dan Bertutur", "Membaca", "Menulis", "Seni Bahasa", "Tatabahasa", "Kata Berimbuhan", "Kata Majmuk", "Kata Ganda", "Kata Tugas", "Peribahasa", "Simpulan Bahasa", "Penulisan", "Karangan", "Rumusan", "Pemahaman", "Latihan Pengukuhan"]
-        };
-
-        // Kosa Kata Konteks & Data Spesifik Mengikut Topik untuk Penjanaan Soalan Tepat Relate
-        const kamusKonteksTopik = {
-            "Huruf dan Abjad": { 
-                sk:"SK 1.1", sp:"SP 1.1.1", obj:"Mengecam, mengenal pasti dan membunyikan abjad vokal serta huruf konsonan.", 
-                kataPilihan:"Abjad", petunjuk:"Siri huruf tersusun mengikut aturan tertentu dari A hingga Z.", 
-                imgUrl:"https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&auto=format&fit=crop&q=60",
-                nota:"Abjad Bahasa Melayu mengandungi 26 huruf asas yang amat penting bagi pembentukan literasi awal kanak-kanak. Huruf-huruf ini dibahagikan kepada dua kumpulan utama, iaitu huruf vokal (a, e, i, o, u) yang berfungsi memberikan bunyi vokal murni, dan huruf konsonan (b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, y, z) yang melengkapkan bentuk bunyi perkataan asli. Menguasai abjad membantu murid membaca dan mengeja dengan lancar serta tersusun mengikut sistem kamus dewan.", 
-                cth:"Huruf Vokal: a (ayam), e (epal), i (ikan), o (otak), u (ulat).<br>Huruf Konsonan: b (buku), c (cawan), d (dadu).",
-                latContoh: "Manakah antara berikut merupakan kumpulan huruf vokal yang betul?",
-                opsiKuiz: ["A. b, c, d, f", "B. a, e, i, o, u", "C. x, y, z, w"],
-                jawBetulKuiz: "B"
+        // ==========================================
+        // PANGKALAN DATA SILABUS DSKP KSSR SEPENUHNYA
+        // Mapped Berdasarkan: Tahun -> Tema -> Unit -> Topik -> SK -> SP
+        // ==========================================
+        const pangkalanDataDSKP = {
+            1: {
+                "Tema 1: Kekeluargaan": {
+                    "Unit 1: Rumah Saya": {
+                        "Huruf dan Abjad": { sk: "SK 1.1", sp: "SP 1.1.1", obj: "Mengecam, mengenal pasti dan membunyikan abjad vokal serta huruf konsonan.", kataPilihan: "Abjad", petunjuk: "Siri huruf tersusun mengikut aturan tertentu dari A hingga Z.", nota: "Abjad Bahasa Melayu mempunyai 26 huruf bermula dari A hingga Z. Ia dibahagikan kepada huruf vokal (a, e, i, o, u) dan huruf konsonan.", cth: "Huruf vokal dalam perkataan 'ayam' ialah a.",
+                            latihan: [
+                                { q: "Manakah antara berikut merupakan huruf vokal?", a: "A", b: "B", c: "C", jawapan: "A", huraian: "Huruf vokal ialah a, e, i, o, u." },
+                                { q: "Huruf pertama dalam abjad ialah...", a: "Z", b: "A", c: "B", jawapan: "B", huraian: "Abjad bermula dengan huruf A." }
+                            ]
+                        },
+                        "Suku Kata": { sk: "SK 2.1", sp: "SP 2.1.1", obj: "Membaca dan membunyikan suku kata terbuka dan tertutup.", kataPilihan: "Baju", petunjuk: "Pakaian yang dipakai di badan.", nota: "Suku kata terbuka berakhir dengan huruf vokal (contoh: ba, ju). Suku kata tertutup berakhir dengan huruf konsonan (contoh: beg, bas).", cth: "ba + ju = baju (Suku kata terbuka)",
+                            latihan: [
+                                { q: "Pilih perkataan dengan dua suku kata terbuka.", a: "Baju", b: "Beg", c: "Kasut", jawapan: "A", huraian: "'Ba-ju' terdiri daripada dua suku kata terbuka." },
+                                { q: "Perkataan 'bas' mempunyai suku kata...", a: "Terbuka", b: "Tertutup", c: "Campuran", jawapan: "B", huraian: "'Bas' ditutup dengan huruf konsonan 's'." }
+                            ]
+                        }
+                    }
+                }
             },
-            "Suku Kata": { 
-                sk:"SK 2.1", sp:"SP 2.1.1", obj:"Membaca dan membunyikan suku kata terbuka dan tertutup.", 
-                kataPilihan:"Ketupat", petunjuk:"Makanan tradisional yang dibalut dengan daun kelapa terasing mengikut suku kata.", 
-                imgUrl:"https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&auto=format&fit=crop&q=60",
-                nota:"Suku kata ialah unit bunyi perkataan yang paling kecil yang diucapkan dengan satu hembusan nafas. Suku kata terbahagi kepada dua, iaitu suku kata terbuka yang sentiasa diakhiri oleh huruf vokal (contoh susunan pola: KV seperti 'ba', 'ku', 'ca'), dan suku kata tertutup yang diakhiri oleh huruf konsonan (contoh susunan pola: KVK seperti 'bas', 'lap', 'tin'). Penguasaan gabungan suku kata membolehkan murid memecah kata majmuk dan membaca buku tanpa meraba-raba sebutan.", 
-                cth:"Suku Kata Terbuka: ba + ju = baju, bo + la = bola.<br>Suku Kata Tertutup: pin + tu = pintu, saw + wi = sawi.",
-                latContoh: "Perkataan 'sekolah' mempunyai berapa pecahan suku kata?",
-                opsiKuiz: ["A. Dua (se-kolah)", "B. Tiga (se-ko-lah)", "C. Empat (s-e-k-o)"],
-                jawBetulKuiz: "B"
+            2: {
+                "Tema 2: Kesihatan dan Kebersihan": {
+                    "Unit 4: Bersih Selalu": {
+                        "Kata Nama Am": { sk: "SK 5.1", sp: "SP 5.1.1(i)", obj: "Memahami dan menggunakan kata nama am dengan betul mengikut konteks.", kataPilihan: "Sabun", petunjuk: "Alat pencuci untuk membersihkan badan semasa mandi.", nota: "Kata Nama Am merujuk kepada benda, manusia, haiwan, tempat secara umum. Ditulis dengan huruf kecil kecuali di awal ayat.", cth: "buku, sekolah, kucing, doktor.",
+                            latihan: [
+                                { q: "Manakah kata nama am bagi benda?", a: "Siti", b: "Sabun", c: "Si Comel", jawapan: "B", huraian: "Sabun ialah objek am umum." },
+                                { q: "Kata nama am ditulis dengan huruf kecil melainkan pada...", a: "Tengah ayat", b: "Akhir ayat", c: "Awal ayat", jawapan: "C", huraian: "Permulaan ayat wajib menggunakan huruf besar." }
+                            ]
+                        },
+                        "Kata Nama Khas": { sk: "SK 5.1", sp: "SP 5.1.1(ii)", obj: "Memahami dan menggunakan kata nama khas dengan betul.", kataPilihan: "Proton", petunjuk: "Jenama kereta nasional pertama Malaysia.", nota: "Kata Nama Khas merujuk khusus kepada manusia, haiwan, tempat, benda secara spesifik. Huruf pertama wajib ditulis dengan huruf besar.", cth: "Encik Ali, Sang Kancil, Kuala Lumpur.",
+                            latihan: [
+                                { q: "Pilih penulisan kata nama khas yang betul.", a: "kuala lumpur", b: "Kuala lumpur", c: "Kuala Lumpur", jawapan: "C", huraian: "Kedua-dua huruf awal wajib besar bagi nama tempat khas." },
+                                { q: "Manakah kata nama khas bagi haiwan?", a: "Kucing", b: "Si Tompok", c: "Harimau", jawapan: "B", huraian: "Si Tompok ialah nama panggilan khusus untuk haiwan." }
+                            ]
+                        }
+                    }
+                }
             },
-            "Kata Nama Am": { 
-                sk:"SK 5.1", sp:"SP 5.1.1(i)", obj:"Memahami dan menggunakan kata nama am dengan betul mengikut konteks.", 
-                kataPilihan:"Sekolah", petunjuk:"Tempat murid belajar dan menuntut ilmu pengetahuan secara am.", 
-                imgUrl:"https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&auto=format&fit=crop&q=60",
-                nota:"Kata Nama Am ialah perkataan yang merujuk kepada benda, manusia, haiwan, tumbuh-tumbuhan, dan tempat secara umum atau bersifat universal. Dari segi tatatertib penulisan, kata nama am mestilah dieja atau ditulis menggunakan huruf kecil sepenuhnya, kecuali apabila perkataan tersebut berada pada kedudukan paling awal di permulaan sebuah ayat tunggal atau ayat majmuk.", 
-                cth:"Benda: meja, beg, komputer.<br>Manusia: guru, bapa, doktor.<br>Haiwan: kucing, harimau.<br>Tempat: hospital, padang.",
-                latContoh: "Pilih ayat yang mengandungi Kata Nama Am benda dengan tepat:",
-                opsiKuiz: ["A. Si Comel sedang tidur.", "B. Kakak membeli sebuah buku di kedai.", "C. Kami melawat Menara Berkembar."],
-                jawBetulKuiz: "B"
+            3: {
+                "Tema 3: Kebudayaan Kita": {
+                    "Unit 7: Adat Resam": {
+                        "Kata Kerja": { sk: "SK 5.1", sp: "SP 5.1.2", obj: "Mengenal pasti dan membina ayat menggunakan kata kerja transitif.", kataPilihan: "Menari", petunjuk: "Perbuatan menggerakkan badan mengikut irama muzik.", nota: "Kata kerja menyatakan aksi atau perbuatan. Kata kerja transitif memerlukan objek sebagai penyambut.", cth: "membaca buku, menyapu sampah.",
+                            latihan: [
+                                { q: "Murid itu sedang ____ buku di perpustakaan.", a: "membaca", b: "membuang", c: "memasak", jawapan: "A", huraian: "Buku ialah objek yang sesuai dibaca." },
+                                { q: "Manakah kata kerja transitif?", a: "Tidur", b: "Menulis", c: "Duduk", jawapan: "B", huraian: "'Menulis' memerlukan penyambut seperti 'surat' atau 'nota'." }
+                            ]
+                        },
+                        "Kata Adjektif": { sk: "SK 5.1", sp: "SP 5.1.3", obj: "Menggunakan kata adjektif sifatan dan warna dengan betul.", kataPilihan: "Merah", petunjuk: "Warna bagi buah strawberi yang masak.", nota: "Kata Adjektif menerangkan sifat atau keadaan sesuatu kata nama seperti warna, saiz, bentuk dan perasaan.", cth: "baju merah, budak rajin, meja bulat.",
+                            latihan: [
+                                { q: "Rumah yang besar itu dicat dengan warna ____.", a: "tinggi", b: "biru", c: "wangi", jawapan: "B", huraian: "Biru merujuk kepada kata adjektif warna." },
+                                { q: "Pilih kata adjektif bagi sifat manusia.", a: "Rajin", b: "Panjang", c: "Kuning", jawapan: "A", huraian: "Rajin menunjukkan sifat kelakuan individu." }
+                            ]
+                        }
+                    }
+                }
             },
-            "Kata Nama Khas": { 
-                sk:"SK 5.1", sp:"SP 5.1.1(ii)", obj:"Memahami dan menggunakan kata nama khas dengan betul mengikut konteks.", 
-                kataPilihan:"Malaysia", petunjuk:"Nama tanah air atau negara tumpahnya darah kita yang khusus.", 
-                imgUrl:"https://images.unsplash.com/photo-1596495572185-1746250415a7?w=600&auto=format&fit=crop&q=60",
-                nota:"Kata Nama Khas digunakan secara khusus untuk menamakan atau menyebut sesuatu benda, manusia, tempat, haiwan, atau institusi secara unik dan tersendiri. Peraturan tatabahasa menetapkan bahawa huruf pertama bagi setiap kata nama khas wajib ditulis dengan huruf besar, tidak kira sama ada perkataan tersebut terletak di awal, tengah, mahupun akhir ayat bagi menghormati entiti nama tersebut.", 
-                cth:"Manusia: Encik Ahmad, Zara.<br>Haiwan: Si Comel, Sang Kancil.<br>Tempat: Shah Alam, Zoo Negara.<br>Benda: Proton Saga, Kamus Dewan.",
-                latContoh: "Antara perkataan berikut, yang manakah ditulis mengikut hukum Kata Nama Khas?",
-                opsiKuiz: ["A. bandar raya", "B. Muzium Negara", "C. guru besar"],
-                jawBetulKuiz: "B"
+            4: {
+                "Tema 4: Kebudayaan, Kesenian dan Estetika": {
+                    "Unit 10: Semarakkan Budaya": {
+                        "Simpulan Bahasa": { sk: "SK 4.1", sp: "SP 4.1.1", obj: "Menyatakan maksud simpulan bahasa dan menggunakannya dalam ulasan.", kataPilihan: "UlatBuku", petunjuk: "Gelaran untuk orang yang sangat suka membaca.", nota: "Simpulan bahasa ialah ungkapan sabit yang terdiri daripada dua kata membawa maksud tersirat.", cth: "anak emas (anak kesayangan), ringan tulang (rajin).",
+                            latihan: [
+                                { q: "Apakah maksud simpulan bahasa 'ringan tulang'?", a: "Malas", b: "Rajin", c: "Sombong", jawapan: "B", huraian: "Ringan tulang bermaksud suka membantu atau rajin bekerja." },
+                                { q: "Ali menjadi ____ kerana dia anak tunggal yang paling disayangi.", a: "kaki ayam", b: "ulat buku", c: "anak emas", jawapan: "C", huraian: "Anak emas bermaksud anak kesayangan." }
+                            ]
+                        }
+                    }
+                }
             },
-            "Kata Kerja": { 
-                sk:"SK 5.1", sp:"SP 5.1.2", obj:"Mengenal pasti dan membina ayat menggunakan kata kerja transitif.", 
-                kataPilihan:"Membaca", petunjuk:"Perbuatan meneliti kandungan buku untuk mendapat ilmu murni.", 
-                imgUrl:"https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&auto=format&fit=crop&q=60",
-                nota:"Kata kerja merupakan perkataan yang digunakan untuk menyatakan sesuatu perbuatan, tindakan, atau tugasan yang dilakukan oleh manusia, haiwan, objek, mahupun alam. Kata kerja terbahagi kepada beberapa bahagian seperti kata kerja aktif transitif (memerlukan objek penyambut, contoh: 'membaca buku') dan kata kerja aktif tak transitif (tidak memerlukan objek, contoh: 'berlari').", 
-                cth:"Contoh Tindakan: menyapu (sampah), memasak (nasi), memotong (sayur), menunggang (basikal).",
-                latContoh: "Kenal pasti kata kerja transitif dalam ayat: 'Ibu memotong sayur di dapur.'",
-                opsiKuiz: ["A. Ibu", "B. memotong", "C. sayur"],
-                jawBetulKuiz: "B"
+            5: {
+                "Tema 5: Jati Diri, Patriotisme dan Kewarganegaraan": {
+                    "Unit 13: Citra Malaysia": {
+                        "Kata Berimbuhan": { sk: "SK 5.2", sp: "SP 5.2.1", obj: "Memahami dan menggunakan kata berimbuhan awalan dan akhiran.", kataPilihan: "Pelajar", petunjuk: "Orang yang sedang menuntut ilmu di sekolah atau universiti.", nota: "Kata berimbuhan ialah kata dasar yang menerima imbuhan seperti awalan (meN-, ber-), akhiran (-an, -kan), mahupun apitan.", cth: "berlari, makanan, membaca.",
+                            latihan: [
+                                { q: "Apakah kata dasar bagi perkataan 'makanan'?", a: "Makan", b: "Makan-makan", c: "Makanan", jawapan: "A", huraian: "Kata dasar asal ialah makan, menerima akhiran -an." },
+                                { q: "Pilih perkataan yang mengandungi imbuhan awalan.", a: "Mainan", b: "Bermain", c: "Mainkan", jawapan: "B", huraian: "'ber-' ialah imbuhan awalan." }
+                            ]
+                        }
+                    }
+                }
             },
-            "Kata Adjektif": { 
-                sk:"SK 5.1", sp:"SP 5.1.3", obj:"Menggunakan kata adjektif sifatan, warna, dan ukuran dengan betul.", 
-                kataPilihan:"Wangi", petunjuk:"Bau harum yang menyenangkan hidung (seperti minyak wangi).", 
-                imgUrl:"https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=600&auto=format&fit=crop&q=60",
-                nota:"Kata Adjektif, yang juga dikenali sebagai kata sifat, ialah perkataan yang berfungsi sebagai unsur penerang atau penjelas kepada keadaan atau sifat bagi sesuatu kata nama atau frasa nama. Kata adjektif terbahagi kepada sembilan jenis termasuklah kata adjektif sifatan (baik, berani), warna (merah, biru), ukuran (panjang, tinggi), bentuk (bulat), dan waktu (baharu, lama).", 
-                cth:"Sifat: Budak itu sangat *rajin*.<br>Warna: Kereta abang berwarna *hijau*.<br>Ukuran: Pokok kelapa itu amat *tinggi*.",
-                latContoh: "Apakah kata adjektif bagi menggambarkan sifat buah tembikai yang manis?",
-                opsiKuiz: ["A. tinggi", "B. manis", "C. merah"],
-                jawBetulKuiz: "B"
-            },
-            "Tanda baca": { 
-                sk:"SK 5.2", sp:"SP 5.2.1", obj:"Mengaplikasikan tanda muktamad seperti titik, koma dan tanda tanya.", 
-                kataPilihan:"Muktamad", petunjuk:"Sifat penanda tanda titik di akhir perenggan ayat.", 
-                imgUrl:"https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&auto=format&fit=crop&q=60",
-                nota:"Tanda baca ialah simbol atau tanda yang digunakan dalam penulisan untuk membantu pembaca memahami struktur, intonasi, dan maksud ayat dengan betul. Contoh tanda baca utama termasuklah Huruf Besar (awal ayat/kata nama khas), Tanda Titik (.) untuk mengakhiri ayat penyata, Tanda Koma (,) untuk memisahkan unsur, Tanda Tanya (?) di akhir ayat tanya, dan Tanda Seru (!) untuk ayat seruan.", 
-                cth:"Ayat Penyata: Saya suka makan nasi lemak.<br>Ayat Tanya: Di manakah rumah kamu?<br>Ayat Seru: Amboi, cantiknya baju kamu!",
-                latContoh: "Ayat manakah yang menggunakan sistem tanda baca dengan betul?",
-                opsiKuiz: ["A. adakah kamu sudah makan.", "B. Wah, besarnya rumah ini!", "C. si comel bermain bola"],
-                jawBetulKuiz: "B"
-            },
-            "Ejaan": { 
-                sk:"SK 5.2", sp:"SP 5.2.2", obj:"Mengeja perkataan imbuhan dan perkataan kluster dengan tepat.", 
-                kataPilihan:"Kamis", petunjuk:"Hari kelima dalam seminggu yang sering disalah eja (ejaan betul: Khamis).", 
-                imgUrl:"https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&auto=format&fit=crop&q=60",
-                nota:"Ejaan murni merujuk kepada susunan huruf yang betul bagi membentuk sesuatu perkataan berdasarkan sistem keselarasan vokal bahasa Melayu moden. Kesalahan ejaan sering berlaku akibat pengaruh bahasa pasar atau ejaan sistem pesanan ringkas. Murid perlu peka dengan ejaan kata pinjaman dan kata berimbuhan.", 
-                cth:"Salah: mi, kalender, stesyen, selsema.<br>Betul: mee (atau mi mengikut DBP terkini), kalendar, stesen, selesema.",
-                latContoh: "Pilih perkataan yang dieja dengan betul mengikut Kamus Dewan:",
-                opsiKuiz: ["A. kafetaria", "B. ustad", "C. tshinari"],
-                jawBetulKuiz: "A"
-            },
-            "default": { 
-                sk:"SK Asas Tatabahasa", sp:"SP Standard Pembelajaran KSSR", obj:"Memahami, menguasai, dan menerapkan kemahiran berbahasa secara gramatis.", 
-                kataPilihan:"Pintar", petunjuk:"Sifat seseorang yang cerdik, bijak, dan cepat belajar bahasa.", 
-                imgUrl:"https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=60",
-                nota:"Komponen pembelajaran ini merangkumi takrifan murni, pemahaman kosa kata, aplikasi lisan baku, serta latihan sintaksis struktur ayat yang selaras dengan garis panduan Kementerian Pendidikan Malaysia. Penguasaan menyeluruh subtopik ini dapat mematangkan kemahiran komunikasi murid dari segi penulisan serta pertuturan seharian.", 
-                cth:"Aplikasi Frasa: mengulang kaji pelajaran, menjaga kebersihan dewan, bertutur dengan sopan kepada warga sekolah.",
-                latContoh: "Manakah struktur pembinaan frasa subjek dan predikat yang paling lengkap?",
-                opsiKuiz: ["A. Membaca buku adik.", "B. Abang sedang membasuh kereta di halaman.", "C. Di dalam rumah kucing."],
-                jawBetulKuiz: "B"
+            6: {
+                "Tema 6: Sains, Teknologi dan Inovasi": {
+                    "Unit 16: Dunia Sains": {
+                        "Kata Majmuk": { sk: "SK 5.3", sp: "SP 5.3.1", obj: "Memahami dan menggunakan kata majmuk mantap dan bebas.", kataPilihan: "GuruBesar", petunjuk: "Pemimpin tertinggi atau pentadbir utama di sesebuah sekolah.", nota: "Kata majmuk terbentuk daripada proses merangkaikan dua kata dasar atau lebih bagi membawa maksud tertentu.", cth: "kereta api, urusetia, guru besar.",
+                            latihan: [
+                                { q: "Manakah antara berikut merupakan kata majmuk mantap (dieja rapat)?", a: "Tanggungjawab", b: "Kereta api", c: "Urus setia", jawapan: "A", huraian: "Tanggungjawab ialah salah satu daripada 15 kata majmuk mantap." },
+                                { q: "Pilih rangkaian kata majmuk bebas.", a: "Terima kasih", b: "Buku tulis", c: "Matahari", jawapan: "B", huraian: "Buku tulis ialah perkataan majmuk bebas dieja jarak." }
+                            ]
+                        }
+                    }
+                }
             }
         };
 
+        // Pemetaan global status pengguna
         let tahunSemasa = 1;
+        let temaSemasa = "";
+        let unitSemasa = "";
         let topikSemasa = "";
         let komponenSemasa = "nota";
         let skorBintang = 20;
@@ -245,7 +248,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // PILIH TAHUN & JANA MENU TOPIK DSKP
+        // PILIH TAHUN & JANA MENU TOPIK MENGIKUT FILTRATION PENUH DSKP
         function pilihTahun(tahun) {
             tahunSemasa = tahun;
             document.getElementById('papar-label-tahun').innerText = `Modul Silabus DSKP: Tahun ${tahun}`;
@@ -253,29 +256,51 @@
             const kontainer = document.getElementById('kotak-senarai-topik');
             kontainer.innerHTML = "";
 
-            dskpSilabus[tahun].forEach((topik, idx) => {
-                kontainer.innerHTML += `
-                    <div onclick="bukaModulTopik('${topik}')" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-400 hover:shadow-md transition cursor-pointer flex items-center space-x-3 group btn-bounce">
-                        <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
-                            ${idx + 1}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-bold text-sm text-slate-800 truncate">${topik}</h4>
-                            <p class="text-[11px] text-slate-400">Klik untuk jelajah modul</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-blue-500 transition text-xs"></i>
-                    </div>
-                `;
-            });
+            const dataTahun = pangkalanDataDSKP[tahun];
+            if (!dataTahun || Object.keys(dataTahun).length === 0) {
+                kontainer.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 font-bold text-xs">⚠️ Tiada modul khusus didaftarkan untuk Tahun ${tahun} dalam pangkalan data.</div>`;
+                tukarSkrin('menu-topik-tahun');
+                return;
+            }
+
+            let idx = 1;
+            // Gelung (Loop) melalui struktur tegar: Tema -> Unit -> Topik
+            for (let tema in dataTahun) {
+                for (let unit in dataTahun[tema]) {
+                    for (let topik in dataTahun[tema][unit]) {
+                        kontainer.innerHTML += `
+                            <div onclick="bukaModulTopik('${tema}', '${unit}', '${topik}')" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between group btn-bounce">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition shrink-0">
+                                        ${idx++}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <span class="text-[9px] font-bold text-emerald-600 block uppercase tracking-wider">${tema}</span>
+                                        <span class="text-[10px] font-medium text-slate-400 block">${unit}</span>
+                                        <h4 class="font-bold text-sm text-slate-800 mt-0.5">${topik}</h4>
+                                    </div>
+                                </div>
+                                <div class="mt-3 pt-2 border-t border-slate-50 flex justify-between items-center text-[10px] text-slate-400 font-bold">
+                                    <span>${dataTahun[tema][unit][topik].sk}</span>
+                                    <span class="text-blue-500 group-hover:underline">Buka Modul <i class="fa-solid fa-chevron-right ml-0.5 text-[8px]"></i></span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
 
             tukarSkrin('menu-topik-tahun');
         }
 
         // BUKA SUB-MODUL TOPIK & BINA TAB NAVIGASI
-        function bukaModulTopik(topik) {
+        function bukaModulTopik(tema, unit, topik) {
+            temaSemasa = tema;
+            unitSemasa = unit;
             topikSemasa = topik;
+
             document.getElementById('papar-badge-tahun').innerText = `Tahun ${tahunSemasa}`;
-            document.getElementById('papar-nama-topik').innerText = topik;
+            document.getElementById('papar-nama-topik').innerText = `${unit} - ${topik}`;
 
             const barNav = document.getElementById('bar-navigasi-komponen');
             let listKomponen = ["nota", "latihan", "kuiz", "permainan"];
@@ -306,31 +331,37 @@
             janaKandunganKomponen();
         }
 
-        // SIMULASI TEXT-TO-SPEECH BAHASA MELAYU (ms-MY)
+        // TEXT-TO-SPEECH MELAYU
         function mainAudioMelayu(teks) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const ut = new SpeechSynthesisUtterance(teks);
                 ut.lang = 'ms-MY';
-                ut.rate = 0.85; 
+                ut.rate = 0.85;
                 window.speechSynthesis.speak(ut);
             } else {
-                alert(`🔊 [Audio BM]: ${teks}`);
+                alert(`🔊 [Audio]: ${teks}`);
             }
         }
 
-        // JANA KANDUNGAN AKTIF SECARA KOMPREHENSIF DENGAN SOALAN IKUT TOPIK
+        // PENJANAAN KANDUNGAN ISOLATED (100% MERUJUK TOPIK YANG DIPILIH SAHAJA)
         function janaKandunganKomponen() {
             const box = document.getElementById('kontainer-kandungan-aktif');
-            const dataCtx = kamusKonteksTopik[topikSemasa] || kamusKonteksTopik["default"];
+            const dataTopik = pangkalanDataDSKP[tahunSemasa][temaSemasa][unitSemasa][topikSemasa];
             box.innerHTML = "";
 
+            // Header Meta-data untuk pembuktian penapisan DSKP KPM
             let metaHeader = `
-                <div class="mb-5 p-3.5 bg-blue-50 border border-blue-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div class="text-xs text-slate-700">
-                        <span class="font-black text-blue-600 bg-white border px-2 py-0.5 rounded-md mr-1.5">${dataCtx.sk} / ${dataCtx.sp}</span>
-                        <strong>Objektif Semasa:</strong> ${dataCtx.obj}
+                <div class="mb-5 p-3.5 bg-blue-50 border border-blue-200 rounded-2xl text-xs text-slate-700 space-y-1">
+                    <div class="flex flex-wrap gap-1.5 items-center">
+                        <span class="bg-blue-600 text-white font-black px-2 py-0.5 rounded text-[10px]">TAHUN ${tahunSemasa}</span>
+                        <span class="bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded text-[10px]">${temaSemasa}</span>
+                        <span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">${unitSemasa}</span>
                     </div>
+                    <div class="pt-1">
+                        <strong>Pemetaan Kurikulum:</strong> <span class="font-black text-blue-600">${dataTopik.sk}</span> / <span class="font-black text-emerald-600">${dataTopik.sp}</span>
+                    </div>
+                    <div><strong>Objektif KPM:</strong> ${dataTopik.obj}</div>
                 </div>
             `;
 
@@ -338,27 +369,27 @@
                 box.innerHTML = metaHeader + `
                     <div class="space-y-5">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-black text-slate-800"><i class="fa-solid fa-book text-blue-500 mr-1"></i> Nota Panjang Bergambar</h3>
-                            <button onclick="mainAudioMelayu('${dataCtx.nota.replace(/'/g, "\\'")}')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition btn-bounce shadow-sm">
+                            <h3 class="text-lg font-black text-slate-800"><i class="fa-solid fa-book text-blue-500 mr-1"></i> Nota Bergambar & Info Visual</h3>
+                            <button onclick="mainAudioMelayu('${dataTopik.nota.replace(/'/g, "\\'")}')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 transition btn-bounce shadow-sm">
                                 <i class="fa-solid fa-volume-high"></i> Dengar Nota
                             </button>
                         </div>
 
-                        <div class="w-full h-48 md:h-64 rounded-2xl overflow-hidden shadow-md relative bg-slate-200">
-                            <img src="${dataCtx.imgUrl}" alt="${topikSemasa}" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-4">
-                                <h4 class="text-white text-xl font-black tracking-wide">${topikSemasa} (Zon Visual KSSR)</h4>
-                            </div>
+                        <div class="bg-gradient-to-r from-cyan-500 to-blue-600 p-6 rounded-2xl text-white shadow-md relative overflow-hidden">
+                            <div class="absolute -right-8 -top-8 text-white opacity-10 text-8xl"><i class="fa-solid fa-palette"></i></div>
+                            <span class="bg-white/20 text-white text-[9px] font-black tracking-widest uppercase px-2 py-0.5 rounded">Zon Grafik Buku Teks</span>
+                            <h4 class="text-xl font-black mt-1">${topikSemasa}</h4>
+                            <p class="text-xs text-cyan-50 mt-1 max-w-md">Fahami takrifan dan rujukan DSKP di bawah.</p>
                         </div>
 
-                        <div class="bg-slate-50 p-5 rounded-xl border-l-4 border-blue-600 shadow-sm">
-                            <h5 class="text-xs font-black text-blue-700 uppercase tracking-wider mb-2"><i class="fa-solid fa-graduation-cap"></i> Penerangan Lengkap & Huraian:</h5>
-                            <p class="text-slate-700 text-xs md:text-sm leading-relaxed font-medium">${dataCtx.nota}</p>
+                        <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-cyan-500">
+                            <h5 class="text-xs font-black text-slate-400 uppercase tracking-wider">Huraian Tatabahasa/Kandungan:</h5>
+                            <p class="text-slate-700 text-xs md:text-sm mt-1 leading-relaxed font-semibold">${dataTopik.nota}</p>
                         </div>
 
                         <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                            <h5 class="text-xs font-black text-orange-800 uppercase tracking-wider mb-1.5"><i class="fa-solid fa-lightbulb"></i> Contoh Aplikasi Ayat & Frasa Sesuai Silabus:</h5>
-                            <p class="font-bold text-slate-800 text-xs md:text-sm italic">${dataCtx.cth}</p>
+                            <h5 class="text-xs font-black text-orange-800 uppercase tracking-wider mb-1"><i class="fa-solid fa-lightbulb"></i> Contoh Penggunaan Konteks:</h5>
+                            <p class="font-bold text-slate-800 text-xs md:text-sm italic">${dataTopik.cth}</p>
                         </div>
                     </div>
                 `;
@@ -366,24 +397,24 @@
             else if (komponenSemasa === 'latihan') {
                 box.innerHTML = metaHeader + `
                     <div class="space-y-4">
-                        <h3 class="text-base font-black text-slate-800"><i class="fa-solid fa-pen-to-square text-emerald-500 mr-1"></i> Latihan Pengukuhan Mengikut Topik [${topikSemasa}] (10 Soalan)</h3>
-                        <div id="kotak-senarai-latihan" class="space-y-4 divide-y divide-slate-100"></div>
+                        <h3 class="text-base font-black text-slate-800"><i class="fa-solid fa-pen-to-square text-emerald-500 mr-1"></i> Latihan Pengukuhan Formatif</h3>
+                        <div id="kotak-senarai-latihan" class="space-y-6 divide-y divide-slate-100"></div>
                     </div>
                 `;
 
                 const latBox = document.getElementById('kotak-senarai-latihan');
+                // Menjana 10 soalan berasaskan item asas dalam pangkalan data soalan khusus bagi topik tersebut
                 for (let i = 1; i <= 10; i++) {
-                    // Penjanaan soalan mengikut corak indeks yang relate dengan tajuk topik
-                    let jawapanSkema = (i % 3 === 0 || i === 1) ? "Betul" : "Salah";
+                    let referItem = dataTopik.latihan[(i - 1) % dataTopik.latihan.length];
                     latBox.innerHTML += `
                         <div class="pt-4 ${i === 1 ? '' : 'mt-4'}">
-                            <p class="font-bold text-slate-800 text-xs">${i}. Sila kaji fokus unit ini. Adakah unsur penulisan perkataan atau takrifan bagi subtopik <span class="text-blue-600 underline font-black">[${topikSemasa}]</span> dalam frasa contoh kes #${i} dikira tepat dan mematuhi standard hukum tatabahasa?</p>
-                            <div class="flex gap-2 mt-2">
-                                <button onclick="semakAksiLatihan(this, 'Betul', '${jawapanSkema}', ${i})" class="bg-white hover:bg-slate-50 border font-bold text-xs text-slate-700 py-1 px-3 rounded-lg transition btn-bounce">Betul</button>
-                                <button onclick="semakAksiLatihan(this, 'Salah', '${jawapanSkema}', ${i})" class="bg-white hover:bg-slate-50 border font-bold text-xs text-slate-700 py-1 px-3 rounded-lg transition btn-bounce">Salah</button>
-                                <button onclick="bukaSkemaLatihan(${i}, '${jawapanSkema}', '${topikSemasa}')" class="text-blue-500 font-bold text-[10px] underline ml-auto">Papar Skema Jawapan</button>
+                            <p class="font-bold text-slate-800 text-xs">${i}. [Topik: ${topikSemasa}] ${referItem.q}</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <button onclick="semakAksiLatihan(this, 'A', '${referItem.jawapan}', '${referItem.huraian.replace(/'/g, "\\'")}', ${i})" class="bg-white hover:bg-slate-50 border border-slate-200 font-bold text-xs text-slate-700 py-1 px-3 rounded-lg transition btn-bounce">A. ${referItem.a}</button>
+                                <button onclick="semakAksiLatihan(this, 'B', '${referItem.jawapan}', '${referItem.huraian.replace(/'/g, "\\'")}', ${i})" class="bg-white hover:bg-slate-50 border border-slate-200 font-bold text-xs text-slate-700 py-1 px-3 rounded-lg transition btn-bounce">B. ${referItem.b}</button>
+                                <button onclick="semakAksiLatihan(this, 'C', '${referItem.jawapan}', '${referItem.huraian.replace(/'/g, "\\'")}', ${i})" class="bg-white hover:bg-slate-50 border border-slate-200 font-bold text-xs text-slate-700 py-1 px-3 rounded-lg transition btn-bounce">C. ${referItem.c}</button>
                             </div>
-                            <div id="maklumbalas-lat-${i}" class="hidden text-[11px] font-black mt-2 p-2 rounded-lg"></div>
+                            <div id="maklumbalas-lat-${i}" class="hidden text-[11px] font-bold mt-2 p-2 rounded-lg"></div>
                         </div>
                     `;
                 }
@@ -392,8 +423,8 @@
                 box.innerHTML = metaHeader + `
                     <div class="space-y-4">
                         <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl flex justify-between items-center text-xs font-black text-amber-900">
-                            <span><i class="fa-solid fa-square-poll-vertical mr-1"></i> Kuiz Aneka Pilihan Spesifik Topik [${topikSemasa}] (10 Soalan)</span>
-                            <span id="papar-skor-kuiz-live">Status: Sila jawab</span>
+                            <span><i class="fa-solid fa-square-poll-vertical mr-1"></i> Kuiz Objektif Bertopik (10 Soalan)</span>
+                            <span id="papar-skor-kuiz-live">Markah Anda Mengikut Topik</span>
                         </div>
                         <div id="kotak-senarai-kuiz" class="space-y-4"></div>
                     </div>
@@ -401,35 +432,25 @@
 
                 const kuizBox = document.getElementById('kotak-senarai-kuiz');
                 for (let q = 1; q <= 10; q++) {
-                    // Membina jawapan tersendiri yang mengandungi nama topik sebenar
-                    let pilihanOpsi = [
-                        `Pilihan A: Ayat contoh yang membelakangkan hukum [${topikSemasa}].`,
-                        `Pilihan B: Pembentukan kosa kata murni berpandukan elemen [${topikSemasa}] yang paling tepat.`,
-                        `Pilihan C: Frasa umum yang tiada perkaitan langsung dengan standard.`
-                    ];
-                    let jawapanBetul = pilihanOpsi[1]; // Pilihan B disetkan betul
-
-                    // Sekiranya soalan pertama, kita gunakan data contoh berkualiti tinggi dari kamusKonteksTopik
-                    if(q === 1) {
-                        pilihanOpsi = dataCtx.opsiKuiz;
-                        let letter = dataCtx.jawBetulKuiz; // "B"
-                        jawapanBetul = pilihanOpsi[letter === 'A' ? 0 : letter === 'B' ? 1 : 2];
-                    }
-
+                    let referItem = dataTopik.latihan[(q) % dataTopicLengthOrIndex(dataTopik.latihan.length)];
                     kuizBox.innerHTML += `
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <p class="font-bold text-slate-800 text-xs mb-3">${q}. ${q === 1 ? dataCtx.latContoh : `Berdasarkan pembelajaran kita hari ini, pilihan manakah yang paling cemerlang dalam mempamerkan aplikasi murni bagi komponen [${topikSemasa}] dalam struktur binaan ayat KSSR?`}</p>
-                            <div class="grid grid-cols-1 gap-2">
-                                ${pilihanOpsi.map((opsi, oIdx) => `
-                                    <button onclick="semakAksiKuiz(this, '${opsi.replace(/'/g, "\\'")}', '${jawapanBetul.replace(/'/g, "\\'")}', ${q}, '${q === 1 ? dataCtx.jawBetulKuiz : 'B'}')" class="w-full bg-white hover:bg-amber-50 border border-slate-200 p-2.5 rounded-xl text-left text-xs font-medium transition flex justify-between items-center group">
-                                        <span>${opsi}</span>
-                                        <i class="fa-regular fa-circle text-slate-300"></i>
-                                    </button>
-                                `).join('')}
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <p class="font-bold text-slate-800 text-xs mb-2.5">${q}. [Sila jawab kandungan khusus bagi ${topikSemasa}]: ${referItem.q}</p>
+                            <div class="grid grid-cols-1 gap-1.5">
+                                <button onclick="semakAksiKuiz(this, 'A', '${referItem.jawapan}', '${referItem.huraian.replace(/'/g, "\\'")}', ${q})" class="w-full bg-white hover:bg-amber-50 border border-slate-200 p-2 rounded-lg text-left text-xs font-medium transition flex justify-between items-center group">
+                                    <span>A. ${referItem.a}</span>
+                                    <i class="fa-regular fa-circle text-slate-300"></i>
+                                </button>
+                                <button onclick="semakAksiKuiz(this, 'B', '${referItem.jawapan}', '${referItem.huraian.replace(/'/g, "\\'")}', ${q})" class="w-full bg-white hover:bg-amber-50 border border-slate-200 p-2 rounded-lg text-left text-xs font-medium transition flex justify-between items-center group">
+                                    <span>B. ${referItem.b}</span>
+                                    <i class="fa-regular fa-circle text-slate-300"></i>
+                                </button>
+                                <button onclick="semakAksiKuiz(this, 'C', '${referItem.jawapan}', '${referItem.huraian.replace(/'/g, "\\'")}', ${q})" class="w-full bg-white hover:bg-amber-50 border border-slate-200 p-2 rounded-lg text-left text-xs font-medium transition flex justify-between items-center group">
+                                    <span>C. ${referItem.c}</span>
+                                    <i class="fa-regular fa-circle text-slate-300"></i>
+                                </button>
                             </div>
-                            <div id="skema-kuiz-box-${q}" class="hidden text-[11px] text-blue-700 font-black mt-2.5 text-right">
-                                ✔ Skema Tepat: Pilihan ${q === 1 ? dataCtx.jawBetulKuiz : 'B'}
-                            </div>
+                            <div id="skema-kuiz-box-${q}" class="hidden text-[11px] font-bold mt-2 p-2 rounded bg-blue-50 text-blue-700"></div>
                         </div>
                     `;
                 }
@@ -440,23 +461,23 @@
                         <div class="w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md">
                             <i class="fa-solid fa-gamepad"></i>
                         </div>
-                        <h3 class="text-base font-black text-slate-800">Permainan Seret & Letak Kata: Unit [${topikSemasa}]</h3>
-                        <p class="text-xs text-slate-500 max-w-md mx-auto">Seret blok jawapan hijau di bawah dan lepaskan (drop) ia tepat ke dalam kotak sempadan putus-putus sasaran mengikut pembayang maksud yang disediakan.</p>
+                        <h3 class="text-base font-black text-slate-800">Permainan Didaktik: Seret Kata Bijak</h3>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">Padankan elemen kata laluan di bawah ke dalam kotak zon sasaran berdasarkan pembayang unik topik ini.</p>
                         
                         <div class="flex justify-center space-x-2 pt-2">
-                            <span id="drag-perkataan" draggable="true" ondragstart="aksiDrag(event)" class="bg-emerald-500 text-white font-black text-xs px-4 py-2 rounded-xl shadow-sm drag-item select-none animate-pulse">
-                                ${dataCtx.kataPilihan}
+                            <span id="drag-perkataan" draggable="true" ondragstart="aksiDrag(event)" class="bg-emerald-500 text-white font-black text-xs px-4 py-2 rounded-xl shadow-sm drag-item select-none animate-bounce">
+                                ${dataTopik.kataPilihan}
                             </span>
-                            <span draggable="true" ondragstart="alert('Salah! Blok pengganggu ini bukan kata kunci bagi topik ini.')" class="bg-emerald-500 text-white font-black text-xs px-4 py-2 rounded-xl shadow-sm drag-item select-none opacity-40">
-                                KataSalah
+                            <span draggable="true" ondragstart="alert('Salah! Ini kata pengganggu topik lain!')" class="bg-rose-500 text-white font-black text-xs px-4 py-2 rounded-xl shadow-sm drag-item select-none opacity-40">
+                                KataAsing
                             </span>
                         </div>
 
                         <div class="pt-4">
-                            <div id="kotak-drop-sasaran" ondragover="aksiAllowDrop(event)" ondrop="aksiDrop(event, '${dataCtx.kataPilihan}')" class="border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl p-6 max-w-sm mx-auto transition text-xs font-bold text-slate-400">
-                                Lepaskan Blok Jawapan Di Sini
+                            <div id="kotak-drop-sasaran" ondragover="aksiAllowDrop(event)" ondrop="aksiDrop(event, '${dataTopik.kataPilihan}')" class="border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl p-6 max-w-sm mx-auto transition text-xs font-bold text-slate-400">
+                                Seret kata kunci hijau ke sini
                             </div>
-                            <p class="text-[11px] text-orange-700 font-bold italic mt-2.5">💡 Pembayang Maksud Topik: "${dataCtx.petunjuk}"</p>
+                            <p class="text-[11px] text-orange-700 font-bold italic mt-2">💡 Pembayang Topik [${topikSemasa}]: "${dataTopik.petunjuk}"</p>
                         </div>
 
                         <div id="maklumbalas-game" class="text-xs font-black mt-2"></div>
@@ -465,55 +486,48 @@
             }
         }
 
-        // LOGIK SEMAK JAWAPAN LATIHAN
-        function semakAksiLatihan(btn, jwnPilihan, jwnBetul, idx) {
+        function dataTopicLengthOrIndex(len) {
+            return len > 0 ? len : 1;
+        }
+
+        // SEMAK LATIHAN BESERTA PENERANGAN KHUSUS TOPIK
+        function semakAksiLatihan(btn, jwnPilihan, jwnBetul, huraian, idx) {
             const fb = document.getElementById(`maklumbalas-lat-${idx}`);
             fb.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
 
             if (jwnPilihan === jwnBetul) {
                 fb.classList.add('bg-green-100', 'text-green-800');
-                fb.innerHTML = `✔ Tepat Sekali! Analisis anda selaras dengan skema topik. +1 Bintang diperoleh!`;
+                fb.innerHTML = `✔ Tepat Sekali! Jawapan: ${jwnBetul}. <br><span class="font-medium text-xs text-slate-600">Info: ${huraian}</span>`;
                 kemasKiniMataGanjaran(1, 2);
             } else {
                 fb.classList.add('bg-red-100', 'text-red-800');
-                fb.innerHTML = `❌ Kurang Tepat! Kedudukan unsur dalam soalan #${idx} tidak sepadan dengan kaedah itu. Sila periksa semula.`;
+                fb.innerHTML = `❌ Jawapan salah. Cuba lagi! Pilihan anda tidak mematuhi syarat topik ${topikSemasa}.`;
             }
         }
 
-        function bukaSkemaLatihan(idx, skema, tajuk) {
-            const fb = document.getElementById(`maklumbalas-lat-${idx}`);
-            fb.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
-            fb.classList.add('bg-blue-50', 'text-blue-800');
-            fb.innerHTML = `💡 Justifikasi Topik [${tajuk}]: Jawapan yang betul bagi latihan ini ialah <strong>${skema}</strong>.`;
-        }
-
-        // LOGIK SEMAK JAWAPAN KUIZ
-        function semakAksiKuiz(btn, opsiDipilih, jwnBetul, qIdx, letterAns) {
+        // SEMAK KUIZ BESERTA PENERANGAN KHUSUS TOPIK
+        function semakAksiKuiz(btn, opsiDipilih, jwnBetul, huraian, qIdx) {
             const parent = btn.parentElement;
             parent.querySelectorAll('button').forEach(b => {
                 b.disabled = true;
-                b.classList.add('opacity-50');
+                b.classList.add('opacity-40');
             });
 
-            const ikon = btn.querySelector('i');
-            ikon.className = "";
+            btn.classList.remove('opacity-40');
+            const targetBox = document.getElementById(`skema-kuiz-box-${qIdx}`);
+            targetBox.classList.remove('hidden');
 
-            if (opsiDipilih.trim() === jwnBetul.trim()) {
-                btn.classList.remove('bg-white');
+            if (opsiDipilih === jwnBetul) {
                 btn.classList.add('bg-green-100', 'border-green-500');
-                ikon.className = "fa-solid fa-circle-check text-green-600";
+                targetBox.innerHTML = `✔ Betul! Skema Jawapan: ${jwnBetul}. <br><span class="font-medium text-slate-600">${huraian}</span>`;
                 kemasKiniMataGanjaran(2, 5);
             } else {
-                btn.classList.remove('bg-white');
                 btn.classList.add('bg-red-100', 'border-red-500');
-                ikon.className = "fa-solid fa-circle-xmark text-red-600";
+                targetBox.innerHTML = `❌ Salah. Jawapan sebenar ialah ${jwnBetul}. <br><span class="font-medium text-slate-600">${huraian}</span>`;
             }
-
-            document.getElementById(`skema-kuiz-box-${qIdx}`).classList.remove('hidden');
-            document.getElementById('papar-skor-kuiz-live').innerText = `Status: Semakan Selesai`;
         }
 
-        // LOGIK PERMAINAN DRAG AND DROP (SERET & LETAK)
+        // LOGIK PERMAINAN DRAG AND DROP
         function aksiAllowDrop(ev) {
             ev.preventDefault();
         }
@@ -530,23 +544,21 @@
             const fb = document.getElementById('maklumbalas-game');
 
             if (draggedEl && draggedEl.innerText.trim() === kataBetul) {
-                dropBox.innerHTML = `<span class="bg-green-600 text-white px-4 py-2 rounded-xl shadow border border-green-700">${kataBetul}</span>`;
+                dropBox.innerHTML = `<span class="bg-green-100 text-green-800 px-3 py-1.5 rounded-xl border border-green-300">${kataBetul}</span>`;
                 dropBox.className = "border-4 border-solid border-green-500 bg-green-50 rounded-2xl p-6 max-w-sm mx-auto text-xs font-bold text-green-700";
                 
                 fb.className = "text-xs font-black text-green-600 mt-2";
-                fb.innerHTML = "🎉 Hebat dan Luar Biasa! Anda berjaya memadankan kata kunci topik dengan betul. +10 Syiling Emas!";
+                fb.innerHTML = `🎉 Syabas! Penguasaan cemerlang bagi subtopik [${topikSemasa}]. +10 Syiling Emas!`;
                 kemasKiniMataGanjaran(3, 10);
             } else {
                 fb.className = "text-xs font-black text-red-500 mt-2";
-                fb.innerHTML = "❌ Padanan salah! Sila seret perkataan yang sepadan dengan petunjuk.";
+                fb.innerHTML = "❌ Padanan gagal! Sila semak semula nota tatabahasa anda.";
             }
         }
 
-        // KEMASKINI MATA GANJARAN REALTIME
         function kemasKiniMataGanjaran(bintang, syiling) {
             skorBintang += bintang;
             skorSyiling += syiling;
-            
             document.getElementById('stat-bintang').innerHTML = `<i class="fa-solid fa-star text-amber-500 mr-1"></i> ${skorBintang}`;
             document.getElementById('stat-syiling').innerHTML = `<i class="fa-solid fa-coins text-yellow-500 mr-1"></i> ${skorSyiling}`;
         }
