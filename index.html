@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabaran Cilik Bahasa - Versi Sijil Stabil</title>
+    <title>Cabaran Cilik Bahasa - Versi Sijil Super Stabil</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- html2canvas untuk Simpan Imej (PNG) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- FIREBASE SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -202,56 +200,46 @@
                         </div>
                     </div>
 
+                    <!-- PREVIEW KAD SIJIL SEBENAR (Kini dipaparkan secara langsung supaya murid yakin sistem berfungsi) -->
+                    <div class="w-full overflow-x-auto my-6 p-2 bg-slate-100 rounded-xl border border-slate-300">
+                        <div id="sijil-html-preview" class="w-[720px] h-[480px] bg-white border-[12px] border-double border-yellow-600 mx-auto p-8 relative flex flex-col justify-between items-center text-center shadow-lg" style="box-sizing: border-box;">
+                            <div class="absolute top-2 left-2 text-2xl">⭐</div>
+                            <div class="absolute top-2 right-2 text-2xl">⭐</div>
+                            <div class="absolute bottom-2 left-2 text-2xl">⭐</div>
+                            <div class="absolute bottom-2 right-2 text-2xl">⭐</div>
+                            <div>
+                                <h1 class="text-3xl font-bold tracking-wider text-yellow-700 uppercase mb-0.5">SIJIL PENGHARGAAN</h1>
+                                <p class="text-xs italic text-gray-400">Kecemerlangan Pentaksiran Kendiri Maya</p>
+                            </div>
+                            <div class="space-y-3 my-2">
+                                <p class="text-sm">Dengan ini diperakukan bahawa murid pintar</p>
+                                <h4 id="cert-user-name" class="text-xl font-bold text-slate-800 underline uppercase">NAMA MURID</h4>
+                                <p class="text-xs">telah menyempurnakan keseluruhan modul pembelajaran digital</p>
+                                <h2 id="cert-tahun-nama" class="text-2xl font-bold text-blue-800 my-0.5">CABARAN BAHASA MELAYU TAHUN 1</h2>
+                                <p class="text-sm">dengan keputusan pencapaian gred kecemerlangan bertaraf</p>
+                                <h3 id="cert-lencana-nama" class="text-xl font-black text-emerald-600 uppercase tracking-widest">PINGAT EMAS</h3>
+                            </div>
+                            <div class="w-full flex justify-between items-end px-8 mt-2">
+                                <div class="text-center w-32 border-t border-slate-300 pt-1 text-[10px]">
+                                    <p class="font-bold">SISTEM PINTAR AI</p>
+                                    <p class="text-gray-400">Pakar Didik Bahasa</p>
+                                </div>
+                                <div class="text-3xl p-1 bg-yellow-100 rounded-full border border-yellow-400">🏆</div>
+                                <div class="text-center w-32 border-t border-slate-300 pt-1 text-[10px]">
+                                    <p class="font-bold">TARIKH KELULUSAN</p>
+                                    <p id="cert-tarikh" class="text-gray-500">11/07/2026</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <!-- Butang Muat Turun Imej Fail -->
                         <button onclick="janaSijilSebagaiImej()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
-                            <i class="fas fa-image mr-2"></i> Muat Turun Sijil (Simpan Imej)
+                            <i class="fas fa-download mr-2"></i> Muat Turun Sijil (Format PNG)
                         </button>
-                        <!-- Butang Menu Utama -->
                         <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
                             <i class="fas fa-home mr-2"></i> Menu Utama
                         </button>
-                    </div>
-                </div>
-
-                <!-- TEMPLATE REKABENTUK SIJIL (DIKUKUHKAN BEBAS DARIPADA KEBERGANTUNGAN KEBENARAN ELEMEN CORS LUARAN) -->
-                <div style="position: absolute; left: -9999px; top: -9999px;">
-                    <div id="sijil-print-area" class="w-[800px] h-[560px] p-10 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center text-slate-800" style="box-sizing: border-box; font-family: 'Georgia', serif;">
-                        
-                        <!-- Penjuru Selamat Emoji (html2canvas sokong penuh berbanding ikon font) -->
-                        <div class="absolute top-4 left-4 text-3xl">⭐</div>
-                        <div class="absolute top-4 right-4 text-3xl">⭐</div>
-                        <div class="absolute bottom-4 left-4 text-3xl">⭐</div>
-                        <div class="absolute bottom-4 right-4 text-3xl">⭐</div>
-
-                        <div>
-                            <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1">SIJIL PENGHARGAAN</h1>
-                            <p class="text-sm italic text-gray-500">Kecemerlangan Pentaksiran Kendiri Maya</p>
-                        </div>
-
-                        <div class="space-y-4 my-4">
-                            <p class="text-lg">Dengan ini diperakukan bahawa murid pintar</p>
-                            <h4 id="cert-user-name" class="text-2xl font-bold text-slate-800 underline uppercase" style="font-family: 'Arial', sans-serif;">NAMA MURID</h4>
-                            <p class="text-base">telah menyempurnakan keseluruhan modul pembelajaran digital</p>
-                            <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-1" style="font-family: 'Arial', sans-serif;">CABARAN BAHASA MELAYU TAHUN 1</h2>
-                            <p class="text-lg">dengan keputusan pencapaian gred kecemerlangan bertaraf</p>
-                            <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest" style="font-family: 'Arial', sans-serif;">PINGAT EMAS</h3>
-                        </div>
-
-                        <div class="w-full flex justify-between items-end px-12 mt-4" style="font-family: 'Arial', sans-serif;">
-                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs">
-                                <p class="font-bold">SISTEM PINTAR AI</p>
-                                <p class="text-gray-400">Pakar Didik Bahasa</p>
-                            </div>
-                            <!-- Grafik Pingat Berasaskan Emoji Selamat -->
-                            <div class="text-4xl p-2 bg-yellow-100 rounded-full border-2 border-yellow-400">
-                                🏆
-                            </div>
-                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs">
-                                <p class="font-bold">TARIKH KELULUSAN</p>
-                                <p id="cert-tarikh" class="text-gray-500">11/07/2026</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -895,7 +883,7 @@
             bukaSijilTerus();
         }
 
-        // FUNGSI TOGGLE UNTUK MEMBUKA KAWASAN SIJIL TERUS DARI HOME / AKTIVITI TAMAT
+        // REKABENTUK SIJIL DINAMIK DI PANEL PREVIEW
         function bukaSijilTerus() {
             aktifkanAudioContextPenuh();
             const jumlahMata = dapatkanJumlahMata();
@@ -908,7 +896,6 @@
             let warnaLencana = "text-amber-700 bg-amber-100";
             let ikonLencana = "fa-medal";
             
-            // Penilaian gred berdasarkan pencapaian mata semasa murid
             if(jumlahMata >= 200) {
                 lencana = "Pingat Emas";
                 warnaLencana = "text-yellow-600 bg-yellow-100";
@@ -924,43 +911,106 @@
                 <span class="text-xs font-bold mt-1 text-slate-600">${lencana}</span>
             `;
             
-            document.getElementById('cert-user-name').innerText = penggunaSemasa ? (penggunaSemasa.displayName || penggunaSemasa.email) : "Wira Pintar";
-            document.getElementById('cert-tahun-nama').innerText = `CABARAN BAHASA MELAYU TAHUN ${tahunSemasa}`;
-            document.getElementById('cert-lencana-nama').innerText = lencana.toUpperCase();
+            // Kemaskini teks pada sijil pratonton HTML
+            const namaMurid = penggunaSemasa ? (penggunaSemasa.displayName || penggunaSemasa.email) : "Wira Pintar";
+            const tajukTahun = `CABARAN BAHASA MELAYU TAHUN ${tahunSemasa}`;
+            const gredLencana = lencana.toUpperCase();
             
             const hariIni = new Date();
-            document.getElementById('cert-tarikh').innerText = `${String(hariIni.getDate()).padStart(2,'0')}/${String(hariIni.getMonth()+1).padStart(2,'0')}/${hariIni.getFullYear()}`;
+            const stringTarikh = `${String(hariIni.getDate()).padStart(2,'0')}/${String(hariIni.getMonth()+1).padStart(2,'0')}/${hariIni.getFullYear()}`;
+
+            const previewArea = document.getElementById('sijil-html-preview');
+            previewArea.querySelector('#cert-user-name').innerText = namaMurid;
+            previewArea.querySelector('#cert-tahun-nama').innerText = tajukTahun;
+            previewArea.querySelector('#cert-lencana-nama').innerText = gredLencana;
+            previewArea.querySelector('#cert-tarikh').innerText = stringTarikh;
             
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
             paparHalaman('ganjaran');
         }
 
-        // ================= STABLE IMAGE DOWNLOAD ENGINE (PNG) =================
+        // ================= PENJANAAN SIJIL ASLI DAN STABIL (SVG BLOB RENDERING) =================
+        // Menolak kebergantungan html2canvas luaran sepenuhnya untuk mengelakkan sebarang isu ralat peranti.
         function janaSijilSebagaiImej() {
-            const elemenSijil = document.getElementById('sijil-print-area');
-            
-            // allowTaint ditukar kepada false bagi mengelakkan ralat keselamatan sekatan canvas pelayar
-            const opt = {
-                scale: 2, 
-                logging: false,
-                useCORS: true,
-                allowTaint: false,
-                backgroundColor: "#ffffff"
-            };
+            const previewArea = document.getElementById('sijil-html-preview');
+            const nama = previewArea.querySelector('#cert-user-name').innerText;
+            const program = previewArea.querySelector('#cert-tahun-nama').innerText;
+            const lencana = previewArea.querySelector('#cert-lencana-nama').innerText;
+            const tarikh = previewArea.querySelector('#cert-tarikh').innerText;
 
-            html2canvas(elemenSijil, opt).then(canvas => {
-                const imejDataUrl = canvas.toDataURL("image/png");
+            // Membina template lukisan vektor SVG tulen beresolusi tinggi (1200x800) secara terus
+            const svgData = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+                <rect width="1200" height="800" fill="#ffffff"/>
+                <!-- Bingkai Double Emas -->
+                <rect x="20" y="20" width="1160" height="760" fill="none" stroke="#b45309" stroke-width="8"/>
+                <rect x="35" y="35" width="1130" height="730" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="10,5"/>
                 
-                const pautanDownload = document.createElement('a');
-                pautanDownload.href = imejDataUrl;
-                pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahunSemasa}.png`;
+                <!-- Bintang Penjuru -->
+                <text x="60" y="80" font-size="40">⭐</text>
+                <text x="1110" y="80" font-size="40">⭐</text>
+                <text x="60" y="740" font-size="40">⭐</text>
+                <text x="1110" y="740" font-size="40">⭐</text>
+
+                <!-- Kandungan Sijil -->
+                <text x="600" y="150" font-family="'Arial', sans-serif" font-size="50" font-weight="bold" fill="#b45309" text-anchor="middle" letter-spacing="4">SIJIL PENGHARGAAN</text>
+                <text x="600" y="200" font-family="'Georgia', serif" font-size="20" font-style="italic" fill="#6b7280" text-anchor="middle">Kecemerlangan Pentaksiran Kendiri Maya</p>
                 
-                document.body.appendChild(pautanDownload);
-                pautanDownload.click();
-                document.body.removeChild(pautanDownload);
-            }).catch(err => {
-                alert("Gagal memproses imej sijil: " + err);
-            });
+                <text x="600" y="290" font-family="'Georgia', serif" font-size="24" fill="#374151" text-anchor="middle">Dengan ini diperakukan bahawa wira pintar</text>
+                
+                <!-- Nama Murid -->
+                <text x="600" y="360" font-family="'Arial', sans-serif" font-size="36" font-weight="bold" fill="#111827" text-anchor="middle" text-decoration="underline">${nama}</text>
+                
+                <text x="600" y="430" font-family="'Georgia', serif" font-size="22" fill="#374151" text-anchor="middle">telah menyempurnakan keseluruhan modul pembelajaran digital</text>
+                
+                <!-- Nama Modul Program -->
+                <text x="600" y="490" font-family="'Arial', sans-serif" font-size="32" font-weight="bold" fill="#1d4ed8" text-anchor="middle">${program}</text>
+                
+                <text x="600" y="550" font-family="'Georgia', serif" font-size="22" fill="#374151" text-anchor="middle">dengan keputusan pencapaian gred kecemerlangan bertaraf</text>
+                
+                <!-- Gred Lencana -->
+                <text x="600" y="610" font-family="'Arial', sans-serif" font-size="30" font-weight="900" fill="#059669" text-anchor="middle" letter-spacing="2">${lencana}</text>
+
+                <!-- Garisan Tandatangan Siri Kiri -->
+                <line x1="150" y1="700" x2="350" y2="700" stroke="#9ca3af" stroke-width="2"/>
+                <text x="250" y="725" font-family="'Arial', sans-serif" font-size="16" font-weight="bold" fill="#1f2937" text-anchor="middle">SISTEM PINTAR AI</text>
+                <text x="250" y="745" font-family="'Arial', sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Pakar Didik Bahasa</text>
+
+                <!-- Ikon Trofi Grafik Tengah -->
+                <circle cx="600" cy="695" r="40" fill="#fef3c7" stroke="#fbbf24" stroke-width="2"/>
+                <text x="600" y="710" font-size="45" text-anchor="middle">🏆</text>
+
+                <!-- Garisan Tarikh Kanan -->
+                <line x1="850" y1="700" x2="1050" y2="700" stroke="#9ca3af" stroke-width="2"/>
+                <text x="950" y="725" font-family="'Arial', sans-serif" font-size="16" font-weight="bold" fill="#1f2937" text-anchor="middle">TARIKH KELULUSAN</text>
+                <text x="950" y="745" font-family="'Arial', sans-serif" font-size="14" fill="#6b7280" text-anchor="middle">${tarikh}</text>
+            </svg>
+            `;
+
+            // Proses pemancaran data blob menjadi fail imej fizikal (PNG) terus ke dalam pelayar web tanpa ralat sandaran
+            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const imejPangkin = new Image();
+            imejPangkin.onload = function() {
+                const kanvasSimpanan = document.createElement('canvas');
+                kanvasSimpanan.width = 1200;
+                kanvasSimpanan.height = 800;
+                const ctx = kanvasSimpanan.getContext('2d');
+                ctx.drawImage(imejPangkin, 0, 0);
+                
+                const urlPngMuktamad = kanvasSimpanan.toDataURL('image/png');
+                
+                const muatTurunPautan = document.createElement('a');
+                muatTurunPautan.href = urlPngMuktamad;
+                muatTurunPautan.download = `Sijil_Cilik_Bahasa_${nama.replace(/\s+/g, '_')}.png`;
+                document.body.appendChild(muatTurunPautan);
+                muatTurunPautan.click();
+                
+                document.body.removeChild(muatTurunPautan);
+                URL.revokeObjectURL(url);
+            };
+            imejPangkin.src = url;
         }
     </script>
 </body>
