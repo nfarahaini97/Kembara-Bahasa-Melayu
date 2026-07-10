@@ -472,7 +472,7 @@
             tajuk: "Kenali Huruf Abjad", jenis: "mcq", ikon: "fa-font",
             soalan: [
                 { q: "Pilih pasangan huruf besar bagi abjad 'a'.", a: ["A", "B", "C", "D"], c: 0 },
-                { q: "Pilih pasangan huruf besar bagi abjad 'b'.", a: ["B", "E", "F", "G"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'b'.", a: ["B", "B", "F", "G"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'd'.", a: ["D", "H", "I", "J"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'e'.", a: ["E", "K", "L", "M"], c: 0 },
                 { q: "Pilih pasangan huruf besar bagi abjad 'g'.", a: ["G", "N", "O", "P"], c: 0 },
@@ -921,31 +921,56 @@
         }
 
         // ================= STABLE IMAGE DOWNLOAD ENGINE (PNG) =================
-        function janaSijilSebagaiImej() {
+       function janaSijilSebagaiImej() {
             const elemenSijil = document.getElementById('sijil-print-area');
             
-            // Konfigurasi stabil untuk mengelakkan ralat render CORS Font Luaran
+            if (!elemenSijil) {
+                alert("Ralat: Elemen '#sijil-print-area' tidak dijumpai.");
+                return;
+            }
+
+            // Pastikan semua imej di dalam sijil ada atribut crossorigin sebelum diproses
+            const semuaImej = elemenSijil.getElementsByTagName('img');
+            for (let img of semuaImej) {
+                if (img.src.startsWith('http') && !img.hasAttribute('crossorigin')) {
+                    img.setAttribute('crossorigin', 'anonymous');
+                }
+            }
+            
+            // Konfigurasi yang dibetulkan: Buang allowTaint untuk mengelakkan canvas tercemar
             const opt = {
                 scale: 2, 
                 logging: false,
-                useCORS: true,
-                allowTaint: true,
+                useCORS: true,       // Wajib true untuk font/imej luaran
+                allowTaint: false,   // MESTI FALSE supaya canvas boleh ditukar ke DataURL (Imej)
                 backgroundColor: "#ffffff"
             };
 
-            html2canvas(elemenSijil, opt).then(canvas => {
-                const imejDataUrl = canvas.toDataURL("image/png");
-                
-                const pautanDownload = document.createElement('a');
-                pautanDownload.href = imejDataUrl;
-                pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahunSemasa}.png`;
-                
-                document.body.appendChild(pautanDownload);
-                pautanDownload.click();
-                document.body.removeChild(pautanDownload);
-            }).catch(err => {
-                alert("Gagal memproses imej sijil: " + err);
-            });
+            // Tambah delay sedikit jika font luaran (Google Fonts) lambat dimuatkan oleh html2canvas
+            setTimeout(() => {
+                html2canvas(elemenSijil, opt).then(canvas => {
+                    try {
+                        const imejDataUrl = canvas.toDataURL("image/png");
+                        
+                        // Dapatkan pembolehubah tahunSemasa (jika tiada, gunakan tahun komputer)
+                        const tahun = typeof tahunSemasa !== 'undefined' ? tahunSemasa : new Date().getFullYear();
+                        
+                        const pautanDownload = document.createElement('a');
+                        pautanDownload.href = imejDataUrl;
+                        pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahun}.png`;
+                        
+                        document.body.appendChild(pautanDownload);
+                        pautanDownload.click();
+                        document.body.removeChild(pautanDownload);
+                    } catch (e) {
+                        console.error(e);
+                        alert("Gagal menukar canvas kepada imej. Sila pastikan tiada imej sekatan keselamatan (CORS) dalam sijil.");
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    alert("Gagal memproses imej sijil: " + err.message);
+                });
+            }, 500); // ditangguhkan 500ms supaya browser bersedia melukis elemen
         }
     </script>
 </body>
