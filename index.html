@@ -3,27 +3,576 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabaran Cilik Bahasa - Versi Kemaskini</title>
+    <title>Cabaran Cilik Bahasa</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <style>
-        body { font-family: 'Quicksand', sans-serif; background-color: #f0fdf4; }
-        h1, h2, h3 { font-family: 'Fredoka', sans-serif; }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0fdf4;
+        }
+        h1, h2, h3, .font-comic {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .btn-bounce:active {
+            transform: scale(0.95);
+        }
+        .drop-zone.hover {
+            background-color: #bbf7d0;
+            border-color: #22c55e;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
+
+    <section id="page-login" class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl border-4 border-blue-400 p-8 text-center max-w-md w-full space-y-6">
+            <div class="bg-blue-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto text-blue-500 text-5xl shadow-inner animate-bounce">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-black tracking-wide text-blue-600">CABARAN CILIK BAHASA</h1>
+                <p class="text-sm text-gray-500 font-medium mt-1">Platform Pembelajaran Interaktif BM Tahap 1</p>
+            </div>
+            
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-left text-slate-600 space-y-2">
+                <p class="font-bold text-slate-700 text-center uppercase tracking-wider mb-1">Kelebihan Log Masuk:</p>
+                <p><i class="fas fa-check text-emerald-500 mr-1"></i> Menyimpan progress automatik ke Firebase Database.</p>
+                <p><i class="fas fa-check text-emerald-500 mr-1"></i> Rekod pemarkahan tidak hilang jika pelayar ditutup.</p>
+                <p><i class="fas fa-check text-emerald-500 mr-1"></i> Menjana sijil eksklusif dengan nama profil anda.</p>
+            </div>
+
+            <button onclick="logMasukGoogle()" class="w-full bg-white border-2 border-slate-300 hover:border-slate-400 text-slate-700 font-bold py-3 px-4 rounded-xl shadow transition btn-bounce flex items-center justify-center space-x-3 text-base">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.227C18.216 1.414 15.424 0 12.24 0 5.58 0 0 5.58 0 12.24s5.58 12.24 12.24 12.24c6.96 0 11.57-4.894 11.57-11.79 0-.795-.085-1.402-.19-1.905H12.24z"/>
+                </svg>
+                <span>Sertai dengan Google</span>
+            </button>
+        </div>
+    </section>
+
+    <div id="main-app-content" class="hidden flex-grow flex flex-col">
+        
+        <header class="bg-blue-500 text-white shadow-lg sticky top-0 z-50 px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="paparHalaman('utama')">
+                <div class="bg-yellow-400 p-2 rounded-full text-blue-900 text-xl">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">CABARAN CILIK BAHASA</h1>
+                    <p class="text-xs text-yellow-200 font-comic">Wira: <span id="user-display-name">...</span></p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2 bg-blue-600/50 px-3 py-1.5 rounded-xl border border-blue-400">
+                <button id="btn-toggle-music" onclick="toggleMuzik(event)" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
+                    <i id="icon-music" class="fas fa-music"></i> <span id="txt-music">Muzik: ON</span>
+                </button>
+                <button id="btn-toggle-sfx" onclick="toggleSfx(event)" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
+                    <i id="icon-sfx" class="fas fa-volume-up"></i> <span id="txt-sfx">Bunyi: ON</span>
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <div class="bg-blue-700 px-3 py-1.5 rounded-full text-xs font-bold flex items-center mr-1">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i> <span id="total-score-badge">0</span> Mata
+                </div>
+                <button onclick="logKeluar()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl font-bold shadow transition btn-bounce text-xs">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-grow p-4 md:p-8 max-w-6xl mx-auto w-full">
+
+            <section id="page-utama" class="space-y-8 layer-section">
+                <div class="text-center py-6 bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400 rounded-3xl shadow-xl text-white p-6">
+                    <h2 class="text-3xl md:text-5xl font-black mb-2 drop-shadow-md">Selamat Datang, Wira Bahasa!</h2>
+                    <p class="text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow">Pilih tahun persekolahan anda dan kuasai cabaran pembelajaran digital cemerlang.</p>
+                </div>
+
+                <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Pintar Anda:</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div onclick="pilihTahun(1)" class="bg-white rounded-2xl shadow-lg border-4 border-blue-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                        <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-4xl shadow-inner">
+                            <i class="fas fa-child"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-blue-600 mb-2">Tahun 1</h3>
+                        <p class="text-gray-600 text-sm mb-4">Pengenalan huruf abjad, pemantapan suku kata kata terbuka, nama objek bilik darjah dan ayat tunggal asas.</p>
+                        <span class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
+                    </div>
+
+                    <div onclick="pilihTahun(2)" class="bg-white rounded-2xl shadow-lg border-4 border-green-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                        <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500 text-4xl shadow-inner">
+                            <i class="fas fa-user-astronaut"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-green-600 mb-2">Tahun 2</h3>
+                        <p class="text-gray-600 text-sm mb-4">Pemantapan golongan kata nama khas, kata kerja aktif, kata adjektif keadaan, susunan subjek-predikat gramatis.</p>
+                        <span class="bg-green-500 text-white font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
+                    </div>
+
+                    <div onclick="pilihTahun(3)" class="bg-white rounded-2xl shadow-lg border-4 border-yellow-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                        <div class="bg-yellow-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-600 text-4xl shadow-inner">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-yellow-600 mb-2">Tahun 3</h3>
+                        <p class="text-gray-600 text-sm mb-4">Eksplorasi kata nama am abstrak, ungkapan simpulan bahasa klasik, kata sendi nama, dan pemahaman petikan kreatif.</p>
+                        <span class="bg-yellow-500 text-slate-800 font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-senarai-aktiviti" class="hidden space-y-6 layer-section">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-md border-b-4 border-slate-300">
+                    <div>
+                        <button onclick="paparHalaman('utama')" class="text-blue-500 font-bold hover:underline mb-1 inline-block text-sm">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Menu Utama
+                        </button>
+                        <h2 id="tajuk-tahun" class="text-2xl md:text-3xl font-bold text-slate-700">Aktiviti Tahun X</h2>
+                    </div>
+                    <div class="mt-2 md:mt-0 bg-emerald-100 text-emerald-800 font-bold px-4 py-2 rounded-lg text-sm shadow-inner">
+                        Kemajuan: <span id="progress-tahun-text">0/10</span> Aktiviti Selesai
+                    </div>
+                </div>
+
+                <div id="grid-aktiviti" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            </section>
+
+            <section id="page-game" class="hidden space-y-6 layer-section">
+                <div class="bg-white p-4 rounded-2xl shadow border-2 border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center space-x-3">
+                        <button onclick="kembaliKeSenarai()" class="bg-slate-200 text-slate-700 p-2.5 rounded-full hover:bg-slate-300 transition shadow">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div>
+                            <span id="game-tag-topik" class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full uppercase">Topik</span>
+                            <h3 id="game-tajuk-topik" class="text-lg md:text-xl font-bold text-slate-700">Nama Aktiviti</h3>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-6 bg-slate-50 p-2 rounded-xl border border-slate-200 w-full md:w-auto justify-between">
+                        <div class="text-sm font-bold">Soalan: <span id="game-current-q">0</span>/<span id="game-total-q">0</span></div>
+                        <div class="w-24 md:w-32 bg-slate-200 rounded-full h-3 overflow-hidden">
+                            <div id="game-progress-bar" class="bg-gradient-to-r from-blue-400 to-green-500 h-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <div class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                            Skor: <span id="game-score">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl border-4 border-white p-6 md:p-10 min-h-[350px] flex flex-col justify-between relative overflow-hidden">
+                    <div id="feedback-layer" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-6 transition-all duration-300">
+                        <div id="feedback-box" class="transform scale-50 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full">
+                            <div id="feedback-icon" class="text-6xl mb-4"></div>
+                            <h4 id="feedback-title" class="text-3xl font-black mb-2">Hebat!</h4>
+                            <p id="feedback-msg" class="text-sm font-medium mb-6">Jawapan anda betul tepat sekali.</p>
+                            <div class="flex justify-center space-x-4">
+                                <button id="btn-next-q" class="bg-emerald-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-emerald-600 transition btn-bounce">Seterusnya <i class="fas fa-arrow-right ml-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-dynamic-area" class="w-full space-y-6"></div>
+                </div>
+            </section>
+
+            <section id="page-ganjaran" class="hidden space-y-6 layer-section">
+                <div class="bg-white rounded-3xl shadow-xl p-8 text-center max-w-2xl mx-auto border-4 border-yellow-300">
+                    <div class="text-6xl mb-4">🎉🎉🎉</div>
+                    <h2 class="text-3xl font-black text-slate-700 mb-2">Tahniah! Tahap Selesai!</h2>
+                    <p class="text-gray-500 font-medium mb-6">Anda cemerlang menjawab semua siri aktiviti pembelajaran.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-inner">
+                        <div>
+                            <span class="text-xs text-gray-400 font-bold block uppercase">Gred Markah</span>
+                            <span id="final-score-percent" class="text-4xl font-black text-blue-600">0%</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 font-bold block uppercase">Lencana Dicapai</span>
+                            <div id="badge-container" class="flex flex-col items-center justify-center mt-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="janaSijil()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
+                            <i class="fas fa-print mr-2"></i> Muat Turun Sijil (PDF)
+                        </button>
+                        <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
+                            <i class="fas fa-home mr-2"></i> Menu Utama
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hidden">
+                    <div id="sijil-print-area" class="w-[800px] h-[560px] p-8 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center font-serif text-slate-800">
+                        <div class="absolute top-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                        <div class="absolute top-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                        <div class="absolute bottom-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                        <div class="absolute bottom-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+
+                        <div>
+                            <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1">Sijil Penghargaan</h1>
+                            <p class="text-sm italic text-gray-500">Kecemerlangan Pentaksiran Kendiri Maya</p>
+                        </div>
+
+                        <div class="space-y-4 my-4">
+                            <p class="text-lg">Dengan ini diperakukan bahawa murid pintar</p>
+                            <h4 id="cert-user-name" class="text-xl font-bold text-slate-800 underline uppercase">NAMA MURID</h4>
+                            <p class="text-base">telah menyempurnakan keseluruhan modul pembelajaran digital</p>
+                            <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-1">CABARAN BAHASA MELAYU TAHUN 1</h2>
+                            <p class="text-lg">dengan keputusan pencapaian gred kecemerlangan bertaraf</p>
+                            <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest">PINGAT EMAS</h3>
+                        </div>
+
+                        <div class="w-full flex justify-between items-end px-12 mt-4">
+                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
+                                <p class="font-bold">SISTEM PINTAR AI</p>
+                                <p class="text-gray-400">Pakar Didik Bahasa</p>
+                            </div>
+                            <div class="bg-yellow-100 p-4 rounded-full border-4 border-yellow-400 text-yellow-600 text-3xl shadow">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
+                                <p class="font-bold">TARIKH KELULUSAN</p>
+                                <p id="cert-tarikh" class="text-gray-500">10/07/2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-slate-100 text-slate-500 border-t border-slate-200 py-4 text-center text-xs font-medium">
+            &copy; 2026 Cabaran Cilik Bahasa. Berasaskan Format DSKP KSSR Semakan KPM.
+        </footer>
+    </div>
+
     <script>
-        // --- DATA BANK SOALAN YANG DIKEMASKINI ---
+        // CONFIGURATION FIREBASE REAL DATABASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyCnVtlsculpdbdjOb7Cm7H3xdRIkNjTUMs",
+            authDomain: "cabaran-cilik-bahasa.firebaseapp.com",
+            projectId: "cabaran-cilik-bahasa",
+            storageBucket: "cabaran-cilik-bahasa.firebasestorage.app",
+            messagingSenderId: "878407227521",
+            appId: "1:878407227521:web:09743bae59abd2da8d9580"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        let penggunaSemasa = null;
+        let rekodKemajuan = { 1: {}, 2: {}, 3: {} };
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                penggunaSemasa = user;
+                document.getElementById('page-login').classList.add('hidden');
+                document.getElementById('main-app-content').classList.remove('hidden');
+                document.getElementById('user-display-name').innerText = user.displayName || user.email;
+                muatKemajuanDariFirebase(user.uid);
+            } else {
+                penggunaSemasa = null;
+                document.getElementById('main-app-content').classList.add('hidden');
+                document.getElementById('page-login').classList.remove('hidden');
+            }
+        });
+
+        function logMasukGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).catch((error) => {
+                alert("Gagal log masuk: " + error.message);
+            });
+        }
+
+        function logKeluar() {
+            if(confirm("Adakah anda pasti mahu log keluar?")) {
+                tutupMuzikLatar();
+                auth.signOut();
+            }
+        }
+
+        // CONTROL MUSIC & SFX CONTEXT
+        let isMusicOn = true;
+        let isSfxOn = true;
+        let audioCtx = null;
+        let mainLoopInterval = null;
+
+        function paksaBukaAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function mainMuzikLatar() {
+            paksaBukaAudio();
+            if (!isMusicOn) { tutupMuzikLatar(); return; }
+            if (mainLoopInterval) return;
+
+            mainLoopInterval = setInterval(() => {
+                if (!isMusicOn || !audioCtx) return;
+                let masaKini = audioCtx.currentTime;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'triangle';
+                let kumpulanNota = [261.63, 329.63, 392.00, 523.25];
+                let notaRawak = kumpulanNota[Math.floor(Math.random() * kumpulanNota.length)];
+                
+                osc.frequency.setValueAtTime(notaRawak, masaKini);
+                gain.gain.setValueAtTime(0.015, masaKini);
+                gain.gain.linearRampToValueAtTime(0.001, masaKini + 0.6);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(masaKini);
+                osc.stop(masaKini + 0.6);
+            }, 1000);
+        }
+
+        function tutupMuzikLatar() {
+            if (mainLoopInterval) { clearInterval(mainLoopInterval); mainLoopInterval = null; }
+        }
+
+        function mainKesanBunyi(isBetul) {
+            paksaBukaAudio();
+            if (!isSfxOn || !audioCtx) return;
+            let masaKini = audioCtx.currentTime;
+
+            if (isBetul) {
+                [523.25, 659.25, 783.99].forEach((freq, index) => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, masaKini + (index * 0.08));
+                    gain.gain.setValueAtTime(0.1, masaKini + (index * 0.08));
+                    gain.gain.linearRampToValueAtTime(0.001, masaKini + (index * 0.08) + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(masaKini + (index * 0.08));
+                    osc.stop(masaKini + (index * 0.08) + 0.4);
+                });
+            } else {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(130.00, masaKini);
+                osc.frequency.linearRampToValueAtTime(90.00, masaKini + 0.4);
+                gain.gain.setValueAtTime(0.15, masaKini);
+                gain.gain.linearRampToValueAtTime(0.001, masaKini + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(masaKini);
+                osc.stop(masaKini + 0.4);
+            }
+        }
+
+        function toggleMuzik(e) {
+            if(e) e.stopPropagation();
+            isMusicOn = !isMusicOn;
+            const btn = document.getElementById('btn-toggle-music');
+            const icon = document.getElementById('icon-music');
+            const txt = document.getElementById('txt-music');
+            if(isMusicOn) {
+                btn.className = "bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-music";
+                txt.innerText = "Muzik: ON";
+                mainMuzikLatar();
+            } else {
+                btn.className = "bg-rose-500 hover:bg-rose-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-music-slash";
+                txt.innerText = "Muzik: OFF";
+                tutupMuzikLatar();
+            }
+        }
+
+        function toggleSfx(e) {
+            if(e) e.stopPropagation();
+            isSfxOn = !isSfxOn;
+            const btn = document.getElementById('btn-toggle-sfx');
+            const icon = document.getElementById('icon-sfx');
+            const txt = document.getElementById('txt-sfx');
+            if(isSfxOn) {
+                btn.className = "bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-volume-up";
+                txt.innerText = "Bunyi: ON";
+            } else {
+                btn.className = "bg-rose-500 hover:bg-rose-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow";
+                icon.className = "fas fa-volume-mute";
+                txt.innerText = "Bunyi: OFF";
+            }
+        }
+
+        // ================= BANK SOALAN STRUKTUR EKSPLISIT =================
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
 
-        // Aktiviti 7: Susun Perkataan Jadi Ayat (10 Soalan)
+        // TAHUN 1 DATASET
+        BANK_SOALAN[1][1] = {
+            tajuk: "Kenali Huruf Abjad", jenis: "mcq", ikon: "fa-font",
+            soalan: [
+                { q: "Pilih pasangan huruf besar bagi abjad 'a'.", a: ["A", "B", "C", "D"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'b'.", a: ["B", "E", "F", "G"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'd'.", a: ["D", "H", "I", "J"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'e'.", a: ["E", "K", "L", "M"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'g'.", a: ["G", "N", "O", "P"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'h'.", a: ["H", "Q", "R", "S"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'j'.", a: ["J", "T", "U", "V"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'k'.", a: ["K", "W", "X", "Y"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'm'.", a: ["M", "Z", "A", "B"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'n'.", a: ["N", "C", "D", "E"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'p'.", a: ["P", "F", "G", "H"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'q'.", a: ["Q", "I", "J", "K"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'r'.", a: ["R", "L", "M", "N"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 't'.", a: ["T", "O", "P", "Q"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'u'.", a: ["U", "R", "S", "T"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'w'.", a: ["W", "V", "X", "Y"], c: 0 },
+                { q: "Pilih pasangan huruf besar bagi abjad 'y'.", a: ["Y", "Z", "A", "B"], c: 0 },
+                { q: "Pilih pasangan huruf kecil bagi abjad 'F'.", a: ["f", "t", "l", "k"], c: 0 },
+                { q: "Pilih pasangan huruf kecil bagi abjad 'L'.", a: ["l", "i", "j", "f"], c: 0 },
+                { q: "Pilih pasangan huruf kecil bagi abjad 'Z'.", a: ["z", "s", "x", "c"], c: 0 }
+            ]
+        };
+
+        BANK_SOALAN[1][2] = {
+            tajuk: "Cantum Suku Kata Terbuka", jenis: "drag_drop", ikon: "fa-cubes",
+            soalan: [
+                { q: "Susun suku kata supaya membentuk kata 'Baju'.", parts: ["BA", "JU"], correctOrder: ["BA", "JU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Bola'.", parts: ["BO", "LA"], correctOrder: ["BO", "LA"] },
+                { q: "Susun suku kata supaya membentuk kata 'Caci'.", parts: ["CA", "CI"], correctOrder: ["CA", "CI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Dadu'.", parts: ["DA", "DU"], correctOrder: ["DA", "DU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Feri'.", parts: ["FE", "RI"], correctOrder: ["FE", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Geli'.", parts: ["GE", "LI"], correctOrder: ["GE", "LI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Hari'.", parts: ["HA", "RI"], correctOrder: ["HA", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Jari'.", parts: ["JA", "RI"], correctOrder: ["JA", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Kaki'.", parts: ["KA", "KI"], correctOrder: ["KA", "KI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Lori'.", parts: ["LO", "RI"], correctOrder: ["LO", "RI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Meja'.", parts: ["ME", "JA"], correctOrder: ["ME", "JA"] },
+                { q: "Susun suku kata supaya membentuk kata 'Nasi'.", parts: ["NA", "SI"], correctOrder: ["NA", "SI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Pasu'.", parts: ["PA", "SU"], correctOrder: ["PA", "SU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Rusa'.", parts: ["RU", "SA"], correctOrder: ["RU", "SA"] },
+                { q: "Susun suku kata supaya membentuk kata 'Sate'.", parts: ["SA", "TE"], correctOrder: ["SA", "TE"] },
+                { q: "Susun suku kata supaya membentuk kata 'Topi'.", parts: ["TO", "PI"], correctOrder: ["TO", "PI"] },
+                { q: "Susun suku kata supaya membentuk kata 'Susu'.", parts: ["SU", "SU"], correctOrder: ["SU", "SU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Kuku'.", parts: ["KU", "KU"], correctOrder: ["KU", "KU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Buku'.", parts: ["BU", "KU"], correctOrder: ["BU", "KU"] },
+                { q: "Susun suku kata supaya membentuk kata 'Guru'.", parts: ["GU", "RU"], correctOrder: ["GU", "RU"] }
+            ]
+        };
+
+        BANK_SOALAN[1][3] = {
+            tajuk: "Padanan Objek Sekolah", jenis: "mcq", ikon: "fa-images",
+            soalan: [
+                { q: "Kenal pasti nama bagi objek alat tulis kelas berikut:", visual: "✏️", a: ["Pensel", "Meja", "Kerusi", "Beg"], c: 0 },
+                { q: "Apakah nama bagi objek pengurusan pembacaan ini?", visual: "📚", a: ["Buku", "Lampu", "Kipas", "Jam"], c: 0 },
+                { q: "Namakan objek perabot tempat duduk murid berikut:", visual: "🪑", a: ["Kerusi", "Pintu", "Tingkap", "Peta"], c: 0 },
+                { q: "Apakah nama objek ruang penyimpanan fail sekolah ini?", visual: "🎒", a: ["Beg Sekolah", "Krayon", "Pembaris", "Pemadam"], c: 0 },
+                { q: "Namakan peralatan menulis di papan tulis ini:", visual: "🖍️", a: ["Krayon", "Botol Air", "Jam Dinding", "Bekal"], c: 0 },
+                { q: "Kenal pasti objek pengukuran garisan lurus ini:", visual: "📏", a: ["Pembaris", "Meja", "Tingkap", "Kertas"], c: 0 },
+                { q: "Apakah nama perkataan untuk takungan sisa kelas ini?", visual: "🗑️", a: ["Tong Sampah", "Pintu", "Kipas", "Lampu"], c: 0 },
+                { q: "Namakan objek pemberi pencahayaan malam bilik darjah:", visual: "💡", a: ["Lampu", "Jam", "Buku", "Kerusi"], c: 0 },
+                { q: "Apakah nama objek penunjuk waktu harian ini?", visual: "🕒", a: ["Jam", "Beg", "Pensel", "Kertas"], c: 0 },
+                { q: "Namakan permukaan bertulis kapur atau marker ini:", visual: "📋", a: ["Papan Tulis", "Tingkap", "Pintu", "Krayon"], c: 0 },
+                { q: "Kenal pasti nama bagi objek pembersih ejaan salah ini:", visual: "🧼", a: ["Pemadam", "Peta", "Botol", "Baju"], c: 0 },
+                { q: "Apakah nama bagi struktur laluan masuk keluar bilik darjah?", visual: "🚪", a: ["Pintu", "Kipas", "Kerusi", "Meja"], c: 0 },
+                { q: "Namakan helaian tipis kosong untuk melukis lukisan ini:", visual: "📄", a: ["Kertas", "Beg", "Jam", "Lampu"], c: 0 },
+                { q: "Apakah nama objek takungan minuman murid ini?", visual: "🧪", a: ["Botol Air", "Bekal", "Pasu", "Lori"], c: 0 },
+                { q: "Namakan objek pelindung cuaca hujan berwira warna ini:", visual: "☂️", a: ["Payung", "Topi", "Baju", "Kasut"], c: 0 },
+                { q: "Kenal pasti nama perabot meja guru atau murid ini:", visual: "🪵", a: ["Meja", "Kerusi", "Pintu", "Tingkap"], c: 0 },
+                { q: "Apakah nama bagi alas kaki pelindung aktiviti luar?", visual: "👟", a: ["Kasut", "Baju", "Topi", "Beg"], c: 0 },
+                { q: "Apakah nama hiasan pakaian pelindung kepala dari panas?", visual: "🧢", a: ["Topi", "Kasut", "Baju", "Seluar"], c: 0 },
+                { q: "Namakan pakaian asas sekolah bahagian badan atas murid:", visual: "👕", a: ["Baju", "Topi", "Kasut", "Beg"], c: 0 },
+                { q: "Apakah nama takungan tumbuhan hiasan di koridor kelas?", visual: "🪴", a: ["Pasu", "Botol", "Buku", "Meja"], c: 0 }
+            ]
+        };
+
+        BANK_SOALAN[1][4] = {
+            tajuk: "Pilih Ejaan Betul", jenis: "mcq", ikon: "fa-spell-check",
+            soalan: [
+                { q: "Manakah ejaan yang betul bagi hidupan berkokok?", a: ["Ayam", "Ayem", "Ayamm", "Aeyam"], c: 0 },
+                { q: "Manakah ejaan bahasa Melayu yang betul bagi sumber cahaya api?", a: ["Obor", "Obeor", "Ubur", "Oborr"], c: 0 },
+                { q: "Manakah ejaan betul bagi reptilia menjalar panjang?", a: ["Ular", "Olar", "Uler", "Ullar"], c: 0 },
+                { q: "Manakah ejaan betul bagi haiwan unggas berenang air?", a: ["Itik", "Etek", "Ittek", "Idik"], c: 0 },
+                { q: "Manakah ejaan betul bagi buah merah manis import?", a: ["Epal", "Epeal", "Epel", "Eppal"], c: 0 },
+                { q: "Manakah ejaan betul bagi bekas takungan minuman bercawan?", a: ["Cawan", "Cawen", "Cawann", "Cewan"], c: 0 },
+                { q: "Manakah ejaan betul bagi pelindung kaki sekolah?", a: ["Kasut", "Kaset", "Kasot", "Kassut"], c: 0 },
+                { q: "Manakah ejaan betul bagi struktur kediaman keluarga?", a: ["Rumah", "Romeh", "Rumahz", "Rumha"], c: 0 },
+                { q: "Manakah ejaan betul bagi mamalia belalai besar?", a: ["Gajah", "Gajeh", "Gajahh", "Gaja"], c: 0 },
+                { q: "Manakah ejaan betul bagi hidupan laut lapan tentakel?", a: ["Sotong", "Sutung", "Sotongg", "Suteng"], c: 0 },
+                { q: "Manakah ejaan betul bagi tumbuhan berkayu hutan?", a: ["Pokok", "Pukuk", "Pokokke", "Poko"], c: 0 },
+                { q: "Manakah ejaan betul bagi struktur flora berwarna-warni?", a: ["Bunga", "Bunge", "Bungae", "Bungga"], c: 0 },
+                { q: "Manakah ejaan betul bagi makanan ruji sarapan pagi kita?", a: ["Nasi", "Nase", "Nasie", "Nasii"], c: 0 },
+                { q: "Manakah ejaan betul bagi haiwan bersisik dalam air?", a: ["Ikan", "Ekan", "Ikann", "Iken"], c: 0 },
+                { q: "Manakah ejaan betul bagi gas gumpalan putih di langit langit?", a: ["Awan", "Awen", "Awann", "Ewan"], c: 0 },
+                { q: "Manakah ejaan betul bagi kenderaan awam darat beroda empat besar?", a: ["Bas", "Bes", "Base", "Bass"], c: 0 },
+                { q: "Manakah ejaan betul bagi kenderaan sewa beroda empat bandar?", a: ["Teksi", "Tekse", "Taxi", "Taeksi"], c: 0 },
+                { q: "Manakah ejaan betul bagi pengangkutan bermotor keluarga?", a: ["Kereta", "Kete", "Kerete", "Kareta"], c: 0 },
+                { q: "Manakah ejaan betul bagi manisan bakeri bulat berlubang tengah?", a: ["Donut", "Donat", "Doneat", "Donot"], c: 0 },
+                { q: "Manakah ejaan betul bagi makanan kepingan bakar tepung gandum?", a: ["Roti", "Rote", "Rotie", "Roty"], c: 0 }
+            ]
+        };
+
+        BANK_SOALAN[1][5] = {
+            tajuk: "Isi Tempat Kosong Mudah", jenis: "blank", ikon: "fa-pen-clip",
+            soalan: [
+                { q: "Saya makan buah ______ yang berwarna merah manis.", c: ["epal"] },
+                { q: "Adik membaca ______ cerita di dalam perpustakaan.", c: ["buku"] },
+                { q: "Abang menendang ______ di padang sekolah.", c: ["bola"] },
+                { q: "Haiwan comel peliharaan saya ialah ______ yang comel.", c: ["kucing"] },
+                { q: "Setiap pagi saya minum ______ suam untuk kesihatan.", c: ["susu"] },
+                { q: "Ayah mengayuh ______ ke kedai runcit berdekatan.", c: ["basikal"] },
+                { q: "Tumbuhan hijau itu adalah ______ kelapa yang tinggi.", c: ["pokok"] },
+                { q: "Kakak memasak ______ goreng untuk hidangan malam.", c: ["nasi"] },
+                { q: "Ibu memakai ______ kurung yang berwarna biru anggun.", c: ["baju"] },
+                { q: "Cikgu menulis menggunakan marker di ______ hitam.", c: ["papan"] },
+                { q: "Murid menyapu sampah sarap menggunakan ______ lidi.", c: ["penyapu"] },
+                { q: "Siti meletakkan alat tulis di dalam ______ sekolah.", c: ["beg"] },
+                { q: "Pelari itu memakai ______ sukan semasa pertandingan.", c: ["kasut"] },
+                { q: "Burung layang-layang ______ tinggi di langit biru.", c: ["terbang"] },
+                { q: "Nelayan itu menangkap ______ segar di lautan luas.", c: ["ikan"] },
+                { q: "Petani membela haiwan ternakan iaitu ______ di reban.", c: ["ayam"] },
+                { q: "Lori kontena itu membawa ______ pasir sungai.", c: ["muatan"] },
+                { q: "Manisan hari lahir kegemaran saya ialah ______ coklat.", c: ["kek"] },
+                { q: "Adik melukis menggunakan sebatang ______ kayu.", c: ["pensel"] },
+                { q: "Rumah nenek mempunyai halaman ______ hijau yang luas.", c: ["rumput"] }
+            ]
+        };
+
+        BANK_SOALAN[1][6] = {
+            tajuk: "Susun Huruf Objek", jenis: "drag_drop", ikon: "fa-font-awesome",
+            soalan: [
+                { q: "Susun huruf objek ini:", visual: "🎒", parts: ["B", "E", "G"], correctOrder: ["B", "E", "G"] },
+                { q: "Susun huruf objek ini:", visual: "🕒", parts: ["J", "A", "M"], correctOrder: ["J", "A", "M"] },
+                { q: "Susun huruf objek ini:", visual: "🚌", parts: ["B", "A", "S"], correctOrder: ["B", "A", "S"] },
+                { q: "Susun huruf objek ini:", visual: "🥚", parts: ["T", "E", "L", "U", "R"], correctOrder: ["T", "E", "L", "U", "R"] },
+                { q: "Susun huruf objek ini:", visual: "🐟", parts: ["I", "K", "A", "N"], correctOrder: ["I", "K", "A", "N"] },
+                { q: "Susun huruf objek ini:", visual: "🐓", parts: ["A", "Y", "A", "M"], correctOrder: ["A", "Y", "A", "M"] },
+                { q: "Susun huruf objek ini:", visual: "🪑", parts: ["K", "E", "R", "U", "S", "I"], correctOrder: ["K", "E", "R", "U", "S", "I"] },
+                { q: "Susun huruf objek ini:", visual: "🪵", parts: ["M", "E", "J", "A"], correctOrder: ["M", "E", "J", "A"] },
+                { q: "Susun huruf objek ini:", visual: "🛖", parts: ["R", "U", "M", "A", "H"], correctOrder: ["R", "U", "M", "A", "H"] },
+                { q: "Susun huruf objek ini:", visual: "🛞", parts: ["R", "O", "D", "A"], correctOrder: ["R", "O", "D", "A"] },
+                { q: "Susun huruf objek ini:", visual: "✉️", parts: ["K", "A", "D"], correctOrder: ["K", "A", "D"] },
+                { q: "Susun huruf objek ini:", visual: "🥣", parts: ["S", "U", "P"], correctOrder: ["S", "U", "P"] },
+                { q: "Susun huruf objek ini:", visual: "👒", parts: ["T", "O", "P", "I"], correctOrder: ["T", "O", "P", "I"] },
+                { q: "Susun huruf objek ini:", visual: "👟", parts: ["K", "A", "S", "U", "T"], correctOrder: ["K", "A", "S", "U", "T"] },
+                { q: "Susun huruf objek ini:", visual: "🧅", parts: ["B", "A", "W", "A", "N", "G"], correctOrder: ["B", "A", "W", "A", "N", "G"] },
+                { q: "Susun huruf objek ini:", visual: "🌶️", parts: ["C", "I", "L", "I"], correctOrder: ["C", "I", "L", "I"] },
+                { q: "Susun huruf objek ini:", visual: "🌹", parts: ["B", "U", "N", "G", "A"], correctOrder: ["B", "U", "N", "G", "A"] },
+                { q: "Susun huruf objek ini:", visual: "🌳", parts: ["P", "O", "K", "O", "K"], correctOrder: ["P", "O", "K", "O", "K"] },
+                { q: "Susun huruf objek ini:", visual: "🍉", parts: ["B", "U", "A", "H"], correctOrder: ["B", "U", "A", "H"] },
+                { q: "Susun huruf objek ini:", visual: "🥛", parts: ["S", "U", "S", "U"], correctOrder: ["S", "U", "S", "U"] }
+            ]
+        };
+
         BANK_SOALAN[1][7] = {
             tajuk: "Susun Perkataan Jadi Ayat", jenis: "drag_drop", ikon: "fa-align-left",
             soalan: [
@@ -40,7 +589,6 @@
             ]
         };
 
-        // Aktiviti 8: Betul @ Salah (10 Soalan)
         BANK_SOALAN[1][8] = {
             tajuk: "Betul @ Salah Fakta Asas", jenis: "mcq", ikon: "fa-circle-question",
             soalan: [
@@ -57,7 +605,6 @@
             ]
         };
 
-        // Aktiviti 9: Pemahaman Petikan (10 Soalan)
         BANK_SOALAN[1][9] = {
             tajuk: "Pemahaman Petikan Pendek", jenis: "mcq", ikon: "fa-file-lines",
             soalan: [
@@ -69,12 +616,11 @@
                 { q: "Bapa kerja di pejabat. Bapa naik kereta. Di mana bapa kerja?", a: ["Pejabat", "Kedai", "Sekolah", "Rumah"], c: 0 },
                 { q: "Adik suka makan roti. Roti rasa manis. Apa rasa roti?", a: ["Manis", "Masin", "Pahit", "Tawar"], c: 0 },
                 { q: "Kaki saya sakit terkena batu. Apa yang sakit?", a: ["Kaki", "Tangan", "Mata", "Hidung"], c: 0 },
-                { q: "Hari ini hari hujan. Kita kena bawa payung. Apa perlu bawa?", a: ["Payung", "Topi", "Beg", "Buku"], c: 0 },
-                { q: "Rumah saya dekat padang. Di mana rumah saya?", a: ["Padang", "Sekolah", "Kedai", "Pekan"], c: 0 }
+                { q: "Hari ini hujan. Kita kena bawa payung. Apa perlu bawa?", a: ["Payung", "Topi", "Beg", "Buku"], c: 0 },
+                { q: "Rumah saya dekat padang. Rumah saya dekat dengan apa?", a: ["Padang", "Sekolah", "Kedai", "Pekan"], c: 0 }
             ]
         };
 
-        // Aktiviti 10: Kuiz Holistik (10 Soalan)
         BANK_SOALAN[1][10] = {
             tajuk: "Kuiz Holistik Akhir", jenis: "mcq", ikon: "fa-graduation-cap",
             soalan: [
@@ -85,13 +631,357 @@
                 { q: "Berapakah jumlah kaki ayam?", a: ["Dua", "Empat", "Enam", "Lapan"], c: 0 },
                 { q: "Apakah lawan bagi perkataan 'tinggi'?", a: ["Rendah", "Panjang", "Besar", "Kecil"], c: 0 },
                 { q: "Apakah lawan bagi perkataan 'siang'?", a: ["Malam", "Pagi", "Petang", "Tengahari"], c: 0 },
-                { q: "Apakah warna bendera Malaysia?", a: ["Jalur Gemilang", "Hitam", "Kelabu", "Ungu"], c: 0 },
                 { q: "Apa kita guna untuk dengar bunyi?", a: ["Telinga", "Mata", "Hidung", "Mulut"], c: 0 },
                 { q: "Apakah rasa buah limau?", a: ["Masam", "Manis", "Pahit", "Tawar"], c: 0 }
             ]
         };
 
-        // ... [Sambungan kod JavaScript yang lain tetap sama dengan versi sebelumnya] ...
+        // DATA TAHUN 2 & TAHUN 3 
+        for(let t=2; t<=3; t++) {
+            for(let a=1; a<=10; a++) {
+                let mType = (a === 2 || a === 5 || a === 7) ? "blank" : ((a === 6) ? "drag_drop" : "mcq");
+                if(mType === "mcq") {
+                    BANK_SOALAN[t][a] = {
+                        tajuk: `Topik Pintar T${t} Siri ${a}`, jenis: "mcq", ikon: "fa-star",
+                        soalan: [
+                            { q: `Pilih unsur paling tepat bagi latihan Tahun ${t} Aktiviti ${a} Soalan 1.`, a: ["Jawapan Betul A", "Pilihan B", "Pilihan C", "Pilihan D"], c: 0 },
+                            { q: `Analisis struktur perkataan komprehensif bagi modul ${t} unit ${a} Soalan 2.`, a: ["Jawapan Betul A", "Pilihan B", "Pilihan C", "Pilihan D"], c: 0 }
+                        ]
+                    };
+                } else if(mType === "drag_drop") {
+                    BANK_SOALAN[t][a] = {
+                        tajuk: `Susunan Frasa T${t} Siri ${a}`, jenis: "drag_drop", ikon: "fa-cubes",
+                        soalan: [
+                            { q: "Susun semula bahagian siri perkataan ini:", parts: ["Bahagian A", "Bahagian B", "Bahagian C"], correctOrder: ["Bahagian A", "Bahagian B", "Bahagian C"] }
+                        ]
+                    };
+                } else {
+                    BANK_SOALAN[t][a] = {
+                        tajuk: `Latihan Bertulis T${t} Siri ${a}`, jenis: "blank", ikon: "fa-pen",
+                        soalan: [
+                            { q: "Lengkapkan ayat pendek ini dengan kata jawapan ______ .", c: ["pintar"] }
+                        ]
+                    };
+                }
+            }
+        }
+
+        let tahunSemasa = 1;
+        let topikSemasa = 1;
+        let indexSoalanSemasa = 0;
+        let senaraiSoalanAktif = [];
+        let skorAktivitiSemasa = 0;
+
+        function muatKemajuanDariFirebase(uid) {
+            database.ref('kemajuan_murid/' + uid).once('value')
+            .then((snapshot) => {
+                if (snapshot.exists()) rekodKemajuan = snapshot.val();
+                else rekodKemajuan = { 1: {}, 2: {}, 3: {} };
+                kemasKiniSkorPaparan();
+            }).catch(e => console.error(e));
+        }
+
+        function simpanKemajuanKeFirebase() {
+            if (penggunaSemasa) {
+                database.ref('kemajuan_murid/' + penggunaSemasa.uid).set(rekodKemajuan)
+                .catch(e => console.error(e));
+            }
+        }
+
+        function paparHalaman(idHalaman) {
+            document.querySelectorAll('.layer-section').forEach(section => section.classList.add('hidden'));
+            document.getElementById(`page-${idHalaman}`).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function kemasKiniSkorPaparan() {
+            let totalScore = 0;
+            [1, 2, 3].forEach(th => {
+                for (let tp in rekodKemajuan[th]) totalScore += rekodKemajuan[th][tp];
+            });
+            document.getElementById('total-score-badge').innerText = totalScore;
+        }
+
+        function pilihTahun(tahun) {
+            tahunSemasa = tahun;
+            document.getElementById('tajuk-tahun').innerText = `Aktiviti Bahasa Melayu: Tahun ${tahun}`;
+            binaSenaraiAktiviti();
+            paparHalaman('senarai-aktiviti');
+            mainMuzikLatar(); 
+        }
+
+        function binaSenaraiAktiviti() {
+            const grid = document.getElementById('grid-aktiviti');
+            grid.innerHTML = '';
+            let diselesaikan = 0;
+            const senaraiTopik = BANK_SOALAN[tahunSemasa];
+
+            for (let i = 1; i <= 10; i++) {
+                const dataTopik = senaraiTopik[i];
+                const markahSediaAda = rekodKemajuan[tahunSemasa][i];
+                const isDone = markahSediaAda !== undefined;
+                if (isDone) diselesaikan++;
+
+                const card = document.createElement('div');
+                card.className = `bg-white p-5 rounded-2xl shadow border-2 ${isDone ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-200'} flex items-center justify-between hover:shadow-md transition cursor-pointer`;
+                card.onclick = () => mulaAktiviti(i);
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-blue-500 text-white'} shadow-sm">
+                            <i class="fas ${dataTopik ? dataTopik.ikon : 'fa-star'}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-base md:text-lg">Aktiviti ${i}: ${dataTopik ? dataTopik.tajuk : 'Topik'}</h4>
+                            <p class="text-xs text-gray-400">Format: ${dataTopik ? dataTopik.jenis.toUpperCase().replace('_',' ') : 'Kuiz'}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        ${isDone ? `<span class="bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow"><i class="fas fa-check mr-1"></i> ${markahSediaAda} Pts</span>` : `<span class="bg-slate-100 text-slate-500 text-xs font-bold px-2.5 py-1 rounded-full border">Sedia</span>`}
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+
+            document.getElementById('progress-tahun-text').innerText = `${diselesaikan}/10`;
+            if (diselesaikan === 10) setTimeout(() => paparSkrinGanjaranAkhir(), 900);
+        }
+
+        function kembaliKeSenarai() {
+            paparHalaman('senarai-aktiviti');
+            binaSenaraiAktiviti();
+        }
+
+        function mulaAktiviti(idTopik) {
+            topikSemasa = idTopik;
+            indexSoalanSemasa = 0;
+            skorAktivitiSemasa = 0;
+
+            const dataTopik = BANK_SOALAN[tahunSemasa][idTopik];
+            senaraiSoalanAktif = [...dataTopik.soalan];
+
+            document.getElementById('game-tag-topik').innerText = `Aktiviti ${idTopik}`;
+            document.getElementById('game-tajuk-topik').innerText = dataTopik.tajuk;
+            document.getElementById('game-total-q').innerText = senaraiSoalanAktif.length;
+            document.getElementById('game-score').innerText = "0";
+
+            paparHalaman('game');
+            janaSoalan();
+        }
+
+        function janaSoalan() {
+            document.getElementById('feedback-layer').classList.add('hidden');
+            const totalQ = senaraiSoalanAktif.length;
+            document.getElementById('game-current-q').innerText = indexSoalanSemasa + 1;
+            document.getElementById('game-progress-bar').style.width = `${(indexSoalanSemasa / totalQ) * 100}%`;
+
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+            const area = document.getElementById('quiz-dynamic-area');
+            area.innerHTML = '';
+            const dataTopik = BANK_SOALAN[tahunSemasa][topikSemasa];
+
+            let komponenEmoji = soalanData.visual ? `<div class="text-7xl my-3 text-center animate-pulse">${soalanData.visual}</div>` : '';
+
+            if (dataTopik.jenis === "mcq") {
+                let senaraiPilihan = soalanData.a.map((pilihan, idx) => ({ teks: pilihan, asal: idx }));
+                area.innerHTML = `
+                    <div class="text-center my-4">
+                        <p class="text-xl md:text-2xl font-bold text-slate-800 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300 inline-block w-full">${soalanData.q}</p>
+                        ${komponenEmoji}
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                        ${senaraiPilihan.map((obj, idx) => `
+                            <button onclick="semakJawapanMCQ(${obj.asal}, ${soalanData.c})" class="bg-blue-50 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-100/50 p-4 rounded-2xl font-bold text-left text-slate-700 transition shadow-sm btn-bounce text-base flex items-center">
+                                <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3 text-xs">${String.fromCharCode(65 + idx)}</span>
+                                ${obj.teks}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (dataTopik.jenis === "drag_drop") {
+                area.innerHTML = `
+                    <div class="text-center my-2">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase"><i class="fas fa-hand-pointer mr-1"></i> Seret ke zon garisan putus!</span>
+                        <h4 class="text-lg font-medium text-gray-600 mt-2">${soalanData.q}</h4>
+                        ${komponenEmoji}
+                    </div>
+                    <div id="drop-zone-container" class="w-full min-h-[80px] border-4 border-dashed border-slate-300 rounded-2xl bg-slate-50 p-3 flex flex-wrap gap-3 justify-center items-center drop-zone" ondragover="allowDrop(event)" ondrop="dropElement(event)"></div>
+                    <div id="drag-items-container" class="w-full p-4 bg-yellow-50/50 rounded-2xl border border-yellow-200 flex flex-wrap gap-3 justify-center items-center min-h-[70px]">
+                        ${soalanData.parts.map((part, idx) => `
+                            <div id="drag-part-${idx}" draggable="true" ondragstart="dragStart(event)" class="bg-white border-2 border-amber-300 px-4 py-2.5 rounded-xl font-bold shadow-md text-slate-700 cursor-grab active:cursor-grabbing text-sm md:text-base">
+                                ${part}
+                            </div>
+                        `).sort(() => Math.random() - 0.5).join('')}
+                    </div>
+                    <div class="text-center mt-4">
+                        <button onclick="semakJawapanDragDrop()" class="bg-indigo-600 text-white font-bold px-8 py-2.5 rounded-xl shadow-lg hover:bg-indigo-700 transition btn-bounce">Hantar Jawapan</button>
+                    </div>
+                `;
+            }
+            else if (dataTopik.jenis === "blank") {
+                area.innerHTML = `
+                    <div class="text-center my-4">
+                        <p class="text-xl font-bold text-slate-700">${soalanData.q.replace('______', '<input type="text" id="blank-input-ans" class="border-b-4 border-blue-500 bg-blue-50 text-blue-800 font-bold px-4 py-1 rounded-t-md mx-2 text-center focus:outline-none focus:bg-yellow-100 max-w-[180px]" placeholder="...">')}</p>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button onclick="semakJawapanBlank()" class="bg-emerald-500 text-white font-bold px-8 py-2.5 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce">Semak Jawapan</button>
+                    </div>
+                `;
+                setTimeout(() => { const inp = document.getElementById('blank-input-ans'); if(inp) inp.focus(); }, 200);
+            }
+        }
+
+        // FUNGSI MAKLUMBALAS YANG TELAH DIKEMAS KINI
+        function tunjukMaklumBalas(isBetul, jawapanBetulTeks = '') {
+            mainKesanBunyi(isBetul);
+            const layer = document.getElementById('feedback-layer');
+            const box = document.getElementById('feedback-box');
+            const icon = document.getElementById('feedback-icon');
+            const title = document.getElementById('feedback-title');
+            const msg = document.getElementById('feedback-msg');
+            const btnNext = document.getElementById('btn-next-q');
+
+            layer.classList.remove('hidden');
+            layer.className = `absolute inset-0 z-20 flex flex-col items-center justify-center p-6 bg-slate-950/40 backdrop-blur-sm`;
+
+            if (isBetul) {
+                confetti({ particleCount: 50, spread: 40, origin: { y: 0.6 } });
+                box.className = "bg-white border-4 border-emerald-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-all";
+                icon.innerHTML = "🌟";
+                title.innerText = "Tahniah! Betul";
+                title.className = "text-3xl font-black text-emerald-600 mb-2";
+                msg.innerText = "Jawapan anda tepat. Anda wira pintar!";
+            } else {
+                box.className = "bg-white border-4 border-rose-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-all";
+                icon.innerHTML = "❌";
+                title.innerText = "Jawapan Salah";
+                title.className = "text-3xl font-black text-rose-500 mb-2";
+                
+                // Jika ada jawapan rujukan ralat (untuk isi tempat kosong)
+                if(jawapanBetulTeks) {
+                    msg.innerHTML = `Jawapan kurang tepat.<br><span class="font-bold text-slate-700 text-base mt-2 block bg-slate-100 py-1 rounded border">Jawapan betul: ${jawapanBetulTeks}</span>`;
+                } else {
+                    msg.innerText = "Jawapan kurang tepat.";
+                }
+            }
+            
+            // Mana-mana situasi (betul atau salah), butang Seterusnya akan dipaparkan untuk terus mara
+            btnNext.onclick = prosesSeterusnya;
+        }
+
+        function semakJawapanMCQ(idxDipilih, idxBetul) {
+            if (idxDipilih === idxBetul) {
+                skorAktivitiSemasa += 10;
+                document.getElementById('game-score').innerText = skorAktivitiSemasa;
+                tunjukMaklumBalas(true);
+            } else {
+                tunjukMaklumBalas(false);
+            }
+        }
+
+        function semakJawapanBlank() {
+            const userAns = document.getElementById('blank-input-ans').value.trim().toLowerCase();
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+            const isBetul = soalanData.c.some(ans => userAns === ans.toLowerCase());
+
+            if (isBetul) {
+                skorAktivitiSemasa += 10;
+                document.getElementById('game-score').innerText = skorAktivitiSemasa;
+                tunjukMaklumBalas(true);
+            } else {
+                // Hantar parameter jawapan betul utama jika salah, tiada markah ditambah
+                tunjukMaklumBalas(false, soalanData.c[0]);
+            }
+        }
+
+        function dragStart(ev) { ev.dataTransfer.setData("text/plain", ev.target.id); }
+        function allowDrop(ev) { ev.preventDefault(); ev.currentTarget.classList.add('hover'); }
+        function dropElement(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hover');
+            const dataId = ev.dataTransfer.getData("text/plain");
+            const node = document.getElementById(dataId);
+            if(node) ev.currentTarget.appendChild(node);
+        }
+
+        function semakJawapanDragDrop() {
+            const dropZone = document.getElementById('drop-zone-container');
+            const susunanMurid = Array.from(dropZone.children).map(child => child.innerText.trim());
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+
+            let isBetul = susunanMurid.length === soalanData.correctOrder.length;
+            if (isBetul) {
+                for (let i = 0; i < susunanMurid.length; i++) {
+                    if (susunanMurid[i] !== soalanData.correctOrder[i]) { isBetul = false; break; }
+                }
+            }
+
+            if (isBetul) {
+                skorAktivitiSemasa += 10;
+                document.getElementById('game-score').innerText = skorAktivitiSemasa;
+                tunjukMaklumBalas(true);
+            } else {
+                tunjukMaklumBalas(false);
+            }
+        }
+
+        function prosesSeterusnya() {
+            indexSoalanSemasa++;
+            if (indexSoalanSemasa < senaraiSoalanAktif.length) {
+                janaSoalan();
+            } else {
+                const markahSediaAda = rekodKemajuan[tahunSemasa][topikSemasa] || 0;
+                if (skorAktivitiSemasa > markahSediaAda) {
+                    rekodKemajuan[tahunSemasa][topikSemasa] = skorAktivitiSemasa;
+                    simpanKemajuanKeFirebase();
+                    kemasKiniSkorPaparan();
+                }
+                kembaliKeSenarai();
+            }
+        }
+
+        function paparSkrinGanjaranAkhir() {
+            let totalMataTahunIni = 0;
+            let maksimumMataTahunIni = 0;
+
+            for (let i = 1; i <= 10; i++) {
+                totalMataTahunIni += (rekodKemajuan[tahunSemasa][i] || 0);
+                maksimumMataTahunIni += ((BANK_SOALAN[tahunSemasa][i]?.soalan?.length || 0) * 10);
+            }
+
+            const peratusan = Math.min(100, Math.round((totalMataTahunIni / maksimumMataTahunIni) * 100)) || 0;
+            document.getElementById('final-score-percent').innerText = `${peratusan}%`;
+
+            const bContainer = document.getElementById('badge-container');
+            let lencana = peratusan >= 90 ? "Emas 🥇" : (peratusan >= 70 ? "Perak 🥈" : "Gangsa 🥉");
+            bContainer.innerHTML = `<span class="text-3xl font-black text-yellow-500">${lencana}</span>`;
+
+            document.getElementById('cert-user-name').innerText = penggunaSemasa ? (penggunaSemasa.displayName || penggunaSemasa.email) : "Murid Pintar";
+            document.getElementById('cert-tahun-nama').innerText = `CABARAN BAHASA MELAYU TAHUN ${tahunSemasa}`;
+            document.getElementById('cert-lencana-nama').innerText = `PINGAT ${lencana.toUpperCase().split(' ')[0]}`;
+            
+            const hariIni = new Date();
+            document.getElementById('cert-tarikh').innerText = `${String(hariIni.getDate()).padStart(2, '0')}/${String(hariIni.getMonth() + 1).padStart(2, '0')}/${hariIni.getFullYear()}`;
+
+            paparHalaman('ganjaran');
+        }
+
+        function janaSijil() {
+            const element = document.getElementById('sijil-print-area');
+            element.parentElement.classList.remove('hidden');
+
+            const opt = {
+                margin:       0.2,
+                filename:     `Sijil_Cilik_Tahap_${tahunSemasa}.pdf`,
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.parentElement.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 </html>
