@@ -41,10 +41,10 @@
         </div>
         
         <div class="flex items-center space-x-2 bg-blue-600/50 px-3 py-1.5 rounded-xl border border-blue-400">
-            <button id="btn-toggle-music" onclick="toggleMuzik()" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
+            <button id="btn-toggle-music" onclick="toggleMuzik(event)" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
                 <i id="icon-music" class="fas fa-music"></i> <span id="txt-music">Muzik: ON</span>
             </button>
-            <button id="btn-toggle-sfx" onclick="toggleSfx()" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
+            <button id="btn-toggle-sfx" onclick="toggleSfx(event)" class="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center space-x-1 shadow">
                 <i id="icon-sfx" class="fas fa-volume-up"></i> <span id="txt-sfx">Bunyi: ON</span>
             </button>
         </div>
@@ -232,100 +232,110 @@
     </footer>
 
     <script>
-        // CONFIG AUDIO KONTROL GLOBAL & WEB AUDIO API SYNTHESIZER
+        // CONFIG AUDIO GLOBAL
         let isMusicOn = true;
         let isSfxOn = true;
         let audioCtx = null;
-        let bleepOsculator = null;
-        let bleepGainNode = null;
+        let mainLoopInterval = null;
 
-        function initAudioContext() {
+        // Buka paksa audio context sejurus selepas sebarang klik dilakukan oleh user
+        function paksaBukaAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
 
-        // PENJANA BUNYI SYNTHETIC BACKGROUND MUSIC (Melodi Gelung Mudah)
+        // PENJANA MUZIK LATAR BELAKANG SINTETIK (Bunyi Ambient Santai Kanak-kanak)
         function mainMuzikLatar() {
-            initAudioContext();
+            paksaBukaAudio();
             if (!isMusicOn) {
                 tutupMuzikLatar();
                 return;
             }
-            if (bleepOsculator) return; // Muzik sedang berjalan
+            if (mainLoopInterval) return; // Muzik latar sedia dimainkan
 
-            // Bina synthesizer ringkas untuk muzik latar
-            bleepOsculator = audioCtx.createOscillator();
-            bleepGainNode = audioCtx.createGain();
-            
-            bleepOsculator.type = 'triangle'; // Bunyi lembut mesra kanak-kanak
-            bleepOsculator.frequency.setValueAtTime(261.63, audioCtx.currentTime); // Kunci Do Utama
-            
-            // Buat kesan vibrato berayun lambat
-            bleepOsculator.frequency.linearRampToValueAtTime(329.63, audioCtx.currentTime + 1.5);
-            bleepOsculator.frequency.linearRampToValueAtTime(392.00, audioCtx.currentTime + 3.0);
-            
-            bleepGainNode.gain.setValueAtTime(0.04, audioCtx.currentTime); // Volume perlahan untuk latar belakang
-            
-            bleepOsculator.connect(bleepGainNode);
-            bleepGainNode.connect(audioCtx.destination);
-            bleepOsculator.start();
-
-            // Membina sistem 'looping' buatan untuk nada muzik lembut
-            setInterval(() => {
-                if (bleepOsculator && isMusicOn) {
-                    let freks = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
-                    let randyFreq = freks[Math.floor(Math.random() * freks.length)];
-                    bleepOsculator.frequency.setValueAtTime(randyFreq, audioCtx.currentTime);
-                }
-            }, 1000);
+            // Aturan melodi ringkas gelung
+            mainLoopInterval = setInterval(() => {
+                if (!isMusicOn || !audioCtx) return;
+                
+                let masaKini = audioCtx.currentTime;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'triangle'; // Nada lembut kalis bising
+                let kumpulanNota = [261.63, 329.63, 392.00, 440.00]; // Do-Mi-Sol-La
+                let notaRawak = kumpulanNota[Math.floor(Math.random() * kumpulanNota.length)];
+                
+                osc.frequency.setValueAtTime(notaRawak, masaKini);
+                gain.gain.setValueAtTime(0.03, masaKini); // Volume muzik latar sangat perlahan
+                gain.gain.linearRampToValueAtTime(0.001, masaKini + 0.8);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(masaKini);
+                osc.stop(masaKini + 0.8);
+            }, 900);
         }
 
         function tutupMuzikLatar() {
-            if (bleepOsculator) {
-                try { bleepOsculator.stop(); } catch(e){}
-                bleepOsculator = null;
+            if (mainLoopInterval) {
+                clearInterval(mainLoopInterval);
+                mainLoopInterval = null;
             }
         }
 
-        // PENJANA KESAN BUNYI SINTETIK ("Horaa" & "Buzz")
+        // PENJANA KESAN BUNYI DINAMIK ("Horaa" & "Buzz")
         function mainKesanBunyi(isBetul) {
-            if (!isSfxOn) return;
-            initAudioContext();
+            paksaBukaAudio();
+            if (!isSfxOn || !audioCtx) return;
 
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            let masaKini = audioCtx.currentTime;
 
             if (isBetul) {
-                // BUNYI "HORAA!" (Melodi Chime Naik yang Gembira)
-                osc.type = 'sine';
-                let masa = audioCtx.currentTime;
-                osc.frequency.setValueAtTime(392.00, masa); // G4
-                osc.frequency.setValueAtTime(523.25, masa + 0.08); // C5
-                osc.frequency.setValueAtTime(659.25, masa + 0.16); // E5
-                osc.frequency.setValueAtTime(783.99, masa + 0.24); // G5 ("Horaa!")
-                
-                gain.gain.setValueAtTime(0.2, masa);
-                gain.gain.linearRampToValueAtTime(0.01, masa + 0.5);
-                osc.start(masa);
-                osc.stop(masa + 0.5);
+                // KESAN BUNYI "HORAA!" (3 Kord ceria menaik berturut-turut secara kilat)
+                let notaHoraa = [523.25, 659.25, 783.99, 1046.50]; // C5 -> E5 -> G5 -> C6
+                notaHoraa.forEach((freq, index) => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine'; // Suara siulan bersih
+                    osc.frequency.setValueAtTime(freq, masaKini + (index * 0.06));
+                    
+                    gain.gain.setValueAtTime(0.2, masaKini + (index * 0.06));
+                    gain.gain.linearRampToValueAtTime(0.001, masaKini + (index * 0.06) + 0.3);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(masaKini + (index * 0.06));
+                    osc.stop(masaKini + (index * 0.06) + 0.3);
+                });
             } else {
-                // BUNYI "BUZZ!" (Gelombang Kasar Frekuensi Rendah)
-                osc.type = 'sawtooth';
-                let masa = audioCtx.currentTime;
-                osc.frequency.setValueAtTime(120.00, masa); // Rendah keras
-                osc.frequency.linearRampToValueAtTime(80.00, masa + 0.3); // Menurun keras
+                // KESAN BUNYI "BUZZ!" (Gelombang kasar rendah bergetar)
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
                 
-                gain.gain.setValueAtTime(0.25, masa);
-                gain.gain.linearRampToValueAtTime(0.01, masa + 0.35);
-                osc.start(masa);
-                osc.stop(masa + 0.35);
+                osc.type = 'sawtooth'; // Bunyi semboyan digital
+                osc.frequency.setValueAtTime(110.00, masaKini); // Frekuensi sangat rendah (A2)
+                osc.frequency.linearRampToValueAtTime(85.00, masaKini + 0.35); // Buzz jatuh ke bawah
+                
+                gain.gain.setValueAtTime(0.3, masaKini);
+                gain.gain.linearRampToValueAtTime(0.001, masaKini + 0.35);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(masaKini);
+                osc.stop(masaKini + 0.35);
             }
         }
 
-        function toggleMuzik() {
+        function toggleMuzik(e) {
+            if(e) e.stopPropagation();
             isMusicOn = !isMusicOn;
             const btn = document.getElementById('btn-toggle-music');
             const icon = document.getElementById('icon-music');
@@ -344,7 +354,8 @@
             }
         }
 
-        function toggleSfx() {
+        function toggleSfx(e) {
+            if(e) e.stopPropagation();
             isSfxOn = !isSfxOn;
             const btn = document.getElementById('btn-toggle-sfx');
             const icon = document.getElementById('icon-sfx');
@@ -592,11 +603,11 @@
 
         window.onload = function() {
             kemasKiniSkorPaparan();
-            // Aktifkan Audio pada klik pertama pengguna (Syarat pelayar moden)
+            // Sambungkan pembuka kunci audio pada interaksi pertama seluruh dokumen body
             document.body.addEventListener('click', function() {
-                initAudioContext();
+                paksaBukaAudio();
                 mainMuzikLatar();
-            }, { once: true });
+            }, { once: false });
         };
 
         function paparHalaman(idHalaman) {
@@ -616,6 +627,7 @@
         }
 
         function pilihTahun(tahun) {
+            paksaBukaAudio();
             tahunSemasa = tahun;
             document.getElementById('tajuk-tahun').innerText = `Aktiviti Bahasa Melayu: Tahun ${tahun}`;
             binaSenaraiAktiviti();
@@ -670,6 +682,7 @@
         }
 
         function mulaAktiviti(idTopik) {
+            paksaBukaAudio();
             topikSemasa = idTopik;
             indexSoalanSemasa = 0;
             skorAktivitiSemasa = 0;
@@ -763,7 +776,7 @@
         }
 
         function tunjukMaklumBalas(isBetul) {
-            mainKesanBunyi(isBetul);
+            mainKesanBunyi(isBetul); // Bunyi "Horaa" atau "Buzz" dipanggil di sini
 
             const layer = document.getElementById('feedback-layer');
             const box = document.getElementById('feedback-box');
@@ -798,6 +811,7 @@
         }
 
         function semakJawapanMCQ(idxPilihan) {
+            paksaBukaAudio();
             const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
             if (idxPilihan === soalanData.c) {
                 skorAktivitiSemasa += 10;
@@ -809,6 +823,7 @@
         }
 
         function semakJawapanBlank() {
+            paksaBukaAudio();
             const userAns = document.getElementById('blank-input-ans').value.trim().toLowerCase();
             const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
             const isBetul = soalanData.c.some(jawapanSyarf => userAns === jawapanSyarf.toLowerCase());
@@ -842,6 +857,7 @@
         }
 
         function semakJawapanDragDrop() {
+            paksaBukaAudio();
             const dropZone = document.getElementById('drop-zone-container');
             const susunanMurid = Array.from(dropZone.children).map(child => child.innerText.trim());
             const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
