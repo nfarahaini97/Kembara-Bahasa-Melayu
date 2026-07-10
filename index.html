@@ -111,7 +111,6 @@
 
                 <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Pintar Anda:</h3>
                 
-                <!-- Diubah suai supayar berada di tengah (flex items-center justify-center) -->
                 <div class="flex items-center justify-center">
                     <!-- Tahun 1 -->
                     <div onclick="pilihTahun(1)" class="bg-white rounded-2xl shadow-lg border-4 border-blue-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between max-w-sm w-full">
@@ -278,7 +277,7 @@
         let aktivitiSemasa = 1;
         let soalanIndexSemasa = 0;
         let skorSemasa = 0;
-        let jawapanTerpilihDrag = [];
+        let susunanSemasaDrag = [];
 
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -518,8 +517,8 @@
             soalan: [
                 { q: "Saya makan buah ______ yang berwarna merah manis.", c: "epal" },
                 { q: "Adik membaca ______ cerita di dalam perpustakaan.", c: "buku" },
-                { q: "Abang menendang ______ di padang sekolah.", c: "bola" },
-                { q: "Haiwan comel peliharaan saya ialah ______ yang comel.", c: "kucing" },
+                { q: "Abang menendang ______ bola di padang sekolah.", c: "bola" },
+                { q: "Haiwan comel peliharaan saya ialah ______ yang berbulu.", c: "kucing" },
                 { q: "Setiap pagi saya minum ______ suam untuk kesihatan.", c: "susu" },
                 { q: "Ayah mengayuh ______ ke kedai runcit berdekatan.", c: "basikal" },
                 { q: "Tumbuhan hijau itu adalah ______ kelapa yang tinggi.", c: "pokok" },
@@ -675,7 +674,7 @@
 
         function paparSoalan() {
             document.getElementById('feedback-layer').classList.add('hidden');
-            jawapanTerpilihDrag = [];
+            susunanSemasaDrag = [];
 
             const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
             const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
@@ -689,7 +688,6 @@
             const area = document.getElementById('quiz-dynamic-area');
             area.innerHTML = '';
 
-            // Render soalan visual jika ada emoji
             let htmlVisual = infoSoalan.visual ? `<div class="text-7xl text-center my-4">${infoSoalan.visual}</div>` : '';
             
             if (dataAktiviti.jenis === 'mcq') {
@@ -722,8 +720,9 @@
             else if (dataAktiviti.jenis === 'drag_drop') {
                 let htmlSeret = '';
                 infoSoalan.parts.forEach((p, idx) => {
+                    // Penambahan sokongan drag secara sentuhan atau drag desktop
                     htmlSeret += `
-                        <div onclick="pilihBlokSukuKata(this, '${p}')" class="bg-amber-100 hover:bg-amber-200 border-2 border-amber-300 px-5 py-3 rounded-xl font-bold text-lg cursor-pointer transition shadow text-amber-800 select-none">
+                        <div draggable="true" ondragstart="fungsiDrag(event)" onclick="alternatifKlikSentuh(this)" data-value="${p}" class="bg-amber-100 hover:bg-amber-200 border-2 border-amber-300 px-5 py-3 rounded-xl font-bold text-lg cursor-grab active:cursor-grabbing transition shadow text-amber-800 select-none transformation-all">
                             ${p}
                         </div>
                     `;
@@ -732,8 +731,8 @@
                 area.innerHTML = `
                     <div class="text-center font-bold text-lg md:text-xl text-slate-800 mb-2">${infoSoalan.q}</div>
                     ${htmlVisual}
-                    <div class="min-h-[60px] max-w-xl mx-auto border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl flex flex-wrap items-center justify-center gap-3 p-3 my-6" id="jawapan-drop-container">
-                        <span class="text-gray-400 text-xs font-bold uppercase tracking-wider select-none">Sentuh suku kata di bawah untuk susun</span>
+                    <div class="min-h-[70px] max-w-xl mx-auto border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl flex flex-wrap items-center justify-center gap-3 p-3 my-6 transition" id="jawapan-drop-container" ondragover="allowDrop(event)" ondrop="fungsiDrop(event)">
+                        <span id="placeholder-drag-text" class="text-gray-400 text-xs font-bold uppercase tracking-wider select-none">Seret kad ke sini atau ketik kad di bawah</span>
                     </div>
                     <div class="flex flex-wrap justify-center gap-3 max-w-xl mx-auto" id="suku-kata-container">
                         ${htmlSeret}
@@ -746,24 +745,50 @@
             }
         }
 
-        function pilihBlokSukuKata(elemen, nilai) {
-            if (elemen.classList.contains('opacity-30')) return;
-            elemen.classList.add('opacity-30');
+        // DRAG AND DROP ENGINE CORE FUNCTIONS
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function fungsiDrag(ev) {
+            ev.dataTransfer.setData("text/plain", ev.target.getAttribute('data-value'));
+            // Simpan rujukan elemen global supaya boleh disembunyikan/diubah suai supayar terurus
+            window.draggedElementRef = ev.target;
+        }
+
+        function fungsiDrop(ev) {
+            ev.preventDefault();
+            const dataVal = ev.dataTransfer.getData("text/plain");
+            const element = window.draggedElementRef;
+
+            if (element && !element.classList.contains('opacity-30')) {
+                tambahKeKawasanDrop(element, dataVal);
+            }
+        }
+
+        function alternatifKlikSentuh(element) {
+            if (element.classList.contains('opacity-30')) return;
+            const dataVal = element.getAttribute('data-value');
+            tambahKeKawasanDrop(element, dataVal);
+        }
+
+        function tambahKeKawasanDrop(element, value) {
+            element.classList.add('opacity-30');
+            element.setAttribute('draggable', 'false');
             
             const dropContainer = document.getElementById('jawapan-drop-container');
-            if(jawapanTerpilihDrag.length === 0) dropContainer.innerHTML = '';
+            const placeholder = document.getElementById('placeholder-drag-text');
+            if (placeholder) placeholder.remove();
             
-            jawapanTerpilihDrag.push({ nilai: nilai, ref: elemen });
+            susunanSemasaDrag.push({ nilai: value, ref: element });
             
             const badge = document.createElement('span');
-            badge.className = "bg-blue-500 text-white font-black px-4 py-2 rounded-lg text-lg shadow-md";
-            badge.innerText = nilai;
+            badge.className = "bg-blue-500 text-white font-black px-4 py-2 rounded-lg text-lg shadow-md animate-fade-in";
+            badge.innerText = value;
             dropContainer.appendChild(badge);
         }
 
         function padamSusunanDrag() {
-            const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
-            const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
             paparSoalan();
         }
 
@@ -820,14 +845,14 @@
             const dataAktiviti = BANK_SOALAN[tahunSemasa][aktivitiSemasa];
             const infoSoalan = dataAktiviti.soalan[soalanIndexSemasa];
             
-            if(jawapanTerpilihDrag.length !== infoSoalan.correctOrder.length) {
-                alert("Sila susun semua elemen suku kata/perkataan terlebih dahulu!");
+            if(susunanSemasaDrag.length !== infoSoalan.correctOrder.length) {
+                alert("Sila susun semua elemen kad perkataan/suku kata terlebih dahulu!");
                 return;
             }
             
             let betul = true;
-            for(let i=0; i<jawapanTerpilihDrag.length; i++) {
-                if(jawapanTerpilihDrag[i].nilai !== infoSoalan.correctOrder[i]) {
+            for(let i=0; i<susunanSemasaDrag.length; i++) {
+                if(susunanSemasaDrag[i].nilai !== infoSoalan.correctOrder[i]) {
                     betul = false;
                     break;
                 }
@@ -889,7 +914,6 @@
                 <span class="text-xs font-bold mt-1 text-slate-600">${lencana}</span>
             `;
             
-            // Set data untuk cetakan sijil digital
             document.getElementById('cert-user-name').innerText = penggunaSemasa ? (penggunaSemasa.displayName || penggunaSemasa.email) : "Wira Pintar";
             document.getElementById('cert-tahun-nama').innerText = `CABARAN BAHASA MELAYU TAHUN ${tahunSemasa}`;
             document.getElementById('cert-lencana-nama').innerText = lencana.toUpperCase();
