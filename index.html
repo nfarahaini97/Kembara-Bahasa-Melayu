@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabaran Cilik Bahasa - Versi Sijil Imej</title>
+    <title>Cabaran Cilik Bahasa - Versi Sijil Stabil</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Google Fonts & FontAwesome -->
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- html2canvas untuk Auto Simpan Imej (PNG) -->
+    <!-- html2canvas untuk Simpan Imej (PNG) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- FIREBASE SDK (Compat Version) -->
@@ -197,46 +197,49 @@
                     </div>
 
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <!-- Butang Auto Simpan sebagai Imej PNG -->
+                        <!-- Butang Muat Turun Imej Fail -->
                         <button onclick="janaSijilSebagaiImej()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
                             <i class="fas fa-image mr-2"></i> Muat Turun Sijil (Simpan Imej)
                         </button>
-                        <!-- Butang Menu Utama yang Telah Dipastikan Berfungsi Semula -->
+                        <!-- Butang Menu Utama -->
                         <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
                             <i class="fas fa-home mr-2"></i> Menu Utama
                         </button>
                     </div>
                 </div>
 
-                <!-- TEMPLATE REKABENTUK SIJIL (DISEMBUNYIKAN UNTUK PENGESANAN CANVAS) -->
+                <!-- TEMPLATE REKABENTUK SIJIL (DIKUKUHKAN BEBAS DARIPADA KEBERGANTUNGAN KEBENARAN ELEMEN CORS LUARAN) -->
                 <div style="position: absolute; left: -9999px; top: -9999px;">
-                    <div id="sijil-print-area" class="w-[800px] h-[560px] p-10 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center font-serif text-slate-800" style="box-sizing: border-box;">
-                        <div class="absolute top-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
-                        <div class="absolute top-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
-                        <div class="absolute bottom-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
-                        <div class="absolute bottom-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                    <div id="sijil-print-area" class="w-[800px] h-[560px] p-10 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center text-slate-800" style="box-sizing: border-box; font-family: 'Georgia', serif;">
+                        
+                        <!-- Penjuru Selamat Emoji (html2canvas sokong penuh berbanding ikon font) -->
+                        <div class="absolute top-4 left-4 text-3xl">⭐</div>
+                        <div class="absolute top-4 right-4 text-3xl">⭐</div>
+                        <div class="absolute bottom-4 left-4 text-3xl">⭐</div>
+                        <div class="absolute bottom-4 right-4 text-3xl">⭐</div>
 
                         <div>
-                            <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1" style="font-family: serif;">Sijil Penghargaan</h1>
+                            <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1">SIJIL PENGHARGAAN</h1>
                             <p class="text-sm italic text-gray-500">Kecemerlangan Pentaksiran Kendiri Maya</p>
                         </div>
 
                         <div class="space-y-4 my-4">
                             <p class="text-lg">Dengan ini diperakukan bahawa murid pintar</p>
-                            <h4 id="cert-user-name" class="text-2xl font-bold text-slate-800 underline uppercase" style="font-family: sans-serif;">NAMA MURID</h4>
+                            <h4 id="cert-user-name" class="text-2xl font-bold text-slate-800 underline uppercase" style="font-family: 'Arial', sans-serif;">NAMA MURID</h4>
                             <p class="text-base">telah menyempurnakan keseluruhan modul pembelajaran digital</p>
-                            <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-1" style="font-family: sans-serif;">CABARAN BAHASA MELAYU TAHUN 1</h2>
+                            <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-1" style="font-family: 'Arial', sans-serif;">CABARAN BAHASA MELAYU TAHUN 1</h2>
                             <p class="text-lg">dengan keputusan pencapaian gred kecemerlangan bertaraf</p>
-                            <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest" style="font-family: sans-serif;">PINGAT EMAS</h3>
+                            <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest" style="font-family: 'Arial', sans-serif;">PINGAT EMAS</h3>
                         </div>
 
-                        <div class="w-full flex justify-between items-end px-12 mt-4" style="font-family: sans-serif;">
+                        <div class="w-full flex justify-between items-end px-12 mt-4" style="font-family: 'Arial', sans-serif;">
                             <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs">
                                 <p class="font-bold">SISTEM PINTAR AI</p>
                                 <p class="text-gray-400">Pakar Didik Bahasa</p>
                             </div>
-                            <div class="bg-yellow-100 p-4 rounded-full border-4 border-yellow-400 text-yellow-600 text-3xl shadow">
-                                <i class="fas fa-medal"></i>
+                            <!-- Grafik Pingat Berasaskan Emoji Selamat -->
+                            <div class="text-4xl p-2 bg-yellow-100 rounded-full border-2 border-yellow-400">
+                                🏆
                             </div>
                             <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs">
                                 <p class="font-bold">TARIKH KELULUSAN</p>
@@ -335,7 +338,7 @@
             document.getElementById('total-score-badge').innerText = total;
         }
 
-        // ================= ENGINE MUZIK & SFX INTERAKTIF RANCHAK =================
+        // ================= ENGINE MUZIK =================
         let isMusicOn = true;
         let isSfxOn = true;
         let audioCtx = null;
@@ -582,7 +585,7 @@
             soalan: [
                 { q: "Kucing adalah haiwan yang bertelur.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Epal biasanya berwarna merah atau hijau.", a: ["Betul", "Salah"], c: 0 },
-                { q: "Buku digunakan untuk menulis dan membaca.", a: ["Betul", "Salah"], c: 0 },
+                { q: "Buku digunakan untuk menulis and membaca.", a: ["Betul", "Salah"], c: 0 },
                 { q: "Ikan bernafas menggunakan peparu.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Lori lebih kecil daripada basikal.", a: ["Salah", "Betul"], c: 0 },
                 { q: "Matahari terbit pada waktu malam.", a: ["Salah", "Betul"], c: 0 },
@@ -629,6 +632,9 @@
         function paparHalaman(idHalaman) {
             document.querySelectorAll('.layer-section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById('page-' + idHalaman).classList.remove('hidden');
+            if (idHalaman === 'utama' && penggunaSemasa) {
+                muatKemajuanDariFirebase(penggunaSemasa.uid);
+            }
             window.scrollTo(0,0);
         }
 
@@ -914,29 +920,31 @@
             paparHalaman('ganjaran');
         }
 
-        // ================= IMAGE AUTO-DOWNLOAD SYSTEM (PNG) =================
+        // ================= STABLE IMAGE DOWNLOAD ENGINE (PNG) =================
         function janaSijilSebagaiImej() {
             const elemenSijil = document.getElementById('sijil-print-area');
             
-            // html2canvas menukarkan kod struktur sijil terus menjadi imej pixel fizikal
-            html2canvas(elemenSijil, {
-                scale: 2, // Gandaan skala 2 memastikan kualiti teks sijil tidak pecah apabila dizoom
+            // Konfigurasi stabil untuk mengelakkan ralat render CORS Font Luaran
+            const opt = {
+                scale: 2, 
+                logging: false,
                 useCORS: true,
+                allowTaint: true,
                 backgroundColor: "#ffffff"
-            }).then(canvas => {
+            };
+
+            html2canvas(elemenSijil, opt).then(canvas => {
                 const imejDataUrl = canvas.toDataURL("image/png");
                 
-                // Menjana fungsi pautan download halimunan
                 const pautanDownload = document.createElement('a');
                 pautanDownload.href = imejDataUrl;
                 pautanDownload.download = `Sijil_Wira_Bahasa_Tahun_${tahunSemasa}.png`;
                 
-                // Melakukan simulasi klik automatik
                 document.body.appendChild(pautanDownload);
                 pautanDownload.click();
                 document.body.removeChild(pautanDownload);
             }).catch(err => {
-                alert("Ralat tidak dijangka ketika menyimpan imej: " + err);
+                alert("Gagal memproses imej sijil: " + err);
             });
         }
     </script>
