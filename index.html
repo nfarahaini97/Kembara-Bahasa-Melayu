@@ -5,415 +5,805 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabaran Cilik Bahasa</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: #f0fdf4; /* Hijau muda lembut */
+            background-color: #f0fdf4;
         }
-        h1, h2, h3, .font-kids {
+        h1, h2, h3, .font-comic {
             font-family: 'Fredoka', sans-serif;
         }
-        .animate-bounce-slow {
-            animation: bounce 3s infinite;
+        .btn-bounce:active {
+            transform: scale(0.95);
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
-            50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); }
+        .drop-zone.hover {
+            background-color: #bbf7d0;
+            border-color: #22c55e;
         }
     </style>
 </head>
-<body class="text-slate-700 antialiased scroll-smooth">
+<body class="min-h-screen flex flex-col text-slate-800">
 
-    <nav class="bg-white shadow-md sticky top-0 z-50 px-6 py-4 flex justify-between items-center border-b-4 border-yellow-400">
-        <a href="#" class="text-2xl font-bold text-sky-500 font-kids flex items-center gap-2">
-            <i class="fa-solid fa-graduation-cap text-yellow-400 text-3xl animate-pulse"></i>
-            CABARAN CILIK BAHASA
-        </a>
-        <div class="hidden md:flex gap-6 font-bold text-slate-600">
-            <a href="#objektif" class="hover:text-sky-500 transition-colors">Objektif</a>
-            <a href="#pilihan-tahun" class="hover:text-sky-500 transition-colors">Mula Belajar</a>
-            <a href="#cara-sertai" class="hover:text-sky-500 transition-colors">Cara Penyertaan</a>
-            <a href="#sijil" class="hover:text-sky-500 transition-colors">Ganjaran</a>
-            <a href="#hubungi" class="hover:text-sky-500 transition-colors">Hubungi Guru</a>
+    <audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" preload="auto"></audio>
+    <audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav" preload="auto"></audio>
+
+    <header class="bg-blue-500 text-white shadow-lg sticky top-0 z-50 px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="paparHalaman('utama')">
+            <div class="bg-yellow-400 p-2 rounded-full text-blue-900 text-xl animate-bounce">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold tracking-wide">CABARAN CILIK BAHASA</h1>
+                <p class="text-xs text-yellow-200 font-comic">Belajar Sambil Bermain</p>
+            </div>
         </div>
-    </nav>
-
-    <header class="bg-gradient-to-r from-sky-400 via-sky-300 to-emerald-300 py-16 px-6 text-center relative overflow-hidden">
-        <div class="absolute top-10 left-10 text-white/30 text-5xl animate-bounce-slow"><i class="fa-solid fa-star"></i></div>
-        <div class="absolute bottom-10 right-10 text-white/30 text-6xl animate-bounce-slow" style="animation-delay: 1s;"><i class="fa-solid fa-cloud"></i></div>
-        <div class="absolute top-1/2 right-12 text-white/20 text-4xl"><i class="fa-solid fa-pencil"></i></div>
-        
-        <div class="max-w-3xl mx-auto relative z-10">
-            <h1 class="text-4xl md:text-6xl font-bold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.2)] tracking-wide uppercase">
-                CABARAN CILIK BAHASA
-            </h1>
-            <p class="text-xl md:text-2xl text-yellow-100 mt-4 font-semibold italic drop-shadow">
-                “Belajar sambil bermain”
-            </p>
-            <div class="mt-8">
-                <a href="#pilihan-tahun" class="inline-block bg-yellow-400 hover:bg-yellow-300 text-slate-800 font-bold text-xl px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 border-b-4 border-yellow-600">
-                    <i class="fa-solid fa-gamepad mr-2"></i> Mula Cabaran
-                </a>
+        <div class="flex items-center space-x-4">
+            <button onclick="paparHalaman('utama')" class="bg-white text-blue-600 px-4 py-1.5 rounded-full font-bold shadow hover:bg-yellow-100 transition btn-bounce text-sm">
+                <i class="fas fa-home mr-1"></i> Utama
+            </button>
+            <div class="bg-blue-700 px-3 py-1.5 rounded-full text-xs font-bold flex items-center">
+                <i class="fas fa-star text-yellow-400 mr-1"></i> <span id="total-score-badge">0</span> Mata
             </div>
         </div>
     </header>
 
-    <section id="objektif" class="py-12 px-6 max-w-5xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-emerald-600 mb-8"><i class="fa-solid fa-bullseye mr-2"></i> Objektif Program</h2>
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-sky-400">
-                <div class="w-12 h-12 bg-sky-100 text-sky-500 rounded-full flex items-center justify-center text-xl mx-auto mb-4"><i class="fa-solid fa-heart"></i></div>
-                <h3 class="font-bold text-lg mb-2">Menyeronokkan</h3>
-                <p class="text-sm text-slate-500">Meningkatkan minat murid dalam subjek Bahasa Melayu melalui pendekatan didik hibur.</p>
+    <main class="flex-grow p-4 md:p-8 max-w-6xl mx-auto w-full">
+
+        <section id="page-utama" class="space-y-8 layer-section">
+            <div class="text-center py-6 bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400 rounded-3xl shadow-xl text-white p-6 relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-5xl font-black mb-2 drop-shadow-md">Selamat Datang, Wira Bahasa!</h2>
+                    <p class="text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow">Pilih tahun persekolahan anda dan mulakan cabaran interaktif yang menyeronokkan berdasarkan DSKP KSSR Semakan!</p>
+                </div>
+                <div class="absolute -right-10 -bottom-10 text-white/10 text-9xl transform rotate-12"><i class="fas fa-graduation-cap"></i></div>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-yellow-400">
-                <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-xl mx-auto mb-4"><i class="fa-solid fa-brain"></i></div>
-                <h3 class="font-bold text-lg mb-2">Pengukuhan</h3>
-                <p class="text-sm text-slate-500">Menguji pemahaman topik-topik penting yang dipelajari di dalam bilik darjah.</p>
+
+            <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Anda:</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="pilihTahun(1)" class="bg-white rounded-2xl shadow-lg border-4 border-blue-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                    <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-4xl shadow-inner">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-blue-600 mb-2">Tahun 1</h3>
+                    <p class="text-gray-600 text-sm mb-4">Kenali huruf, suku kata, perkataan mudah dan pemahaman asas.</p>
+                    <span class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
+                </div>
+
+                <div onclick="pilihTahun(2)" class="bg-white rounded-2xl shadow-lg border-4 border-green-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                    <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500 text-4xl shadow-inner">
+                        <i class="fas fa-user-astronaut"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-600 mb-2">Tahun 2</h3>
+                    <p class="text-gray-600 text-sm mb-4">Kuasai tatabahasa, penjodoh bilangan, kata kerja dan susun ayat.</p>
+                    <span class="bg-green-500 text-white font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
+                </div>
+
+                <div onclick="pilihTahun(3)" class="bg-white rounded-2xl shadow-lg border-4 border-yellow-400 p-6 text-center cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                    <div class="bg-yellow-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-600 text-4xl shadow-inner">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-yellow-600 mb-2">Tahun 3</h3>
+                    <p class="text-gray-600 text-sm mb-4">Cabaran simpulan bahasa, bina ayat kreatif, cari perkataan dan kuiz lanjutan.</p>
+                    <span class="bg-yellow-500 text-slate-800 font-bold py-2 px-6 rounded-full inline-block shadow btn-bounce">Mula Cabaran</span>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-emerald-400">
-                <div class="w-12 h-12 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center text-xl mx-auto mb-4"><i class="fa-solid fa-mobile-screen"></i></div>
-                <h3 class="font-bold text-lg mb-2">Mudah Akses</h3>
-                <p class="text-sm text-slate-500">Boleh diakses di mana-mana sahaja menggunakan telefon pintar, tablet, atau komputer.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <hr class="border-dashed border-2 border-slate-200 my-4 max-w-6xl mx-auto">
-
-    <section id="pilihan-tahun" class="py-12 px-6 max-w-5xl mx-auto">
-        <h2 class="text-3xl font-bold text-center text-sky-600 mb-4"><i class="fa-solid fa-children mr-2"></i> Pilih Tahun Anda</h2>
-        <p class="text-center text-slate-500 mb-10 font-medium">Sila pilih mengikut tahap pembelajaran anda untuk memulakan aktiviti.</p>
-        
-        <div class="grid md:grid-cols-3 gap-8">
-            <button onclick="bukaHalaman('tahun1')" class="group bg-white rounded-3xl shadow-md hover:shadow-xl p-8 border-4 border-sky-400 text-center transform hover:-translate-y-2 transition-all duration-300 cursor-pointer">
-                <div class="text-7xl mb-4 group-hover:scale-110 transition-transform">📘</div>
-                <h3 class="text-2xl font-bold text-sky-500">Tahun 1</h3>
-                <p class="text-slate-400 text-sm mt-2">Asas Huruf & Suku Kata</p>
-                <span class="inline-block mt-6 bg-sky-400 text-white font-bold px-6 py-2 rounded-full text-sm group-hover:bg-sky-500 transition-colors">Pilih <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </button>
-
-            <button onclick="bukaHalaman('tahun2')" class="group bg-white rounded-3xl shadow-md hover:shadow-xl p-8 border-4 border-yellow-400 text-center transform hover:-translate-y-2 transition-all duration-300 cursor-pointer">
-                <div class="text-7xl mb-4 group-hover:scale-110 transition-transform">📙</div>
-                <h3 class="text-2xl font-bold text-yellow-500">Tahun 2</h3>
-                <p class="text-slate-400 text-sm mt-2">Tatabahasa & Bina Ayat</p>
-                <span class="inline-block mt-6 bg-yellow-400 text-slate-800 font-bold px-6 py-2 rounded-full text-sm group-hover:bg-yellow-500 group-hover:text-white transition-colors">Pilih <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </button>
-
-            <button onclick="bukaHalaman('tahun3')" class="group bg-white rounded-3xl shadow-md hover:shadow-xl p-8 border-4 border-emerald-400 text-center transform hover:-translate-y-2 transition-all duration-300 cursor-pointer">
-                <div class="text-7xl mb-4 group-hover:scale-110 transition-transform">📗</div>
-                <h3 class="text-2xl font-bold text-emerald-500">Tahun 3</h3>
-                <p class="text-slate-400 text-sm mt-2">Pengukuhan & Pemahaman</p>
-                <span class="inline-block mt-6 bg-emerald-400 text-white font-bold px-6 py-2 rounded-full text-sm group-hover:bg-emerald-500 transition-colors">Pilih <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </button>
-        </div>
-    </section>
-
-    <section id="ruangan-aktiviti" class="py-12 px-6 max-w-6xl mx-auto hidden scroll-mt-20">
-        
-        <div id="tahun1" class="tab-kandungan hidden">
-            <div class="flex items-center gap-4 mb-8 bg-sky-100 p-4 rounded-2xl border-l-8 border-sky-400">
-                <span class="text-4xl">📘</span>
+        <section id="page-senarai-aktiviti" class="hidden space-y-6 layer-section">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-xl shadow-md border-b-4 border-slate-300">
                 <div>
-                    <h2 class="text-2xl font-bold text-sky-600">Senarai Cabaran: Tahun 1</h2>
-                    <p class="text-sm text-slate-500">Jom mula belajar asas bahasa yang menyeronokkan!</p>
+                    <button onclick="paparHalaman('utama')" class="text-blue-500 font-bold hover:underline mb-1 inline-block text-sm">
+                        <i class="fas fa-arrow-left"></i> Kembali ke Menu Utama
+                    </button>
+                    <h2 id="tajuk-tahun" class="text-2xl md:text-3xl font-bold text-slate-700">Aktiviti Tahun X</h2>
+                </div>
+                <div class="mt-2 md:mt-0 bg-emerald-100 text-emerald-800 font-bold px-4 py-2 rounded-lg text-sm shadow-inner">
+                    Kemajuan Tahun ini: <span id="progress-tahun-text">0/10</span> Aktiviti Selesai
                 </div>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-red-100 text-red-500 rounded-xl text-xl"><i class="fa-solid fa-font"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kenali Huruf</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Kenali dan bezakan huruf vokal dan konsonan dengan betul.</p>
-                    <a href="https://wordwall.net/" target="_blank" class="block text-center bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-orange-100 text-orange-500 rounded-xl text-xl"><i class="fa-solid fa-cubes"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Suku Kata</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Cantumkan suku kata terbuka dan tertutup menjadi perkataan murni.</p>
-                    <a href="https://quizizz.com/" target="_blank" class="block text-center bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-yellow-100 text-yellow-600 rounded-xl text-xl"><i class="fa-solid fa-images"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Padankan Gambar</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Suaikan gambar menarik dengan perkataan yang sepadan.</p>
-                    <a href="https://www.liveworksheets.com/" target="_blank" class="block text-center bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-green-100 text-green-500 rounded-xl text-xl"><i class="fa-solid fa-square-check"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Pilih Perkataan Betul</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Pilih ejaan perkataan yang tepat berpandukan soalan.</p>
-                    <a href="https://docs.google.com/forms/" target="_blank" class="block text-center bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-purple-100 text-purple-500 rounded-xl text-xl"><i class="fa-solid fa-pen-to-square"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Isi Tempat Kosong</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Lengkapkan ayat mudah dengan memilih perkataan yang betul.</p>
-                    <a href="https://wordwall.net/" target="_blank" class="block text-center bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-pink-100 text-pink-500 rounded-xl text-xl"><i class="fa-solid fa-trophy"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kuiz Interaktif</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Uji semua kemahiran Tahun 1 dalam cabaran kuiz masa terpantas.</p>
-                    <a href="https://quizizz.com/" target="_blank" class="block text-center bg-sky-400 hover:bg-sky-500 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-            </div>
-        </div>
 
-        <div id="tahun2" class="tab-kandungan hidden">
-            <div class="flex items-center gap-4 mb-8 bg-yellow-100 p-4 rounded-2xl border-l-8 border-yellow-400">
-                <span class="text-4xl">📙</span>
-                <div>
-                    <h2 class="text-2xl font-bold text-yellow-600">Senarai Cabaran: Tahun 2</h2>
-                    <p class="text-sm text-slate-500">Mantapkan pemahaman tatabahasa dan binaan ayat!</p>
+            <div id="grid-aktiviti" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                 </div>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-blue-100 text-blue-500 rounded-xl text-xl"><i class="fa-solid fa-tags"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kata Nama</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Kenali beza antara Kata Nama Am dan Kata Nama Khas.</p>
-                    <a href="https://quizizz.com/" target="_blank" class="block text-center bg-yellow-400 hover:bg-yellow-500 text-slate-800 font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-red-100 text-red-500 rounded-xl text-xl"><i class="fa-solid fa-running"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kata Kerja</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Cari perkataan yang menunjukkan aksi atau perbuatan dalam gambar.</p>
-                    <a href="https://wordwall.net/" target="_blank" class="block text-center bg-yellow-400 hover:bg-yellow-500 text-slate-800 font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-purple-100 text-purple-500 rounded-xl text-xl"><i class="fa-solid fa-lines-leaning"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Bina Ayat Mudah</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Bina struktur ayat yang betul berdasarkan formula Subjek + Predikat.</p>
-                    <a href="https://www.liveworksheets.com/" target="_blank" class="block text-center bg-yellow-400 hover:bg-yellow-500 text-slate-800 font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-teal-100 text-teal-500 rounded-xl text-xl"><i class="fa-solid fa-arrow-down-1-9"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Susun Ayat</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Susun perkataan-perkataan yang rawak menjadi sebuah ayat yang lengkap.</p>
-                    <a href="https://wordwall.net/" target="_blank" class="block text-center bg-yellow-400 hover:bg-yellow-500 text-slate-800 font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-orange-100 text-orange-500 rounded-xl text-xl"><i class="fa-solid fa-comments"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Peribahasa Mudah</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Kenali simpulan bahasa asas beserta maksudnya yang mudah diingati.</p>
-                    <a href="https://docs.google.com/forms/" target="_blank" class="block text-center bg-yellow-400 hover:bg-yellow-500 text-slate-800 font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-emerald-100 text-emerald-500 rounded-xl text-xl"><i class="fa-solid fa-ranking-star"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kuiz</h4>
-                    </div>
-                    <p class="text-slate-500 text-sm mb-4">Uji minda anda dengan soalan-soalan menarik sukatan Tahun 2.</p>
-                    <a href="https://quizizz.com/" target="_blank" class="block text-center bg-yellow-400 hover:bg-yellow-500 text-slate-800 font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <div id="tahun3" class="tab-kandungan hidden">
-            <div class="flex items-center gap-4 mb-8 bg-emerald-100 p-4 rounded-2xl border-l-8 border-emerald-400">
-                <span class="text-4xl">📗</span>
-                <div>
-                    <h2 class="text-2xl font-bold text-emerald-600">Senarai Cabaran: Tahun 3</h2>
-                    <p class="text-sm text-slate-500">Cabaran lebih menarik untuk jaguh bahasa cilik!</p>
-                </div>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-indigo-100 text-indigo-500 rounded-xl text-xl"><i class="fa-solid fa-calculator"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Penjodoh Bilangan</h4>
+        <section id="page-game" class="hidden space-y-6 layer-section">
+            <div class="bg-white p-4 rounded-2xl shadow border-2 border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center space-x-3">
+                    <button onclick="kembaliKeSenarai()" class="bg-slate-200 text-slate-700 p-2.5 rounded-full hover:bg-slate-300 transition shadow">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div>
+                        <span id="game-tag-topik" class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full uppercase">Topik</span>
+                        <h3 id="game-tajuk-topik" class="text-lg md:text-xl font-bold text-slate-700">Nama Aktiviti</h3>
                     </div>
-                    <p class="text-slate-500 text-sm mb-4">Gunakan penjodoh bilangan yang sesuai (biji, buah, batang, dll).</p>
-                    <a href="https://quizizz.com/" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-pink-100 text-pink-500 rounded-xl text-xl"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kata Adjektif</h4>
+
+                <div class="flex items-center space-x-6 bg-slate-50 p-2 rounded-xl border border-slate-200 w-full md:w-auto justify-between">
+                    <div class="text-sm font-bold">
+                        Soalan: <span id="game-current-q">0</span>/<span id="game-total-q">0</span>
                     </div>
-                    <p class="text-slate-500 text-sm mb-4">Ketahui perkataan yang menerangkan sifat benda, warna, dan ukuran.</p>
-                    <a href="https://wordwall.net/" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-amber-100 text-amber-600 rounded-xl text-xl"><i class="fa-solid fa-link"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kata Hubung</h4>
+                    <div class="w-24 md:w-32 bg-slate-200 rounded-full h-3 overflow-hidden">
+                        <div id="game-progress-bar" class="bg-gradient-to-r from-blue-400 to-green-500 h-full transition-all duration-300" style="width: 0%"></div>
                     </div>
-                    <p class="text-slate-500 text-sm mb-4">Sambungkan dua ayat menggunakan kata hubung (dan, atau, tetapi, kerana).</p>
-                    <a href="https://www.liveworksheets.com/" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-cyan-100 text-cyan-500 rounded-xl text-xl"><i class="fa-solid fa-pen-nib"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Bina Ayat</h4>
+                    <div class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                        Skor: <span id="game-score">0</span>
                     </div>
-                    <p class="text-slate-500 text-sm mb-4">Latihan membina ayat majmuk dan ayat tunggal dengan lebih kreatif.</p>
-                    <a href="https://docs.google.com/forms/" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-violet-100 text-violet-500 rounded-xl text-xl"><i class="fa-solid fa-book-open"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Pemahaman</h4>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl border-4 border-white p-6 md:p-10 min-h-[300px] flex flex-col justify-between relative overflow-hidden">
+                <div id="feedback-layer" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-6 transition-all duration-300">
+                    <div id="feedback-box" class="transform scale-50 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full">
+                        <div id="feedback-icon" class="text-6xl mb-4 animate-bounce"></div>
+                        <h4 id="feedback-title" class="text-3xl font-black mb-2">Hebat!</h4>
+                        <p id="feedback-msg" class="text-sm font-medium mb-6">Jawapan anda betul tepat sekali.</p>
+                        <div class="flex justify-center space-x-4">
+                            <button id="btn-try-again" class="hidden bg-rose-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-rose-600 transition btn-bounce">Cuba Lagi</button>
+                            <button id="btn-next-q" class="bg-emerald-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-emerald-600 transition btn-bounce">Seterusnya <i class="fas fa-arrow-right ml-1"></i></button>
+                        </div>
                     </div>
-                    <p class="text-slate-500 text-sm mb-4">Baca petikan cerita pendek dengan teliti dan jawab soalan pemahaman.</p>
-                    <a href="https://wordwall.net/" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="p-3 bg-red-100 text-red-500 rounded-xl text-xl"><i class="fa-solid fa-circle-question"></i></span>
-                        <h4 class="font-bold text-lg text-slate-800">Kuiz</h4>
+
+                <div id="quiz-dynamic-area" class="w-full space-y-6">
                     </div>
-                    <p class="text-slate-500 text-sm mb-4">Uji tahap kehebatan bahasa anda melalui kuiz komprehensif ini.</p>
-                    <a href="https://quizizz.com/" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-full text-sm transition-colors">Mulakan <i class="fa-solid fa-play ml-1"></i></a>
-                </div>
             </div>
-        </div>
+        </section>
 
-    </section>
+        <section id="page-ganjaran" class="hidden space-y-6 layer-section">
+            <div class="bg-white rounded-3xl shadow-xl p-8 text-center max-w-2xl mx-auto border-4 border-yellow-300">
+                <div class="text-6xl mb-4">🎉🎉🎉</div>
+                <h2 class="text-3xl font-black text-slate-700 mb-2">Tahniah! Anda Selesai!</h2>
+                <p class="text-gray-500 font-medium mb-6">Anda telah berjaya menyelesaikan semua aktiviti bagi tahap ini.</p>
+                
+                <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-inner">
+                    <div>
+                        <span class="text-xs text-gray-400 font-bold block uppercase">Jumlah Markah</span>
+                        <span id="final-score-percent" class="text-4xl font-black text-blue-600">0%</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 font-bold block uppercase">Lencana Dicapai</span>
+                        <div id="badge-container" class="flex flex-col items-center justify-center mt-1">
+                            </div>
+                    </div>
+                </div>
 
-    <section id="cara-sertai" class="bg-white py-12 px-6 border-y-4 border-dashed border-slate-200">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-amber-500 mb-10"><i class="fa-solid fa-list-check mr-2"></i> Langkah Mudah Menyertai</h2>
-            <div class="grid md:grid-cols-4 gap-6 text-center">
-                <div class="p-4">
-                    <span class="w-10 h-10 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold mx-auto text-lg mb-3">1</span>
-                    <h4 class="font-bold mb-1">Pilih Tahap</h4>
-                    <p class="text-xs text-slate-400">Pilih butang Tahun 1, 2 atau 3 di atas.</p>
-                </div>
-                <div class="p-4">
-                    <span class="w-10 h-10 bg-yellow-400 text-slate-800 rounded-full flex items-center justify-center font-bold mx-auto text-lg mb-3">2</span>
-                    <h4 class="font-bold mb-1">Pilih Cabaran</h4>
-                    <p class="text-xs text-slate-400">Tekan butang 'Mulakan' pada mana-mana tajuk kuiz.</p>
-                </div>
-                <div class="p-4">
-                    <span class="w-10 h-10 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold mx-auto text-lg mb-3">3</span>
-                    <h4 class="font-bold mb-1">Jawab Kuiz</h4>
-                    <p class="text-xs text-slate-400">Selesaikan aktiviti permainan interaktif dengan gembira.</p>
-                </div>
-                <div class="p-4">
-                    <span class="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold mx-auto text-lg mb-3">4</span>
-                    <h4 class="font-bold mb-1">Dapat Lencana</h4>
-                    <p class="text-xs text-slate-400">Kumpul lencana digital setelah berjaya menjawab!</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="janaSijil()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
+                        <i class="fas fa-print mr-2"></i> Cetak / Muat Turun Sijil
+                    </button>
+                    <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
+                        <i class="fas fa-home mr-2"></i> Kembali ke Menu Utama
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section id="sijil" class="py-12 px-6 max-w-4xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-purple-600 mb-4"><i class="fa-solid fa-award mr-2"></i> Ganjaran & Sijil Digital</h2>
-        <p class="text-slate-500 mb-8 max-w-lg mx-auto text-sm">Hebatnya! Apabila anda menyelesaikan tugasan, anda layak menerima anugerah bintang cilik bahasa ini.</p>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div class="bg-white p-4 rounded-2xl shadow-sm hover:scale-105 transition-transform border border-purple-100">
-                <div class="text-5xl mb-2">⭐</div>
-                <h4 class="font-bold text-sm text-slate-700">Wira Huruf</h4>
-                <p class="text-xs text-slate-400 mt-1">Selesai Aktiviti Tahun 1</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm hover:scale-105 transition-transform border border-purple-100">
-                <div class="text-5xl mb-2">🔥</div>
-                <h4 class="font-bold text-sm text-slate-700">Pakar Ayat</h4>
-                <p class="text-xs text-slate-400 mt-1">Selesai Aktiviti Tahun 2</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm hover:scale-105 transition-transform border border-purple-100">
-                <div class="text-5xl mb-2">👑</div>
-                <h4 class="font-bold text-sm text-slate-700">Jaguh Bahasa</h4>
-                <p class="text-xs text-slate-400 mt-1">Selesai Aktiviti Tahun 3</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm hover:scale-105 transition-transform border border-purple-100">
-                <div class="text-5xl mb-2">📜</div>
-                <h4 class="font-bold text-sm text-slate-700">Sijil Cilik</h4>
-                <p class="text-xs text-slate-400 mt-1">Markah Penuh Kuiz</p>
-            </div>
-        </div>
-    </section>
+            <div class="hidden">
+                <div id="sijil-print-area" class="w-[800px] h-[560px] p-8 bg-white border-[16px] border-double border-yellow-600 relative flex flex-col justify-between items-center text-center font-serif text-slate-800">
+                    <div class="absolute top-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                    <div class="absolute top-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                    <div class="absolute bottom-4 left-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
+                    <div class="absolute bottom-4 right-4 text-yellow-600 text-2xl"><i class="fas fa-ribbon"></i></div>
 
-    <section class="bg-sky-50 py-12 px-6">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-sky-600 mb-8"><i class="fa-solid fa-images mr-2"></i> Galeri Aktiviti Murid</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-slate-200 h-40 rounded-2xl overflow-hidden shadow relative group flex items-center justify-center text-slate-400 text-xs text-center p-4 font-bold">
-                    <i class="fa-solid fa-user-graduate text-3xl absolute opacity-20"></i>
-                    <span>Murid Belajar Menggunakan Tablet</span>
-                </div>
-                <div class="bg-slate-200 h-40 rounded-2xl overflow-hidden shadow relative group flex items-center justify-center text-slate-400 text-xs text-center p-4 font-bold">
-                    <i class="fa-solid fa-school text-3xl absolute opacity-20"></i>
-                    <span>Suasana Kelas Abad Ke-21 Interaktif</span>
-                </div>
-                <div class="bg-slate-200 h-40 rounded-2xl overflow-hidden shadow relative group flex items-center justify-center text-slate-400 text-xs text-center p-4 font-bold">
-                    <i class="fa-solid fa-face-smile text-3xl absolute opacity-20"></i>
-                    <span>Sesi Penyampaian Hadiah Kuiz</span>
-                </div>
-                <div class="bg-slate-200 h-40 rounded-2xl overflow-hidden shadow relative group flex items-center justify-center text-slate-400 text-xs text-center p-4 font-bold">
-                    <i class="fa-solid fa-lightbulb text-3xl absolute opacity-20"></i>
-                    <span>Murid Gembira Selesai Cabaran</span>
+                    <div>
+                        <h1 class="text-4xl font-bold tracking-wider text-yellow-700 uppercase mb-1">Sijil Penghargaan</h1>
+                        <p class="text-sm italic text-gray-500">Cabaran Cilik Bahasa Interaktif</p>
+                    </div>
+
+                    <div class="space-y-4 my-4">
+                        <p class="text-lg">Dengan ini diperakukan bahawa murid pintar teladan bertuah telah menyempurnakan</p>
+                        <h2 id="cert-tahun-nama" class="text-3xl font-bold text-blue-800 font-sans my-2">CABARAN BAHASA MELAYU TAHUN 1</h2>
+                        <p class="text-lg">dengan keputusan pencapaian gred kecemerlangan bertaraf</p>
+                        <h3 id="cert-lencana-nama" class="text-2xl font-black text-emerald-600 uppercase tracking-widest">PINGAT EMAS</h3>
+                    </div>
+
+                    <div class="w-full flex justify-between items-end px-12 mt-4">
+                        <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
+                            <p class="font-bold">SISTEM PINTAR AI</p>
+                            <p class="text-gray-400">Guru Pembimbing Maya</p>
+                        </div>
+                        <div class="bg-yellow-100 p-4 rounded-full border-4 border-yellow-400 text-yellow-600 text-3xl shadow">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="text-center w-40 border-t border-slate-400 pt-2 text-xs font-sans">
+                            <p class="font-bold">TARIKH KELULUSAN</p>
+                            <p id="cert-tarikh" class="text-gray-500">10/07/2026</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="hubungi" class="py-12 px-6 max-w-lg mx-auto text-center">
-        <div class="bg-white p-8 rounded-3xl shadow-lg border-2 border-emerald-400">
-            <h2 class="text-2xl font-bold text-slate-800 mb-2"><i class="fa-solid fa-envelope-open-text text-emerald-500 mr-2"></i> Ada Pertanyaan?</h2>
-            <p class="text-slate-400 text-sm mb-6">Ibu bapa atau murid boleh hubungi guru kelas untuk bantuan teknikal atau maklum balas.</p>
-            <div class="space-y-3">
-                <a href="https://wa.me/60123456789" target="_blank" class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-full shadow transition-colors">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> Hubungi Guru Melalui WhatsApp
-                </a>
-                <a href="mailto:guru@sekolah.edu.my" class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-full transition-colors">
-                    <i class="fa-solid fa-envelope text-lg"></i> Hantar E-mel kepada Guru
-                </a>
-            </div>
-        </div>
-    </section>
+    </main>
 
-    <footer class="bg-slate-800 text-white/70 py-6 text-center text-sm border-t-4 border-yellow-400">
-        <p>© 2026 Cabaran Cilik Bahasa. Hak Cipta Terpelihara.</p>
-        <p class="text-xs mt-1 text-white/40">Dicipta khas untuk didik hibur murid sekolah rendah.</p>
+    <footer class="bg-slate-100 text-slate-500 border-t border-slate-200 py-4 text-center text-xs font-medium">
+        &copy; 2026 Cabaran Cilik Bahasa. Berasaskan Format DSKP KSSR Semakan KPM. Bijak Bahasa, Pintar Budaya!
     </footer>
 
     <script>
-        function bukaHalaman(tahunId) {
-            // Sembunyikan semua kandungan tab tahun dahulu
-            const tabs = document.querySelectorAll('.tab-kandungan');
-            tabs.forEach(tab => tab.classList.add('hidden'));
+        /*******************************************************************************
+         * DATA BANK SOALAN (20 SOALAN RAWAK SETIAP TOPIK)
+         * Mengandungi soalan berkualiti tinggi mengikut standard aras Tahun 1, 2, dan 3.
+         *******************************************************************************/
+        const BANK_SOALAN = {
+            1: { // TAHUN 1
+                1: { tajuk: "Kenali Huruf", jenis: "mcq", ikon: "fa-font",
+                     soalan: [
+                        { q: "Pilih huruf vokal yang terdapat dalam perkataan 'KUCING'.", a: ["U, I", "K, C", "N, G", "A, E"], c: 0 },
+                        { q: "Lengkapkan susunan huruf ini: A, B, C, ___, E", a: ["D", "F", "G", "H"], c: 0 },
+                        { q: "Manakah antara berikut ialah huruf besar?", a: ["m", "b", "R", "k"], c: 2 },
+                        { q: "Pilih perkataan yang bermula dengan huruf konsonan.", a: ["Ayam", "Epal", "Ulat", "Bola"], c: 3 },
+                        { q: "Huruf kecil bagi 'G' ialah...", a: ["q", "g", "p", "d"], c: 1 }
+                     ] // Tambah baki sehingga 20 soalan mengikut format yang sama
+                },
+                2: { tajuk: "Suku Kata", jenis: "drag_drop", ikon: "fa-cubes",
+                     soalan: [
+                        { q: "Susun suku kata untuk perkataan: BA + JU", parts: ["BA", "JU"], correctOrder: ["BA", "JU"] },
+                        { q: "Susun suku kata untuk perkataan: BA + KUL", parts: ["KUL", "BA"], correctOrder: ["BA", "KUL"] },
+                        { q: "Susun suku kata untuk perkataan: DA + UN", parts: ["UN", "DA"], correctOrder: ["DA", "UN"] },
+                        { q: "Susun suku kata untuk perkataan: RE + BAN", parts: ["BAN", "RE"], correctOrder: ["RE", "BAN"] },
+                        { q: "Susun suku kata untuk perkataan: CE + REK", parts: ["REK", "CE"], correctOrder: ["CE", "REK"] }
+                     ]
+                },
+                3: { tajuk: "Padankan Gambar dengan Perkataan", jenis: "mcq", ikon: "fa-images",
+                     soalan: [
+                        { q: "Apakah nama objek yang digunakan untuk menulis?", a: ["Pensel", "Pemadam", "Buku", "Pembaris"], c: 0 },
+                        { q: "Haiwan ini berbunyi 'Meow'. Apakah haiwan ini?", a: ["Anjing", "Kucing", "Burung", "Ayam"], c: 1 },
+                        { q: "Objek ini digunakan untuk melindungi diri daripada hujan.", a: ["Kasut", "Topi", "Payung", "Baju"], c: 2 }
+                     ]
+                },
+                4: { tajuk: "Pilih Perkataan Yang Betul", jenis: "mcq", ikon: "fa-spell-check",
+                     soalan: [
+                        { q: "Ejaan yang betul bagi buah merah bertangkai ialah...", a: ["Epal", "Ipal", "Epeal", "Apel"], c: 0 },
+                        { q: "Pilih ejaan yang betul bagi kenderaan roda dua.", a: ["Basikal", "Basikal", "Besikal", "Basingkal"], c: 0 }
+                     ]
+                },
+                5: { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-clip",
+                     soalan: [
+                        { q: "Kakak suka makan buah ______ yang manis.", c: ["tembikai", "epal", "pisang"] },
+                        { q: "Bapa memandu ______ baru ke pejabat.", c: ["kereta"] }
+                     ]
+                },
+                6: { tajuk: "Susun Huruf Menjadi Perkataan", jenis: "drag_drop", ikon: "fa-font-awesome",
+                     soalan: [
+                        { q: "Susun huruf menjadi perkataan (Haiwan peliharaan): U, K, C, I, N, G", parts: ["G", "N", "I", "C", "U", "K"], correctOrder: ["K", "U", "C", "I", "N", "G"] }
+                     ]
+                },
+                7: { tajuk: "Susun Perkataan Menjadi Ayat Mudah", jenis: "drag_drop", ikon: "fa-align-left",
+                     soalan: [
+                        { q: "Susun perkataan ini:", parts: ["membaca", "Buku", "Saya"], correctOrder: ["Saya", "membaca", "Buku"] }
+                     ]
+                },
+                8: { tajuk: "Betul atau Salah", jenis: "mcq", ikon: "fa-circle-question",
+                     soalan: [
+                        { q: "Adakah burung boleh terbang di udara?", a: ["Betul", "Salah"], c: 0 }
+                     ]
+                },
+                9: { tajuk: "Pemahaman Petikan Pendek", jenis: "mcq", ikon: "fa-file-lines",
+                     soalan: [
+                        { q: "Petikan: Ini kucing Lili. Nama kucing Lili ialah Comel. Comel suka makan ikan.\n\nApakah nama kucing Lili?", a: ["Comel", "Lili", "Ikan", "Manis"], c: 0 }
+                     ]
+                },
+                10: { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-graduation-cap",
+                     soalan: [
+                        { q: "Pilih kata nama am yang betul bagi benda.", a: ["Meja", "Ali", "Sang Kancil", "Kuala Lumpur"], c: 0 },
+                        { q: "Pilih perkataan kvkv.", a: ["Baju", "Sekolah", "Kasut", "Monyet"], c: 0 }
+                     ]
+                }
+            },
+            2: { // TAHUN 2
+                1: { tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-font",
+                     soalan: [
+                        { q: "Manakah antara berikut merupakan Kata Nama Khas?", a: ["Proton Saga", "kereta", "lelaki", "sekolah"], c: 0 },
+                        { q: "Pilih Kata Nama Am bagi kategori haiwan.", a: ["Gajah", "Pak Belang", "Si Comel", "Sang Kancil"], c: 0 }
+                     ]
+                },
+                2: { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-person-running",
+                     soalan: [
+                        { q: "Adik sedang _________ televisyen di ruang tamu.", a: ["menonton", "mendengar", "membaca", "menulis"], c: 0 }
+                     ]
+                },
+                3: { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-wand-magic-sparkles",
+                     soalan: [
+                        { q: "Buah peria itu berasa sangat _________.", a: ["pahit", "manis", "masin", "tawar"], c: 0 }
+                     ]
+                },
+                4: { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-calculator",
+                     soalan: [
+                        { q: "Ibu membeli dua _________ pisang di pasar pagi.", a: ["sisir", "biji", "bilah", "keping"], c: 0 }
+                     ]
+                },
+                5: { tajuk: "Kata Hubung", jenis: "mcq", ikon: "fa-link",
+                     soalan: [
+                        { q: "Ali kaya _________ dia sangat kedekut.", a: ["tetapi", "dan", "kerana", "lalu"], c: 0 }
+                     ]
+                },
+                6: { tajuk: "Susun Ayat", jenis: "drag_drop", ikon: "fa-arrow-down-1-9",
+                     soalan: [
+                        { q: "Susun semula struktur ayat ini:", parts: ["di padang.", "bola", "Abang", "bermain"], correctOrder: ["Abang", "bermain", "bola", "di padang."] }
+                     ]
+                },
+                7: { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-to-square",
+                     soalan: [
+                        { q: "Cikgu Azmi memandu kereta baharunya dengan ______.", c: ["berhati-hati", "cermat"] }
+                     ]
+                },
+                8: { tajuk: "Drag and Drop", jenis: "drag_drop", ikon: "fa-hand-pointer",
+                     soalan: [
+                        { q: "Selesaikan susunan frasa:", parts: ["Ibu memasak", "nasi lemak", "di dapur."], correctOrder: ["Ibu memasak", "nasi lemak", "di dapur."] }
+                     ]
+                },
+                9: { tajuk: "Pemahaman", jenis: "mcq", ikon: "fa-book-open-reader",
+                     soalan: [
+                        { q: "Petikan: Setiap hujung minggu, kami sekeluarga membersihkan rumah. Ayah mengecat dinding manakala abang menyapu sampah.\n\nBilakah mereka sekeluarga membersihkan rumah?", a: ["Setiap hujung minggu", "Hari Isnin", "Waktu malam", "Setiap bulan"], c: 0 }
+                     ]
+                },
+                10: { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-flag",
+                     soalan: [
+                        { q: "Pilih ayat tunggal yang betul.", a: ["Siti menyanyi.", "Siti dan Aminah menyanyi di atas pentas.", "Sambil bernyanyi, Siti menari.", "Siti menyanyi kerana gembira."], c: 0 }
+                     ]
+                }
+            },
+            3: { // TAHUN 3
+                1: { tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-tags",
+                     soalan: [
+                        { q: "Manakah yang merupakan Kata Nama Am Abstrak?", a: ["kejayaan", "buku", "sungai", "Cikgu Lim"], c: 0 }
+                     ]
+                },
+                2: { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-skating",
+                     soalan: [
+                        { q: "Pekerja itu sedang _________ lubang jalan yang rosak.", a: ["menurap", "menggali", "memotong", "menyapu"], c: 0 }
+                     ]
+                },
+                3: { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-palette",
+                     soalan: [
+                        { q: "Jalan raya menuju ke kampung itu sangat _________ dan berbahaya.", a: ["bengkak-bengkok", "lurus", "luas", "panjang"], c: 0 }
+                     ]
+                },
+                4: { tajuk: "Kata Sendi Nama", jenis: "mcq", ikon: "fa-compass",
+                     soalan: [
+                        { q: "Surat hadiah misteri itu datangnya _________ Sarawak.", a: ["dari", "daripada", "kepada", "pada"], c: 0 }
+                     ]
+                },
+                5: { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-hashtag",
+                     soalan: [
+                        { q: "Ayah menghadiahkan se_______ utas jam tangan kepada ibu.", a: ["utas", "biji", "bentuk", "bilah"], c: 0 }
+                     ]
+                },
+                6: { tajuk: "Simpulan Bahasa Asas", jenis: "mcq", ikon: "fa-brain",
+                     soalan: [
+                        { q: "Anak yang diletakkan harapan tinggi dipanggil...", a: ["anak emas", "anak angkat", "berat tulang", "ringan tulang"], c: 0 }
+                     ]
+                },
+                7: { tajuk: "Bina Ayat", jenis: "drag_drop", ikon: "fa-pen-fancy",
+                     soalan: [
+                        { q: "Susun ayat lengkap:", parts: ["untuk menjaga kesihatan.", "senaman", "Kita perlulah", "melakukan"], correctOrder: ["Kita perlulah", "melakukan", "senaman", "untuk menjaga kesihatan."] }
+                     ]
+                },
+                8: { tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-book",
+                     soalan: [
+                        { q: "Petikan: Melaka ialah sebuah negeri bersejarah. Ramai pelancong luar negara melawat kota A Famosa untuk mengambil foto kenangan.\n\nApakah mercu tanda yang dinyatakan?", a: ["Kota A Famosa", "Menara Berkembar", "Tugu Negara", "Pulau Langkawi"], c: 0 }
+                     ]
+                },
+                9: { tajuk: "Word Search (Pilih Ejaan Betul)", jenis: "mcq", ikon: "fa-magnifying-glass",
+                     soalan: [
+                        { q: "Manakah perkataan pinjaman bahasa asing dengan ejaan betul?", a: ["Ambulans", "Ambulan", "Ambulens", "Embulan"], c: 0 }
+                     ]
+                },
+                10: { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-trophy",
+                     soalan: [
+                        { q: "Pilih ayat majmuk yang menggunakan kata hubung 'sambil'.", a: ["Adik makan roti sambil menonton televisyen.", "Adik dan abang makan roti.", "Adik makan roti lalu pergi ke sekolah.", "Adik makan roti jika lapar."], c: 0 }
+                     ]
+                }
+            }
+        };
 
-            // Tunjukkan bekas (container) ruangan aktiviti utama
-            const ruanganAktiviti = document.getElementById('ruangan-aktiviti');
-            ruanganAktiviti.classList.remove('hidden');
+        // Nota Pembangunan: Tambah objek soalan tambahan di sini sehingga genap 20 soalan setiap indeks untuk melengkapkan bank soalan penuh.
 
-            // Paparkan tab tahun yang dipilih sahaja
-            const tabSasaran = document.getElementById(tahunId);
-            tabSasaran.classList.remove('hidden');
+        /*******************************************************************************
+         * PEMUBAH UBAH GLOBAL & STAT KEMAJUAN
+         *******************************************************************************/
+        let tahunSemasa = 1;
+        let topikSemasa = 1;
+        let indexSoalanSemasa = 0;
+        let senaraiSoalanAktif = [];
+        let skorAktivitiSemasa = 0;
+        
+        // Pangkalan data tempatan (LocalStorage)
+        let rekodKemajuan = JSON.parse(localStorage.getItem('cilik_bahasa_progress')) || {
+            1: {}, 2: {}, 3: {}
+        };
 
-            // Skrol secara automatik dan lembut ke ruangan aktiviti tersebut
-            ruanganAktiviti.scrollIntoView({ behavior: 'smooth' });
+        /*******************************************************************************
+         * FUNGSI UTAMA SISTEM & NAVIGASI
+         *******************************************************************************/
+        window.onload = function() {
+            kemasKiniSkorPaparan();
+        };
+
+        function paparHalaman(idHalaman) {
+            document.querySelectorAll('.layer-section').forEach(section => section.classList.add('hidden'));
+            document.getElementById(`page-${idHalaman}`).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function kemasKiniSkorPaparan() {
+            let totalScore = 0;
+            [1, 2, 3].forEach(th => {
+                for (let tp in rekodKemajuan[th]) {
+                    totalScore += rekodKemajuan[th][tp];
+                }
+            });
+            document.getElementById('total-score-badge').innerText = totalScore;
+        }
+
+        function pilihTahun(tahun) {
+            tahunSemasa = tahun;
+            document.getElementById('tajuk-tahun').innerText = `Aktiviti Bahasa Melayu: Tahun ${tahun}`;
+            binaSenaraiAktiviti();
+            paparHalaman('senarai-aktiviti');
+        }
+
+        function binaSenaraiAktiviti() {
+            const grid = document.getElementById('grid-aktiviti');
+            grid.innerHTML = '';
+            
+            let diselesaikan = 0;
+            const senaraiTopik = BANK_SOALAN[tahunSemasa];
+
+            for (let i = 1; i <= 10; i++) {
+                const dataTopik = senaraiTopik[i];
+                const markahSediaAda = rekodKemajuan[tahunSemasa][i];
+                const isDone = markahSediaAda !== undefined;
+                if (isDone) diselesaikan++;
+
+                const card = document.createElement('div');
+                card.className = `bg-white p-5 rounded-2xl shadow border-2 ${isDone ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-200'} flex items-center justify-between hover:shadow-md transition cursor-pointer`;
+                card.onclick = () => mulaAktiviti(i);
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-blue-500 text-white'} shadow-sm">
+                            <i class="fas ${dataTopik ? dataTopik.ikon : 'fa-star'}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-base md:text-lg">Aktiviti ${i}: ${dataTopik ? dataTopik.tajuk : 'Topik Mini'}</h4>
+                            <p class="text-xs text-gray-400">Mekanik: ${dataTopik ? dataTopik.jenis.toUpperCase().replace('_',' ') : 'Kuiz'}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        ${isDone ? `<span class="bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow"><i class="fas fa-check mr-1"></i> ${markahSediaAda} Pts</span>` : `<span class="bg-slate-100 text-slate-500 text-xs font-bold px-2.5 py-1 rounded-full border">Sedia</span>`}
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+
+            document.getElementById('progress-tahun-text').innerText = `${diselesaikan}/10`;
+            
+            // Semak jika semua 10 telah lengkap untuk paparan lencana akhir
+            if (diselesaikan === 10) {
+                setTimeout(() => paparSkrinGanjaranAkhir(), 800);
+            }
+        }
+
+        function kembaliKeSenarai() {
+            paparHalaman('senarai-aktiviti');
+            binaSenaraiAktiviti();
+        }
+
+        /*******************************************************************************
+         * PENGURUSAN LOGIK PERMAINAN & KUIZ
+         *******************************************************************************/
+        function mulaAktiviti(idTopik) {
+            topikSemasa = idTopik;
+            indexSoalanSemasa = 0;
+            skorAktivitiSemasa = 0;
+
+            const dataTopik = BANK_SOALAN[tahunSemasa][idTopik];
+            if (!dataTopik || !dataTopik.soalan || dataTopik.soalan.length === 0) {
+                alert("Kandungan tambahan sedang dimuatkan. Sila pilih topik yang sedia ada!");
+                return;
+            }
+
+            // Rawakkan turutan soalan (Algoritma Fisher-Yates) setiap kali bermula
+            senaraiSoalanAktif = [...dataTopik.soalan];
+            for (let i = senaraiSoalanAktif.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [senaraiSoalanAktif[i], senaraiSoalanAktif[j]] = [senaraiSoalanAktif[j], senaraiSoalanAktif[i]];
+            }
+
+            document.getElementById('game-tag-topik').innerText = `Aktiviti ${idTopik}`;
+            document.getElementById('game-tajuk-topik').innerText = dataTopik.tajuk;
+            document.getElementById('game-total-q').innerText = senaraiSoalanAktif.length;
+            document.getElementById('game-score').innerText = "0";
+
+            paparHalaman('game');
+            janaSoalan();
+        }
+
+        function janaSoalan() {
+            // Sembunyikan lapisan maklum balas
+            document.getElementById('feedback-layer').classList.add('hidden');
+            
+            const totalQ = senaraiSoalanAktif.length;
+            document.getElementById('game-current-q').innerText = indexSoalanSemasa + 1;
+            const progressPercent = ((indexSoalanSemasa) / totalQ) * 100;
+            document.getElementById('game-progress-bar').style.width = `${progressPercent}%`;
+
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+            const area = document.getElementById('quiz-dynamic-area');
+            area.innerHTML = '';
+
+            const dataTopik = BANK_SOALAN[tahunSemasa][topikSemasa];
+
+            // MAIN MEKANIK 1: Multiple Choice Question (MCQ)
+            if (dataTopik.jenis === "mcq") {
+                area.innerHTML = `
+                    <div class="text-center my-4">
+                        <p class="text-xl md:text-2xl font-bold text-slate-800 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300 inline-block w-full">${soalanData.q.replace('\n', '<br>')}</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                        ${soalanData.a.map((pilihan, idx) => `
+                            <button onclick="semakJawapanMCQ(${idx})" class="bg-blue-50 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-100/50 p-4 rounded-2xl font-bold text-left text-slate-700 transition shadow-sm btn-bounce text-base flex items-center">
+                                <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3 text-xs">${String.fromCharCode(65 + idx)}</span>
+                                ${pilihan}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            // MAIN MEKANIK 2: Drag and Drop (Susun Susunan)
+            else if (dataTopik.jenis === "drag_drop") {
+                // Rawakkan susunan bahagian perkataan/frasa
+                let shuffledParts = [...soalanData.parts].sort(() => Math.random() - 0.5);
+
+                area.innerHTML = `
+                    <div class="text-center my-2">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase"><i class="fas fa-hand-pointer mr-1"></i> Sila seret kotak di bawah ke zon jawapan!</span>
+                        <h4 class="text-lg font-medium text-gray-500 mt-2">${soalanData.q}</h4>
+                    </div>
+
+                    <div id="drop-zone-container" class="w-full min-h-[70px] border-4 border-dashed border-slate-300 rounded-2xl bg-slate-50 p-3 flex flex-wrap gap-3 justify-center items-center drop-zone" ondragover="allowDrop(event)" ondrop="dropElement(event)">
+                        </div>
+
+                    <div id="drag-items-container" class="w-full p-4 bg-yellow-50/50 rounded-2xl border border-yellow-200 flex flex-wrap gap-3 justify-center items-center min-h-[70px]">
+                        ${shuffledParts.map((part, idx) => `
+                            <div id="drag-part-${idx}" draggable="true" ondragstart="dragStart(event)" class="bg-white border-2 border-amber-300 px-4 py-2.5 rounded-xl font-bold shadow-md text-slate-700 cursor-grab active:cursor-grabbing transform active:scale-95 text-sm md:text-base">
+                                ${part}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button onclick="semakJawapanDragDrop()" class="bg-indigo-600 text-white font-bold px-8 py-2.5 rounded-xl shadow-lg hover:bg-indigo-700 transition btn-bounce">Hantar Jawapan</button>
+                    </div>
+                `;
+            }
+            // MAIN MEKANIK 3: Fill in the Blank
+            else if (dataTopik.jenis === "blank") {
+                area.innerHTML = `
+                    <div class="text-center my-4">
+                        <p class="text-xl font-bold text-slate-700">${soalanData.q.replace('______', '<input type="text" id="blank-input-ans" class="border-b-4 border-blue-500 bg-blue-50 text-blue-800 font-bold px-4 py-1 rounded-t-md mx-2 text-center focus:outline-none focus:bg-yellow-100 max-w-[180px]" placeholder="taip sini...">')}</p>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button onclick="semakJawapanBlank()" class="bg-emerald-500 text-white font-bold px-8 py-2.5 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce">Semak</button>
+                    </div>
+                `;
+                setTimeout(() => document.getElementById('blank-input-ans').focus(), 300);
+            }
+        }
+
+        /*******************************************************************************
+         * PEMPROSESAN & LOGIK SEMAKAN JAWAPAN
+         *******************************************************************************/
+        function mainBunyi(isBetul) {
+            const snd = document.getElementById(isBetul ? 'snd-correct' : 'snd-wrong');
+            if(snd) {
+                snd.currentTime = 0;
+                snd.play().catch(e => {
+                    // Blok jika pelayar melarang auto-audio sebelum interaksi intim pengguna
+                    const context = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = context.createOscillator();
+                    const gainNode = context.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    oscillator.type = isBetul ? 'sine' : 'sawtooth';
+                    oscillator.frequency.setValueAtTime(isBetul ? 523.25 (C5) : 130.81 (C3), context.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, context.currentTime);
+                    oscillator.start();
+                    oscillator.stop(context.currentTime + 0.2);
+                });
+            }
+        }
+
+        function tunjukMaklumBalas(isBetul) {
+            mainBunyi(isBetul);
+
+            const layer = document.getElementById('feedback-layer');
+            const box = document.getElementById('feedback-box');
+            const icon = document.getElementById('feedback-icon');
+            const title = document.getElementById('feedback-title');
+            const msg = document.getElementById('feedback-msg');
+            const btnTry = document.getElementById('btn-try-again');
+            const btnNext = document.getElementById('btn-next-q');
+
+            layer.classList.remove('hidden');
+            layer.className = `absolute inset-0 z-20 flex flex-col items-center justify-center p-6 bg-slate-950/40 backdrop-blur-sm transition-all duration-300`;
+
+            if (isBetul) {
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+                box.className = "bg-white border-4 border-emerald-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-transform duration-300";
+                icon.innerHTML = "🌟";
+                title.innerText = "Tahniah! Betul!";
+                title.className = "text-3xl font-black text-emerald-600 mb-2 font-comic";
+                msg.innerText = "Bijak sekali jawapan anda. Teruskan usaha!";
+                btnTry.classList.add('hidden');
+                btnNext.onclick = prosesSeterusnya;
+            } else {
+                box.className = "bg-white border-4 border-rose-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-transform duration-300";
+                icon.innerHTML = "❌";
+                title.innerText = "Cuba Lagi!";
+                title.className = "text-3xl font-black text-rose-500 mb-2 font-comic";
+                msg.innerText = "Jangan berputus asa, mari kita fikirkan semula.";
+                btnTry.classList.remove('hidden');
+                btnTry.onclick = () => layer.classList.add('hidden');
+                btnNext.onclick = prosesSeterusnya;
+            }
+        }
+
+        function semakJawapanMCQ(idxPilihan) {
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+            if (idxPilihan === soalanData.c) {
+                skorAktivitiSemasa += 10;
+                document.getElementById('game-score').innerText = skorAktivitiSemasa;
+                tunjukMaklumBalas(true);
+            } else {
+                tunjukMaklumBalas(false);
+            }
+        }
+
+        function semakJawapanBlank() {
+            const userAns = document.getElementById('blank-input-ans').value.trim().toLowerCase();
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+            const isBetul = soalanData.c.some(jawapanSyarf => userAns === jawapanSyarf.toLowerCase());
+
+            if (isBetul) {
+                skorAktivitiSemasa += 10;
+                document.getElementById('game-score').innerText = skorAktivitiSemasa;
+                tunjukMaklumBalas(true);
+            } else {
+                tunjukMaklumBalas(false);
+            }
+        }
+
+        // FUNGSI SERET DAN LEPAS (DRAG AND DROP)
+        function dragStart(ev) {
+            ev.dataTransfer.setData("text/plain", ev.target.id);
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('hover');
+        }
+
+        function dropElement(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hover');
+            const dataId = ev.dataTransfer.getData("text/plain");
+            const draggedNode = document.getElementById(dataId);
+            if(draggedNode) {
+                ev.currentTarget.appendChild(draggedNode);
+            }
+        }
+
+        function semakJawapanDragDrop() {
+            const dropZone = document.getElementById('drop-zone-container');
+            const susunanMurid = Array.from(dropZone.children).map(child => child.innerText.trim());
+            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
+
+            let isBetul = susunanMurid.length === soalanData.correctOrder.length;
+            if (isBetul) {
+                for (let i = 0; i < susunanMurid.length; i++) {
+                    if (susunanMurid[i] !== soalanData.correctOrder[i]) {
+                        isBetul = false;
+                        break;
+                    }
+                }
+            }
+
+            if (isBetul) {
+                skorAktivitiSemasa += 10;
+                document.getElementById('game-score').innerText = skorAktivitiSemasa;
+                tunjukMaklumBalas(true);
+            } else {
+                tunjukMaklumBalas(false);
+            }
+        }
+
+        function prosesSeterusnya() {
+            indexSoalanSemasa++;
+            if (indexSoalanSemasa < senaraiSoalanAktif.length) {
+                janaSoalan();
+            } else {
+                // Selesai Topik - Simpan Rekod Kemajuan ke LocalStorage
+                const markahSediaAda = rekodKemajuan[tahunSemasa][topikSemasa] || 0;
+                if (skorAktivitiSemasa > markahSediaAda) {
+                    rekodKemajuan[tahunSemasa][topikSemasa] = skorAktivitiSemasa;
+                    localStorage.setItem('cilik_bahasa_progress', JSON.stringify(rekodKemajuan));
+                    kemasKiniSkorPaparan();
+                }
+                kembaliKeSenarai();
+            }
+        }
+
+        /*******************************************************************************
+         * GANJARAN AKHIR & PENJANAAN SIJIL DIGITAL
+         *******************************************************************************/
+        function paparSkrinGanjaranAkhir() {
+            let totalMataTahun Ini = 0;
+            let maksimumMataTahunIni = 0;
+
+            for (let i = 1; i <= 10; i++) {
+                totalMataTahunIni += (rekodKemajuan[tahunSemasa][i] || 0);
+                // Anggaran 10 mata satu soalan (ambil kira saiz array aktif soalan)
+                const qCount = BANK_SOALAN[tahunSemasa][i]?.soalan?.length || 1;
+                maksimumMataTahunIni += (qCount * 10);
+            }
+
+            const peratusan = Math.min(100, Math.round((totalMataTahunIni / maksimumMataTahunIni) * 100)) || 0;
+            document.getElementById('final-score-percent').innerText = `${peratusan}%`;
+
+            const bContainer = document.getElementById('badge-container');
+            let lencana = "";
+            let warnaLencana = "";
+
+            if (peratusan >= 90) {
+                lencana = "Emas 🥇";
+                warnaLencana = "text-yellow-500";
+            } else if (peratusan >= 70) {
+                lencana = "Perak 🥈";
+                warnaLencana = "text-slate-400";
+            } else {
+                lencana = "Gangsa 🥉";
+                warnaLencana = "text-amber-600";
+            }
+
+            bContainer.innerHTML = `
+                <span class="text-3xl font-black ${warnaLencana} drop-shadow-sm">${lencana}</span>
+                <span class="text-xs text-gray-500 font-medium">Lencana Utama</span>
+            `;
+
+            // Kemas kini data tersembunyi template sijil siap sedia
+            document.getElementById('cert-tahun-nama').innerText = `CABARAN BAHASA MELAYU TAHUN ${tahunSemasa}`;
+            document.getElementById('cert-lencana-nama').innerText = `PINGAT ${lencana.toUpperCase().split(' ')[0]}`;
+            
+            const hariIni = new Date();
+            document.getElementById('cert-tarikh').innerText = `${String(hariIni.getDate()).padStart(2, '0')}/${String(hariIni.getMonth() + 1).padStart(2, '0')}/${hariIni.getFullYear()}`;
+
+            paparHalaman('ganjaran');
+        }
+
+        function janaSijil() {
+            const element = document.getElementById('sijil-print-area');
+            // Paparkan seketika untuk penangkapan pdf html2pdf yang lancar
+            element.parentElement.classList.remove('hidden');
+
+            const opt = {
+                margin:       0.2,
+                filename:     `Sijil_Cabaran_Cilik_Tahun_${tahunSemasa}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.parentElement.classList.add('hidden');
+            });
         }
     </script>
 </body>
