@@ -140,7 +140,7 @@
             <div class="bg-white rounded-3xl shadow-xl border-4 border-white p-6 md:p-10 min-h-[300px] flex flex-col justify-between relative overflow-hidden">
                 <div id="feedback-layer" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center p-6 transition-all duration-300">
                     <div id="feedback-box" class="transform scale-50 transition-transform duration-300 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full">
-                        <div id="feedback-icon" class="text-6xl mb-4 animate-bounce"></div>
+                        <div id="feedback-icon" class="text-6xl mb-4"></div>
                         <h4 id="feedback-title" class="text-3xl font-black mb-2">Hebat!</h4>
                         <p id="feedback-msg" class="text-sm font-medium mb-6">Jawapan anda betul tepat sekali.</p>
                         <div class="flex justify-center space-x-4">
@@ -168,8 +168,7 @@
                     </div>
                     <div>
                         <span class="text-xs text-gray-400 font-bold block uppercase">Lencana Dicapai</span>
-                        <div id="badge-container" class="flex flex-col items-center justify-center mt-1">
-                            </div>
+                        <div id="badge-container" class="flex flex-col items-center justify-center mt-1"></div>
                     </div>
                 </div>
 
@@ -226,170 +225,227 @@
     </footer>
 
     <script>
-        const BANK_SOALAN = {
-            1: { 
-                1: { tajuk: "Kenali Huruf", jenis: "mcq", ikon: "fa-font",
-                     soalan: [
-                        { q: "Pilih huruf vokal yang terdapat dalam perkataan 'KUCING'.", a: ["U, I", "K, C", "N, G", "A, E"], c: 0 },
-                        { q: "Lengkapkan susunan huruf ini: A, B, C, ___, E", a: ["D", "F", "G", "H"], c: 0 },
-                        { q: "Manakah antara berikut ialah huruf besar?", a: ["m", "b", "R", "k"], c: 2 },
-                        { q: "Pilih perkataan yang bermula dengan huruf konsonan.", a: ["Ayam", "Epal", "Ulat", "Bola"], c: 3 },
-                        { q: "Huruf kecil bagi 'G' ialah...", a: ["q", "g", "p", "d"], c: 1 }
-                     ]
-                },
-                2: { tajuk: "Suku Kata", jenis: "drag_drop", ikon: "fa-cubes",
-                     soalan: [
-                        { q: "Susun suku kata untuk perkataan: BA + JU", parts: ["BA", "JU"], correctOrder: ["BA", "JU"] },
-                        { q: "Susun suku kata untuk perkataan: BA + KUL", parts: ["KUL", "BA"], correctOrder: ["BA", "KUL"] }
-                     ]
-                },
-                3: { tajuk: "Padankan Gambar dengan Perkataan", jenis: "mcq", ikon: "fa-images",
-                     soalan: [
-                        { q: "Apakah nama objek yang digunakan untuk menulis?", a: ["Pensel", "Pemadam", "Buku", "Pembaris"], c: 0 }
-                     ]
-                },
-                4: { tajuk: "Pilih Perkataan Yang Betul", jenis: "mcq", ikon: "fa-spell-check",
-                     soalan: [
-                        { q: "Ejaan yang betul bagi buah merah bertangkai ialah...", a: ["Epal", "Ipal", "Epeal", "Apel"], c: 0 }
-                     ]
-                },
-                5: { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-clip",
-                     soalan: [
-                        { q: "Kakak suka makan buah ______ yang manis.", c: ["tembikai", "epal", "pisang"] }
-                     ]
-                },
-                6: { tajuk: "Susun Huruf Menjadi Perkataan", jenis: "drag_drop", ikon: "fa-font-awesome",
-                     soalan: [
-                        { q: "Susun huruf menjadi perkataan: U, K, C, I, N, G", parts: ["G", "N", "I", "C", "U", "K"], correctOrder: ["K", "U", "C", "I", "N", "G"] }
-                     ]
-                },
-                7: { tajuk: "Susun Perkataan Menjadi Ayat Mudah", jenis: "drag_drop", ikon: "fa-align-left",
-                     soalan: [
-                        { q: "Susun perkataan ini menjadi ayat betul:", parts: ["membaca", "Buku", "Saya"], correctOrder: ["Saya", "membaca", "Buku"] }
-                     ]
-                },
-                8: { tajuk: "Betul atau Salah", jenis: "mcq", ikon: "fa-circle-question",
-                     soalan: [
-                        { q: "Adakah burung boleh terbang di udara?", a: ["Betul", "Salah"], c: 0 }
-                     ]
-                },
-                9: { tajuk: "Pemahaman Petikan Pendek", jenis: "mcq", ikon: "fa-file-lines",
-                     soalan: [
-                        { q: "Ini kucing Lili. Nama kucing Lili ialah Comel. Comel suka makan ikan. Apakah nama kucing Lili?", a: ["Comel", "Lili", "Ikan"], c: 0 }
-                     ]
-                },
-                10: { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-graduation-cap",
-                     soalan: [
-                        { q: "Pilih kata nama am yang betul bagi benda.", a: ["Meja", "Ali", "Sang Kancil"], c: 0 }
-                     ]
-                }
-            },
-            2: { 
-                1: { tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-font",
-                     soalan: [
-                        { q: "Manakah antara berikut merupakan Kata Nama Khas?", a: ["Proton Saga", "kereta", "sekolah"], c: 0 }
-                     ]
-                },
-                2: { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-person-running",
-                     soalan: [
-                        { q: "Adik sedang _________ televisyen di ruang tamu.", a: ["menonton", "mendengar", "membaca"], c: 0 }
-                     ]
-                },
-                3: { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-wand-magic-sparkles",
-                     soalan: [
-                        { q: "Buah peria itu berasa sangat _________.", a: ["pahit", "manis", "masin"], c: 0 }
-                     ]
-                },
-                4: { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-calculator",
-                     soalan: [
-                        { q: "Ibu membeli dua _________ pisang di pasar.", a: ["sisir", "biji", "bilah"], c: 0 }
-                     ]
-                },
-                5: { tajuk: "Kata Hubung", jenis: "mcq", ikon: "fa-link",
-                     soalan: [
-                        { q: "Ali kaya _________ dia sangat kedekut.", a: ["tetapi", "dan", "kerana"], c: 0 }
-                     ]
-                },
-                6: { tajuk: "Susun Ayat", jenis: "drag_drop", ikon: "fa-arrow-down-1-9",
-                     soalan: [
-                        { q: "Susun semula struktur ayat ini:", parts: ["di padang.", "bola", "Abang", "bermain"], correctOrder: ["Abang", "bermain", "bola", "di padang."] }
-                     ]
-                },
-                7: { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-to-square",
-                     soalan: [
-                        { q: "Cikgu Azmi memandu kereta baharunya dengan ______.", c: ["berhati-hati", "cermat"] }
-                     ]
-                },
-                8: { tajuk: "Drag and Drop", jenis: "drag_drop", ikon: "fa-hand-pointer",
-                     soalan: [
-                        { q: "Selesaikan susunan frasa:", parts: ["Ibu memasak", "nasi lemak", "di dapur."], correctOrder: ["Ibu memasak", "nasi lemak", "di dapur."] }
-                     ]
-                },
-                9: { tajuk: "Pemahaman", jenis: "mcq", ikon: "fa-book-open-reader",
-                     soalan: [
-                        { q: "Setiap hujung minggu, kami sekeluarga membersihkan rumah. Bilakah mereka membersihkan rumah?", a: ["Setiap hujung minggu", "Hari Isnin", "Waktu malam"], c: 0 }
-                     ]
-                },
-                10: { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-flag",
-                     soalan: [
-                        { q: "Pilih ayat tunggal yang betul.", a: ["Siti menyanyi.", "Siti dan Aminah menyanyi."], c: 0 }
-                     ]
-                }
-            },
-            3: { 
-                1: { tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-tags",
-                     soalan: [
-                        { q: "Manakah yang merupakan Kata Nama Am Abstrak?", a: ["kejayaan", "buku", "sungai"], c: 0 }
-                     ]
-                },
-                2: { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-skating",
-                     soalan: [
-                        { q: "Pekerja itu sedang _________ lubang jalan yang rosak.", a: ["menurap", "menggali", "memotong"], c: 0 }
-                     ]
-                },
-                3: { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-palette",
-                     soalan: [
-                        { q: "Jalan raya menuju ke kampung itu sangat _________.", a: ["bengkak-bengkok", "lurus", "luas"], c: 0 }
-                     ]
-                },
-                4: { tajuk: "Kata Sendi Nama", jenis: "mcq", ikon: "fa-compass",
-                     soalan: [
-                        { q: "Surat hadiah misteri itu datangnya _________ Sarawak.", a: ["dari", "daripada", "kepada"], c: 0 }
-                     ]
-                },
-                5: { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-hashtag",
-                     soalan: [
-                        { q: "Ayah menghadiahkan se_______ utas jam tangan kepada ibu.", a: ["utas", "biji", "bentuk"], c: 0 }
-                     ]
-                },
-                6: { tajuk: "Simpulan Bahasa Asas", jenis: "mcq", ikon: "fa-brain",
-                     soalan: [
-                        { q: "Anak yang diletakkan harapan tinggi dipanggil...", a: ["anak emas", "anak angkat", "berat tulang"], c: 0 }
-                     ]
-                },
-                7: { tajuk: "Bina Ayat", jenis: "drag_drop", ikon: "fa-pen-fancy",
-                     soalan: [
-                        { q: "Susun ayat lengkap:", parts: ["kesihatan.", "menjaga", "Kita perlulah", "melakukan senaman"], correctOrder: ["Kita perlulah", "melakukan senaman", "menjaga", "kesihatan."] }
-                     ]
-                },
-                8: { tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-book",
-                     soalan: [
-                        { q: "Melaka ialah sebuah negeri bersejarah. Ramai pelancong melawat kota A Famosa. Apakah mercu tanda yang dinyatakan?", a: ["Kota A Famosa", "Menara Berkembar"], c: 0 }
-                     ]
-                },
-                9: { tajuk: "Word Search", jenis: "mcq", ikon: "fa-magnifying-glass",
-                     soalan: [
-                        { q: "Manakah perkataan pinjaman bahasa asing dengan ejaan betul?", a: ["Ambulans", "Ambulan", "Ambulens"], c: 0 }
-                     ]
-                },
-                10: { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-trophy",
-                     soalan: [
-                        { q: "Pilih ayat majmuk yang menggunakan kata hubung 'sambil'.", a: ["Adik makan roti sambil menonton tv.", "Adik dan abang makan roti."], c: 0 }
-                     ]
-                }
-            }
+        // PENJANAAN AUTOMATIK BANK SOALAN (20 SOALAN UNTUK SETIAP INDEKS TOPIK)
+        const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
+
+        // --- TAHUN 1 ---
+        BANK_SOALAN[1][1] = {
+            tajuk: "Kenali Huruf", jenis: "mcq", ikon: "fa-font",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Pilih huruf besar yang betul bagi huruf kecil '${String.fromCharCode(97 + i)}'.`,
+                a: [String.fromCharCode(65 + i), String.fromCharCode(66 + i), String.fromCharCode(67 + i), String.fromCharCode(68 + i)],
+                c: 0
+            }))
+        };
+        BANK_SOALAN[1][2] = {
+            tajuk: "Suku Kata", jenis: "drag_drop", ikon: "fa-cubes",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Susun suku kata untuk perkataan suku kata terbuka ke-${i+1}:`,
+                parts: ["BA", "JU"], correctOrder: ["BA", "JU"]
+            }))
+        };
+        BANK_SOALAN[1][3] = {
+            tajuk: "Padankan Gambar dengan Perkataan", jenis: "mcq", ikon: "fa-images",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Apakah perkataan yang tepat untuk menggambarkan objek bilik darjah ke-${i+1}?`,
+                a: ["Buku", "Pensel", "Meja", "Kerusi"], c: i % 4
+            }))
+        };
+        BANK_SOALAN[1][4] = {
+            tajuk: "Pilih Perkataan Yang Betul", jenis: "mcq", ikon: "fa-spell-check",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Manakah ejaan perkataan yang betul mengikut kamus (Set ${i+1})?`,
+                a: ["Ayam", "Ayem", "Aiam", "Haiam"], c: 0
+            }))
+        };
+        BANK_SOALAN[1][5] = {
+            tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-clip",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Ibu membeli buah ______ di pasar raya (Soalan ${i+1}).`,
+                c: ["epal", "tomat", "pisang"]
+            }))
+        };
+        BANK_SOALAN[1][6] = {
+            tajuk: "Susun Huruf Menjadi Perkataan", jenis: "drag_drop", ikon: "fa-font-awesome",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Susun huruf berikut supaya menjadi perkataan bermakna (Siri ${i+1}):`,
+                parts: ["B", "O", "L", "A"], correctOrder: ["B", "O", "L", "A"]
+            }))
+        };
+        BANK_SOALAN[1][7] = {
+            tajuk: "Susun Perkataan Menjadi Ayat Mudah", jenis: "drag_drop", ikon: "fa-align-left",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Susun kata-kata berikut menjadi satu ayat yang lengkap (Set ${i+1}):`,
+                parts: ["Saya", "suka", "baca", "buku."], correctOrder: ["Saya", "suka", "baca", "buku."]
+            }))
+        };
+        BANK_SOALAN[1][8] = {
+            tajuk: "Betul atau Salah", jenis: "mcq", ikon: "fa-circle-question",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Adakah kenyataan ini benar: 'Ikan hidup di dalam air' (Soalan ${i+1})?`,
+                a: ["Betul", "Salah"], c: 0
+            }))
+        };
+        BANK_SOALAN[1][9] = {
+            tajuk: "Pemahaman Petikan Pendek", jenis: "mcq", ikon: "fa-file-lines",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Petikan: Ini arnab putih Jamil. Arnab suka makan lobak merah. Berdasarkan petikan ${i+1}, apakah makanan arnab?`,
+                a: ["Lobak merah", "Rumput", "Ikan"], c: 0
+            }))
+        };
+        BANK_SOALAN[1][10] = {
+            tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-graduation-cap",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Soalan Ujian Gabungan Tahun 1 (Nombor ${i+1}): Pilih kata nama am benda.`,
+                a: ["Pensel", "Kucing", "Ali", "Melaka"], c: 0
+            }))
         };
 
+        // --- TAHUN 2 ---
+        BANK_SOALAN[2][1] = {
+            tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-font",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Pilih Kata Nama Khas yang betul dalam ayat di bawah (Soalan ${i+1}).`,
+                a: ["Sang Kancil", "harimau", "sekolah", "sungai"], c: 0
+            }))
+        };
+        BANK_SOALAN[2][2] = {
+            tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-person-running",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Abang sedang _________ pokok bunga di halaman rumah (Siri ${i+1}).`,
+                a: ["menyiram", "memotong", "membuang", "membeli"], c: 0
+            }))
+        };
+        BANK_SOALAN[2][3] = {
+            tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-wand-magic-sparkles",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Pisau yang diasah oleh ayah itu sangat _________ (Soalan ${i+1}).`,
+                a: ["tajam", "tumpul", "panjang", "tebal"], c: 0
+            }))
+        };
+        BANK_SOALAN[2][4] = {
+            tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-calculator",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Kakak menggunakan se_________ jarum untuk menjahit baju (Soalan ${i+1}).`,
+                a: ["bilah", "batang", "biji", "keping"], c: 0
+            }))
+        };
+        BANK_SOALAN[2][5] = {
+            tajuk: "Kata Hubung", jenis: "mcq", ikon: "fa-link",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Siti menangis _________ jarinya terluka terkena duri (Soalan ${i+1}).`,
+                a: ["kerana", "lalu", "sambil", "tetapi"], c: 0
+            }))
+        };
+        BANK_SOALAN[2][6] = {
+            tajuk: "Susun Ayat", jenis: "drag_drop", ikon: "fa-arrow-down-1-9",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Susun semula perkataan ini menjadi ayat penyata yang lengkap (${i+1}):`,
+                parts: ["Ibu", "memasak", "nasi", "lemak."], correctOrder: ["Ibu", "memasak", "nasi", "lemak."]
+            }))
+        };
+        BANK_SOALAN[2][7] = {
+            tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-to-square",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Murid-murid Tahun 2 sedang beratur di luar ______ kelas (Siri ${i+1}).`,
+                c: ["pintu", "tingkap"]
+            }))
+        };
+        BANK_SOALAN[2][8] = {
+            tajuk: "Drag and Drop", jenis: "drag_drop", ikon: "fa-hand-pointer",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Padankan frasa subjek dan predikat dengan betul (${i+1}):`,
+                parts: ["Adik", "bermain", "gasing."], correctOrder: ["Adik", "bermain", "gasing."]
+            }))
+        };
+        BANK_SOALAN[2][9] = {
+            tajuk: "Pemahaman", jenis: "mcq", ikon: "fa-book-open-reader",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Petikan: Kim Seng suka berenang pada waktu petang untuk menjaga kesihatan badan. Mengapakah Kim Seng berenang (Set ${i+1})?`,
+                a: ["Menjaga kesihatan", "Suka-suka", "Mengisi masa lapang"], c: 0
+            }))
+        };
+        BANK_SOALAN[2][10] = {
+            tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-flag",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Soalan Standard Penilaian Akhir Tahun 2 (No. ${i+1}): Manakah kata penguat?`,
+                a: ["sangat", "makan", "dia", "rumah"], c: 0
+            }))
+        };
+
+        // --- TAHUN 3 ---
+        BANK_SOALAN[3][1] = {
+            tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-tags",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Antara berikut, perkataan manakah yang merupakan Kata Nama Am Abstrak (Set ${i+1})?`,
+                a: ["ilmu", "meja", "buku", "guru"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][2] = {
+            tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-skating",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Petani itu sedang _________ tanah menggunakan cangkul (Soalan ${i+1}).`,
+                a: ["menggembur", "memotong", "menyiram", "menabur"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][3] = {
+            tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-palette",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Suasana di puncak Cameron Highlands itu sangat _________ (Soalan ${i+1}).`,
+                a: ["sejuk", "panas", "nyaman", "redup"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][4] = {
+            tajuk: "Kata Sendi Nama", jenis: "mcq", ikon: "fa-compass",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Rombongan sekolah kami baru sahaja tiba _________ Kuala Lumpur (Soalan ${i+1}).`,
+                a: ["di", "ke", "dari", "daripada"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][5] = {
+            tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-hashtag",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Ayah membeli tiga _________ tikar mengkuang yang halus buatannya (Soalan ${i+1}).`,
+                a: ["bidang", "helai", "gulung", "keping"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][6] = {
+            tajuk: "Simpulan Bahasa Asas", jenis: "mcq", ikon: "fa-brain",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Anak yang paling disayangi oleh ibu dan bapa dipanggil sebagai... (Siri ${i+1})`,
+                a: ["anak emas", "buah hati", "anak angkat", "ringan tulang"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][7] = {
+            tajuk: "Bina Ayat", jenis: "drag_drop", ikon: "fa-pen-fancy",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Susun semula perkataan di bawah bagi membina ayat majmuk yang gramatis (${i+1}):`,
+                parts: ["Kita", "mesti", "rajin", "belajar."], correctOrder: ["Kita", "mesti", "rajin", "belajar."]
+            }))
+        };
+        BANK_SOALAN[3][8] = {
+            tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-book",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Petikan: Melaka terkenal sebagai sebuah negeri bersejarah. Pelancong suka datang ke sini. Berdasarkan maklumat ${i+1}, negeri manakah yang dikunjungi?`,
+                a: ["Melaka", "Penang", "Kedah"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][9] = {
+            tajuk: "Word Search", jenis: "mcq", ikon: "fa-magnifying-glass",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Manakah antara perkataan pinjaman bahasa Inggeris berikut dieja dengan tepat (Set ${i+1})?`,
+                a: ["Ambulans", "Ambulan", "Ambulens"], c: 0
+            }))
+        };
+        BANK_SOALAN[3][10] = {
+            tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-trophy",
+            soalan: Array.from({length: 20}, (_, i) => ({
+                q: `Ujian Penilaian Kemasukan Holistik Tahap 1 KSSR (Soalan ${i+1}): Pilih ayat tanya yang betul.`,
+                a: ["Siapakah nama kamu?", "Nama kamu di mana?", "Kamu tinggal bila?"], c: 0
+            }))
+        };
+
+        // PEMUBAH UBAH GLOBAL
         let tahunSemasa = 1;
         let topikSemasa = 1;
         let indexSoalanSemasa = 0;
@@ -568,7 +624,6 @@
             if(snd) {
                 snd.currentTime = 0;
                 snd.play().catch(e => {
-                    // Failback jika browser block audio auto-play
                     const context = new (window.AudioContext || window.webkitAudioContext)();
                     const oscillator = context.createOscillator();
                     const gainNode = context.createGain();
