@@ -177,7 +177,6 @@
                             <h4 id="feedback-title" class="text-3xl font-black mb-2">Hebat!</h4>
                             <p id="feedback-msg" class="text-sm font-medium mb-6">Jawapan anda betul tepat sekali.</p>
                             <div class="flex justify-center space-x-4">
-                                <button id="btn-try-again" class="hidden bg-rose-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-rose-600 transition btn-bounce">Cuba Lagi</button>
                                 <button id="btn-next-q" class="bg-emerald-500 text-white font-bold px-6 py-2 rounded-full shadow hover:bg-emerald-600 transition btn-bounce">Seterusnya <i class="fas fa-arrow-right ml-1"></i></button>
                             </div>
                         </div>
@@ -614,7 +613,7 @@
             ]
         };
 
-        // PILIHAN DATA TAHUN 2 & TAHUN 3 SECARA MANUAL EXPLICIT UNTUK MENGELAKKAN RALAT FUNGSI
+        // DATA TAHUN 2 & TAHUN 3 
         for(let t=2; t<=3; t++) {
             for(let a=1; a<=10; a++) {
                 let mType = (a === 2 || a === 5 || a === 7) ? "blank" : ((a === 6) ? "drag_drop" : "mcq");
@@ -810,14 +809,14 @@
             }
         }
 
-        function tunjukMaklumBalas(isBetul) {
+        // FUNGSI MAKLUMBALAS YANG TELAH DIKEMAS KINI
+        function tunjukMaklumBalas(isBetul, jawapanBetulTeks = '') {
             mainKesanBunyi(isBetul);
             const layer = document.getElementById('feedback-layer');
             const box = document.getElementById('feedback-box');
             const icon = document.getElementById('feedback-icon');
             const title = document.getElementById('feedback-title');
             const msg = document.getElementById('feedback-msg');
-            const btnTry = document.getElementById('btn-try-again');
             const btnNext = document.getElementById('btn-next-q');
 
             layer.classList.remove('hidden');
@@ -830,28 +829,24 @@
                 title.innerText = "Tahniah! Betul";
                 title.className = "text-3xl font-black text-emerald-600 mb-2";
                 msg.innerText = "Jawapan anda tepat. Anda wira pintar!";
-                btnTry.classList.add('hidden');
-                btnNext.classList.remove('hidden');
-                btnNext.onclick = prosesSeterusnya;
             } else {
                 box.className = "bg-white border-4 border-rose-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-all";
                 icon.innerHTML = "❌";
-                title.innerText = "Cuba Lagi!";
+                title.innerText = "Jawapan Salah";
                 title.className = "text-3xl font-black text-rose-500 mb-2";
-                msg.innerText = "Jawapan kurang tepat. Sila cuba betulkan semula.";
                 
-                // Kunci murid supaya menaip semula input (tidak boleh klik butang Seterusnya)
-                btnTry.classList.remove('hidden');
-                btnNext.classList.add('hidden'); 
-                btnTry.onclick = () => {
-                    layer.classList.add('hidden');
-                    const inp = document.getElementById('blank-input-ans');
-                    if(inp) { inp.value = ''; inp.focus(); }
-                };
+                // Jika ada jawapan rujukan ralat (untuk isi tempat kosong)
+                if(jawapanBetulTeks) {
+                    msg.innerHTML = `Jawapan kurang tepat.<br><span class="font-bold text-slate-700 text-base mt-2 block bg-slate-100 py-1 rounded border">Jawapan betul: ${jawapanBetulTeks}</span>`;
+                } else {
+                    msg.innerText = "Jawapan kurang tepat.";
+                }
             }
+            
+            // Mana-mana situasi (betul atau salah), butang Seterusnya akan dipaparkan untuk terus mara
+            btnNext.onclick = prosesSeterusnya;
         }
 
-        // PEMBETULAN NAMA FUNGSI (MCQ) - Memastikan Aktiviti 3,4,8,9,10 berfungsi
         function semakJawapanMCQ(idxDipilih, idxBetul) {
             if (idxDipilih === idxBetul) {
                 skorAktivitiSemasa += 10;
@@ -872,7 +867,8 @@
                 document.getElementById('game-score').innerText = skorAktivitiSemasa;
                 tunjukMaklumBalas(true);
             } else {
-                tunjukMaklumBalas(false);
+                // Hantar parameter jawapan betul utama jika salah, tiada markah ditambah
+                tunjukMaklumBalas(false, soalanData.c[0]);
             }
         }
 
