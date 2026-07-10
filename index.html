@@ -210,7 +210,7 @@
 
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
                         <button onclick="janaSijil()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
-                            <i class="fas fa-print mr-2"></i> Cetak / Muat Turun Sijil
+                            <i class="fas fa-print mr-2"></i> Cetak / Muat Tunun Sijil
                         </button>
                         <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
                             <i class="fas fa-home mr-2"></i> Kembali ke Menu Utama
@@ -438,44 +438,66 @@
             }
         }
 
-        // DATA SOALAN AUTOMATIK
+        // ================= PENJANAAN BANK SOALAN YANG UNIK (BEBAS PENGULANGAN) =================
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
         
+        // --- DATA PILIHAN UNTUK AKTIVITI TAHUN 1 ---
+        const bks1_huruftinggi = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+        const bks1_hurufrendah = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+        const bks1_sukukata = [["BA","JU"], ["BO","LA"], ["CU","CI"], ["DA","DU"], ["FE","RI"], ["GE","LI"], ["HA","RI"], ["JA","RI"], ["KA","KI"], ["LO","RI"], ["ME","JA"], ["NA","SI"], ["PA","SU"], ["RU","SA"], ["SA","TE"], ["TO","PI"], ["SU","SU"], ["FA","IL"], ["FE","LI"], ["GA","JI"]];
+        const bks1_benda = ["Buku","Pensel","Meja","Kerusi","Beg","Pemadam","Pembaris","Papan Hitam","Tong Sampah","Tingkap","Pintu","Jam","Kipas","Lampu","Rautan","Krayon","Kertas","Botol Air","Bekal Makanan","Peta"];
+        const bks1_ejaan_betul = [["Ayam","Ayem"],["Obor","Obeor"],["Ular","Olar"],["Itik","Etek"],["Epal","Epeal"],["Cawan","Cawen"],["Kasut","Kaset"],["Rumah","Romeh"],["Gajah","Gajeh"],["Sotong","Sutung"],["Pokok","Pukuk"],["Bunga","Bunge"],["Topi","Tupe"],["Nasi","Nase"],["Ikan","Ekan"],["Lampu","Lampe"],["Awan","Awen"],["Bas","Bes"],["Teksi","Tekse"],["Kereta","Kete"]];
+        const bks1_isi_kosong = [["epal","oren","mangga"], ["buku","pemadam","beg"], ["bola","kasut","baju"], ["kucing","burung","ikan"], ["susu","kopi","teh"], ["basikal","kereta","lori"], ["pokok","bunga","rumput"], ["nasi","roti","biskut"], ["baju","seluar","topi"], ["meja","kerusi","almari"], ["pensel","pembaris","krayon"], ["awan","hujan","petir"], ["kasut","stokin","selipar"], ["ikan","ketam","udang"], ["itik","ayam","burung"], ["singa","harimau","gajah"], ["topi","payung","baju"], ["gula","garam","cuka"], ["madu","susu","sirap"], ["kek","roti","donut"]];
+        
+        // --- DATA PILIHAN UNTUK AKTIVITI TAHUN 2 ---
+        const bks2_khas = ["Sang Kancil", "Kuala Lumpur", "Proton Saga", "Universiti Malaya", "Sekolah Kebangsaan Damai", "Pak Cik Hamid", "Si Jalak", "Pulau Pinang", "Stadium Merdeka", "Sungai Rajang", "Bukit Bendera", "Jalur Gemilang", "Mei Ling", "Ravi", "Dr. Ali", "Puan Aminah", "Zoo Negara", "Muzium Negara", "Pasar Raya Sogo", "Hotel Istana"];
+        const bks2_kerja = ["menyiram", "memotong", "membuang", "membeli", "membaca", "menulis", "memasak", "berenang", "berlari", "melompat", "menari", "menyanyi", "memanjat", "menunggang", "memandu", "membasuh", "mengemas", "menjemur", "menyapu", "mengecat"];
+        const bks2_adj = ["tajam", "tumpul", "panjang", "tebal", "nipis", "tinggi", "rendah", "besar", "kecil", "wangi", "busuk", "manis", "masin", "pahit", "masam", "bersih", "kotor", "laju", "lambat", "lembut"];
+        const bks2_penjodoh = [["bilah","jarum"], ["batang","pensel"], ["biji","bola"], ["keping","roti"], ["ekor","kucing"], ["buah","rumah"], ["helai","baju"], ["laras","senapang"], ["pucuk","surat"], ["utas","rantai"], ["potong","kek"], ["gugus","anggur"], ["rumpun","buluh"], ["bilah","pisau"], ["batang","sungai"], ["biji","tembikai"], ["keping","papan"], ["ekor","burung"], ["buah","kereta"], ["helai","kertas"]];
+
+        // --- DATA PILIHAN UNTUK AKTIVITI TAHUN 3 ---
+        const bks3_abstrak = ["ilmu", "keadilan", "kebebasan", "kesihatan", "kebahagiaan", "kejayaan", "keamanan", "perpaduan", "kesabaran", "kejujuran", "keberanian", "keindahan", "kesedihan", "kegembiraan", "kasih sayang", "impian", "wawasan", "semangat", "bakat", "tenaga"];
+        const bks3_kerja_lanjut = ["menggembur", "membajak", "menuai", "memupuk", "menyemai", "mencantas", "memungut", "memasarkan", "mengairi", "merumpat", "menternak", "memelihara", "memproses", "membungkus", "mengedar", "mengeksport", "menyimpan", "memeriksa", "menggred", "menimbang"];
+        const bks3_sendi = ["di", "ke", "dari", "daripada", "kepada", "pada", "untuk", "bagi", "demi", "tentang", "seperti", "oleh", "dengan", "sejak", "sampai", "terhadap", "akan", "hingga", "antara", "dalam"];
+        const bks3_simpulan = [["anak emas","Anak yang paling disayangi"], ["buah hati","Kekasih atau orang pujaan"], ["ringan tulang","Orang yang rajin bekerja"], ["berat tulang","Orang yang malas"], ["ulat buku","Orang yang suka membaca buku"], ["kaki ayam","Tidak memakai kasut"], ["panjang tangan","Suka mencuri"], ["mandi peluh","Bekerja kuat"], ["otak cair","Orang yang sangat pandai"], ["muka tebal","Tidak tahu malu"], ["hati batu","Sangat degil"], ["khabar angin","Berita yang belum sah"], ["buah tangan","Hadiah yang dibawa"], ["pilih kasih","Tidak adil"], ["cepat tangan","Suka mencuri"], ["anak angkat","Anak orang lain yang dipelihara"], ["ayam tambatan","Orang harapan"], ["ibu keladi","Orang tua yang berkelakuan muda"], ["telinga lintah","Pendengaran yang sangat tajam"], ["kaki bangku","Tidak pandai bermain bola"]];
+
+        // MEMBINA BANK SOALAN SECARA DINAMIK SUPAYA TIDAK BERULANG DI SETIAP INDEKS (1 HINGGA 20)
+        
         // --- TAHUN 1 ---
-        BANK_SOALAN[1][1] = { tajuk: "Kenali Huruf", jenis: "mcq", ikon: "fa-font", soalan: Array.from({length: 20}, (_, i) => ({ q: `Pilih huruf besar yang betul bagi huruf kecil '${String.fromCharCode(97 + i)}'.`, a: [String.fromCharCode(65 + i), String.fromCharCode(66 + i), String.fromCharCode(67 + i), String.fromCharCode(68 + i)], c: 0 })) };
-        BANK_SOALAN[1][2] = { tajuk: "Suku Kata", jenis: "drag_drop", ikon: "fa-cubes", soalan: Array.from({length: 20}, (_, i) => ({ q: `Susun suku kata untuk perkataan suku kata terbuka ke-${i+1}:`, parts: ["BA", "JU"], correctOrder: ["BA", "JU"] })) };
-        BANK_SOALAN[1][3] = { tajuk: "Padankan Gambar", jenis: "mcq", ikon: "fa-images", soalan: Array.from({length: 20}, (_, i) => ({ q: `Apakah perkataan yang tepat untuk menggambarkan objek bilik darjah ke-${i+1}?`, a: ["Buku", "Pensel", "Meja", "Kerusi"], c: i % 4 })) };
-        BANK_SOALAN[1][4] = { tajuk: "Pilih Perkataan Betul", jenis: "mcq", ikon: "fa-spell-check", soalan: Array.from({length: 20}, (_, i) => ({ q: `Manakah ejaan perkataan yang betul (Set ${i+1})?`, a: ["Ayam", "Ayem", "Aiam", "Haiam"], c: 0 })) };
-        BANK_SOALAN[1][5] = { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-clip", soalan: Array.from({length: 20}, (_, i) => ({ q: `Ibu membeli buah ______ di pasar raya (Soalan ${i+1}).`, c: ["epal", "tomat", "pisang"] })) };
-        BANK_SOALAN[1][6] = { tajuk: "Susun Huruf", jenis: "drag_drop", ikon: "fa-font-awesome", soalan: Array.from({length: 20}, (_, i) => ({ q: `Susun huruf berikut supaya menjadi perkataan bermakna (Siri ${i+1}):`, parts: ["B", "O", "L", "A"], correctOrder: ["B", "O", "L", "A"] })) };
-        BANK_SOALAN[1][7] = { tajuk: "Susun Perkataan", jenis: "drag_drop", ikon: "fa-align-left", soalan: Array.from({length: 20}, (_, i) => ({ q: `Susun kata-kata berikut menjadi satu ayat yang lengkap (Set ${i+1}):`, parts: ["Saya", "suka", "baca", "buku."], correctOrder: ["Saya", "suka", "baca", "buku."] })) };
-        BANK_SOALAN[1][8] = { tajuk: "Betul atau Salah", jenis: "mcq", ikon: "fa-circle-question", soalan: Array.from({length: 20}, (_, i) => ({ q: `Adakah kenyataan ini benar: 'Ikan hidup di dalam air' (Soalan ${i+1})?`, a: ["Betul", "Salah"], c: 0 })) };
-        BANK_SOALAN[1][9] = { tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-file-lines", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petikan: Ini arnab putih Jamil. Arnab suka makan lobak merah. Berdasarkan petikan ${i+1}, apakah makanan arnab?`, a: ["Lobak merah", "Rumput", "Ikan"], c: 0 })) };
-        BANK_SOALAN[1][10] = { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-graduation-cap", soalan: Array.from({length: 20}, (_, i) => ({ q: `Soalan Ujian Gabungan Tahun 1 (Nombor ${i+1}): Pilih kata nama am benda.`, a: ["Pensel", "Kucing", "Ali", "Melaka"], c: 0 })) };
+        BANK_SOALAN[1][1] = { tajuk: "Kenali Huruf", jenis: "mcq", ikon: "fa-font", soalan: Array.from({length: 20}, (_, i) => ({ q: `Pilih huruf besar yang betul bagi huruf kecil '${bks1_hurufrendah[i]}'.`, a: [bks1_huruftinggi[i], bks1_huruftinggi[(i+1)%26], bks1_huruftinggi[(i+2)%26], bks1_huruftinggi[(i+3)%26]], c: 0 })) };
+        BANK_SOALAN[1][2] = { tajuk: "Suku Kata", jenis: "drag_drop", ikon: "fa-cubes", soalan: Array.from({length: 20}, (_, i) => ({ q: `Susun suku kata untuk perkataan suku kata terbuka '${bks1_sukukata[i].join('')}':`, parts: [...bks1_sukukata[i]], correctOrder: [...bks1_sukukata[i]] })) };
+        BANK_SOALAN[1][3] = { tajuk: "Padankan Objek", jenis: "mcq", ikon: "fa-images", soalan: Array.from({length: 20}, (_, i) => ({ q: `Apakah perkataan yang tepat untuk menggambarkan objek sekolah: '${bks1_benda[i]}'?`, a: [bks1_benda[i], bks1_benda[(i+1)%20], bks1_benda[(i+2)%20], bks1_benda[(i+3)%20]], c: 0 })) };
+        BANK_SOALAN[1][4] = { tajuk: "Pilih Perkataan Betul", jenis: "mcq", ikon: "fa-spell-check", soalan: Array.from({length: 20}, (_, i) => ({ q: `Manakah ejaan perkataan Melayu yang betul bagi objek ini?`, a: [bks1_ejaan_betul[i][0], bks1_ejaan_betul[i][1], "Tiada Ejaan", "Ejaan Salah"], c: 0 })) };
+        BANK_SOALAN[1][5] = { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-clip", soalan: Array.from({length: 20}, (_, i) => ({ q: `Ibu meletakkan barang iaitu ______ di atas meja dapur.`, c: [bks1_isi_kosong[i][0], bks1_isi_kosong[i][1]] })) };
+        BANK_SOALAN[1][6] = { tajuk: "Susun Huruf", jenis: "drag_drop", ikon: "fa-font-awesome", soalan: Array.from({length: 20}, (_, i) => { let kata = bks1_benda[i].toUpperCase(); return { q: `Susun huruf berikut supaya menjadi perkataan '${kata}':`, parts: kata.split(''), correctOrder: kata.split('') }; }) };
+        BANK_SOALAN[1][7] = { tajuk: "Susun Perkataan", jenis: "drag_drop", ikon: "fa-align-left", soalan: Array.from({length: 20}, (_, i) => { let ayat = [`Murid`, `itu`, `baca`, `buku_${i+1}.`]; return { q: `Susun kata-kata berikut menjadi satu ayat lengkap yang gramatis:`, parts: [...ayat], correctOrder: [...ayat] }; }) };
+        BANK_SOALAN[1][8] = { tajuk: "Betul atau Salah", jenis: "mcq", ikon: "fa-circle-question", soalan: Array.from({length: 20}, (_, i) => ({ q: `Adakah benar hidupan '${bks1_isi_kosong[i][0]}' memerlukan air dan udara untuk terus hidup?`, a: ["Betul", "Salah"], c: 0 })) };
+        BANK_SOALAN[1][9] = { tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-file-lines", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petikan: Ini haiwan peliharaan Jamil iaitu ${bks1_isi_kosong[i][0]}. Ia sangat aktif. Apakah nama hidupan yang dipelihara oleh Jamil?`, a: [bks1_isi_kosong[i][0], "Batu", "Kayu"], c: 0 })) };
+        BANK_SOALAN[1][10] = { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-graduation-cap", soalan: Array.from({length: 20}, (_, i) => ({ q: `Soalan Ujian Holistik Gabungan Tahun 1 Semakan: Antara berikut yang manakah kata nama am kategori benda?`, a: [bks1_benda[i], "Ali", "Melaka", "Sang Kancil"], c: 0 })) };
 
         // --- TAHUN 2 ---
-        BANK_SOALAN[2][1] = { tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-font", soalan: Array.from({length: 20}, (_, i) => ({ q: `Pilih Kata Nama Khas yang betul dalam ayat di bawah (Soalan ${i+1}).`, a: ["Sang Kancil", "harimau", "sekolah", "sungai"], c: 0 })) };
-        BANK_SOALAN[2][2] = { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-person-running", soalan: Array.from({length: 20}, (_, i) => ({ q: `Abang sedang _________ pokok bunga di halaman rumah (Siri ${i+1}).`, a: ["menyiram", "memotong", "membuang", "membeli"], c: 0 })) };
-        BANK_SOALAN[2][3] = { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-wand-magic-sparkles", soalan: Array.from({length: 20}, (_, i) => ({ q: `Pisau yang diasah oleh ayah itu sangat _________ (Soalan ${i+1}).`, a: ["tajam", "tumpul", "panjang", "tebal"], c: 0 })) };
-        BANK_SOALAN[2][4] = { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-calculator", soalan: Array.from({length: 20}, (_, i) => ({ q: `Kakak menggunakan se_________ jarum untuk menjahit baju (Soalan ${i+1}).`, a: ["bilah", "batang", "biji", "keping"], c: 0 })) };
-        BANK_SOALAN[2][5] = { tajuk: "Kata Hubung", jenis: "mcq", ikon: "fa-link", soalan: Array.from({length: 20}, (_, i) => ({ q: `Siti menangis _________ jarinya terluka terkena duri (Soalan ${i+1}).`, a: ["kerana", "lalu", "sambil", "tetapi"], c: 0 })) };
-        BANK_SOALAN[2][6] = { tajuk: "Susun Ayat", jenis: "drag_drop", ikon: "fa-arrow-down-1-9", soalan: Array.from({length: 20}, (_, i) => ({ q: `Susun semula perkataan ini menjadi ayat penyata yang lengkap (${i+1}):`, parts: ["Ibu", "memasak", "nasi", "lemak."], correctOrder: ["Ibu", "memasak", "nasi", "lemak."] })) };
-        BANK_SOALAN[2][7] = { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-to-square", soalan: Array.from({length: 20}, (_, i) => ({ q: `Murid-murid Tahun 2 sedang beratur di luar ______ kelas (Siri ${i+1}).`, c: ["pintu", "tingkap"] })) };
-        BANK_SOALAN[2][8] = { tajuk: "Drag and Drop", jenis: "drag_drop", ikon: "fa-hand-pointer", soalan: Array.from({length: 20}, (_, i) => ({ q: `Padankan frasa subjek and predikat dengan betul (${i+1}):`, parts: ["Adik", "bermain", "gasing."], correctOrder: ["Adik", "bermain", "gasing."] })) };
-        BANK_SOALAN[2][9] = { tajuk: "Pemahaman", jenis: "mcq", ikon: "fa-book-open-reader", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petikan: Kim Seng suka berenang pada waktu petang untuk menjaga kesihatan badan. Mengapakah Kim Seng berenang (Set ${i+1})?`, a: ["Menjaga kesihatan", "Suka-suka", "Mengisi masa lapang"], c: 0 })) };
-        BANK_SOALAN[2][10] = { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-flag", soalan: Array.from({length: 20}, (_, i) => ({ q: `Soalan Standard Penilaian Akhir Tahun 2 (No. ${i+1}): Manakah kata penguat?`, a: ["sangat", "makan", "dia", "rumah"], c: 0 })) };
+        BANK_SOALAN[2][1] = { tajuk: "Kata Nama Khas", jenis: "mcq", ikon: "fa-font", soalan: Array.from({length: 20}, (_, i) => ({ q: `Kenal pasti Kata Nama Khas yang ditulis dengan ejaan huruf besar yang betul dalam siri ini.`, a: [bks2_khas[i], "sekolah", "rumah", "padang"], c: 0 })) };
+        BANK_SOALAN[2][2] = { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-person-running", soalan: Array.from({length: 20}, (_, i) => ({ q: `Abang sedang aktiviti _________ di kawasan persekitaran rumah petang tadi.`, a: [bks2_kerja[i], bks2_kerja[(i+1)%20], bks2_kerja[(i+2)%20]], c: 0 })) };
+        BANK_SOALAN[2][3] = { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-wand-magic-sparkles", soalan: Array.from({length: 20}, (_, i) => ({ q: `Sifat fizikal objek atau keadaan suasana tersebut digambarkan paling sesuai sebagai _________ .`, a: [bks2_adj[i], bks2_adj[(i+1)%20], bks2_adj[(i+2)%20]], c: 0 })) };
+        BANK_SOALAN[2][4] = { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-calculator", soalan: Array.from({length: 20}, (_, i) => ({ q: `Kakak menggunakan se_________ ${bks2_penjodoh[i][1]} semasa melakukan aktiviti pengurusan domestik.`, a: [bks2_penjodoh[i][0], "bilah", "biji", "keping"].filter((v, idx, self) => self.indexOf(v) === idx).slice(0, 4), c: 0 })) };
+        BANK_SOALAN[2][5] = { tajuk: "Kata Hubung", jenis: "mcq", ikon: "fa-link", soalan: Array.from({length: 20}, (_, i) => ({ q: `Siti sedang mengurus tugasan _________ adiknya bermain di kawasan ruang tamu utama.`, a: ["manakala", "kerana", "lalu", "tetapi"], c: i % 4 })) };
+        BANK_SOALAN[2][6] = { tajuk: "Susun Ayat", jenis: "drag_drop", ikon: "fa-arrow-down-1-9", soalan: Array.from({length: 20}, (_, i) => { let ayat = [`Ayah`, bks2_kerja[i], `objek`, `itu.`]; return { q: `Susun semula perkataan ini menjadi ayat penyata aktif transitif yang lengkap:`, parts: [...ayat], correctOrder: [...ayat] }; }) };
+        BANK_SOALAN[2][7] = { tajuk: "Isi Tempat Kosong", jenis: "blank", ikon: "fa-pen-to-square", soalan: Array.from({length: 20}, (_, i) => ({ q: `Murid-murid sedang berkumpul secara berhemah di dalam kawasan sekitar ______ sekolah.`, c: ["dewan", "kelas"] })) };
+        BANK_SOALAN[2][8] = { tajuk: "Padanan Subjek Predikat", jenis: "drag_drop", ikon: "fa-hand-pointer", soalan: Array.from({length: 20}, (_, i) => { let ayat = [`Subjek_${i+1}`, `sedang`, `melakukan_predikat.`]; return { q: `Susun frasa subjek and predikat berikut mengikut struktur logik Melayu:`, parts: [...ayat], correctOrder: [...ayat] }; }) };
+        BANK_SOALAN[2][9] = { tajuk: "Pemahaman", jenis: "mcq", ikon: "fa-book-open-reader", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petikan: Encik Tan pergi ke ${bks2_khas[i]} menggunakan kenderaan peribadi bagi urusan penting. Ke manakah hala tuju Encik Tan?`, a: [bks2_khas[i], "Kedai Kopi", "Pasar Malam"], c: 0 })) };
+        BANK_SOALAN[2][10] = { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-flag", soalan: Array.from({length: 20}, (_, i) => ({ q: `Soalan Standard Penilaian Penguasaan Tahun 2: Manakah yang dikategorikan sebagai kata adjektif sifat?`, a: [bks2_adj[i], "berlari", "mereka", "bangunan"], c: 0 })) };
 
         // --- TAHUN 3 ---
-        BANK_SOALAN[3][1] = { tajuk: "Kata Nama", jenis: "mcq", ikon: "fa-tags", soalan: Array.from({length: 20}, (_, i) => ({ q: `Antara berikut, perkataan manakah yang merupakan Kata Nama Am Abstrak (Set ${i+1})?`, a: ["ilmu", "meja", "buku", "guru"], c: 0 })) };
-        BANK_SOALAN[3][2] = { tajuk: "Kata Kerja", jenis: "mcq", ikon: "fa-skating", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petani itu sedang _________ tanah menggunakan cangkul (Soalan ${i+1}).`, a: ["menggembur", "memotong", "menyiram", "menabur"], c: 0 })) };
-        BANK_SOALAN[3][3] = { tajuk: "Kata Adjektif", jenis: "mcq", ikon: "fa-palette", soalan: Array.from({length: 20}, (_, i) => ({ q: `Suasana di puncak Cameron Highlands itu sangat _________ (Soalan ${i+1}).`, a: ["sejuk", "panas", "nyaman", "redup"], c: 0 })) };
-        BANK_SOALAN[3][4] = { tajuk: "Kata Sendi Nama", jenis: "mcq", ikon: "fa-compass", soalan: Array.from({length: 20}, (_, i) => ({ q: `Rombongan sekolah kami baru sahaja tiba _________ Kuala Lumpur (Soalan ${i+1}).`, a: ["di", "ke", "dari", "daripada"], c: 0 })) };
-        BANK_SOALAN[3][5] = { tajuk: "Penjodoh Bilangan", jenis: "mcq", ikon: "fa-hashtag", soalan: Array.from({length: 20}, (_, i) => ({ q: `Ayah membeli tiga _________ tikar mengkuang yang halus buatannya (Soalan ${i+1}).`, a: ["bidang", "helai", "gulung", "keping"], c: 0 })) };
-        BANK_SOALAN[3][6] = { tajuk: "Simpulan Bahasa", jenis: "mcq", ikon: "fa-brain", soalan: Array.from({length: 20}, (_, i) => ({ q: `Anak yang paling disayangi oleh ibu dan bapa dipanggil sebagai... (Siri ${i+1})`, a: ["anak emas", "buah hati", "anak angkat", "ringan tulang"], c: 0 })) };
-        BANK_SOALAN[3][7] = { tajuk: "Bina Ayat", jenis: "drag_drop", ikon: "fa-pen-fancy", soalan: Array.from({length: 20}, (_, i) => ({ q: `Susun semula perkataan di bawah bagi membina ayat majmuk yang gramatis (${i+1}):`, parts: ["Kita", "mesti", "rajin", "belajar."], correctOrder: ["Kita", "mesti", "rajin", "belajar."] })) };
-        BANK_SOALAN[3][8] = { tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-book", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petikan: Melaka terkenal sebagai sebuah negeri bersejarah. Pelancong suka datang ke sini. Berdasarkan maklumat ${i+1}, negeri manakah yang dikunjungi?`, a: ["Melaka", "Penang", "Kedah"], c: 0 })) };
-        BANK_SOALAN[3][9] = { tajuk: "Word Search", jenis: "mcq", ikon: "fa-magnifying-glass", soalan: Array.from({length: 20}, (_, i) => ({ q: `Manakah antara perkataan pinjaman bahasa Inggeris berikut dieja dengan tepat (Set ${i+1})?`, a: ["Ambulans", "Ambulan", "Ambulens"], c: 0 })) };
-        BANK_SOALAN[3][10] = { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-trophy", soalan: Array.from({length: 20}, (_, i) => ({ q: `Ujian Penilaian Kemasukan Holistik Tahap 1 KSSR (Soalan ${i+1}): Pilih ayat tanya yang betul.`, a: ["Siapakah nama kamu?", "Nama kamu di mana?", "Kamu tinggal bila?"], c: 0 })) };
+        BANK_SOALAN[3][1] = { tajuk: "Kata Nama Abstrak", jenis: "mcq", ikon: "fa-tags", soalan: Array.from({length: 20}, (_, i) => ({ q: `Antara perkataan tatabahasa berikut, manakah merupakan jenis Kata Nama Am Abstrak?`, a: [bks3_abstrak[i], "meja kayu", "kerusi plastik", "guru sekolah"], c: 0 })) };
+        BANK_SOALAN[3][2] = { tajuk: "Kata Kerja Lanjutan", jenis: "mcq", ikon: "fa-skating", soalan: Array.from({length: 20}, (_, i) => ({ q: `Pihak pengurusan syarikat tempatan itu berusaha _________ barangan komoditi pertanian negara.`, a: [bks3_kerja_lanjut[i], bks3_kerja_lanjut[(i+1)%20], bks3_kerja_lanjut[(i+2)%20]], c: 0 })) };
+        BANK_SOALAN[3][3] = { tajuk: "Kata Adjektif Pancaindera", jenis: "mcq", ikon: "fa-palette", soalan: Array.from({length: 20}, (_, i) => ({ q: `Keadaan fizikal makanan atau persekitaran tempat tersebut dirasai amat _________ oleh pengunjung.`, a: [bks2_adj[i], bks2_adj[(i+1)%20], bks2_adj[(i+2)%20]], c: 0 })) };
+        BANK_SOALAN[3][4] = { tajuk: "Kata Sendi Nama", jenis: "mcq", ikon: "fa-compass", soalan: Array.from({length: 20}, (_, i) => ({ q: `Rombongan lawatan sambil belajar sekolah kami akhirnya tiba _________ destinasi yang dirancang.`, a: [bks3_sendi[i % 20], "oleh", "tentang", "demi"], c: 0 })) };
+        BANK_SOALAN[3][5] = { tajuk: "Penjodoh Bilangan Lanjutan", jenis: "mcq", ikon: "fa-hashtag", soalan: Array.from({length: 20}, (_, i) => ({ q: `Pihak berkuasa telah menjumpai beberapa _________ barangan bukti di lokasi kejadian tersebut.`, a: [bks2_penjodoh[i][0], "ekor", "orang", "batang"].filter((v, idx, self) => self.indexOf(v) === idx).slice(0, 4), c: 0 })) };
+        BANK_SOALAN[3][6] = { tajuk: "Simpulan Bahasa", jenis: "mcq", ikon: "fa-brain", soalan: Array.from({length: 20}, (_, i) => ({ q: `Apakah maksud simpulan bahasa bagi ungkapan Melayu klasik '${bks3_simpulan[i][0]}'?`, a: [bks3_simpulan[i][1], "Orang yang suka tidur", "Mengikut kata orang", "Sifat pemarah"], c: 0 })) };
+        BANK_SOALAN[3][7] = { tajuk: "Bina Ayat Kreatif", jenis: "drag_drop", ikon: "fa-pen-fancy", soalan: Array.from({length: 20}, (_, i) => { let ayat = [`Masyarakat`, `mahu`, bks3_abstrak[i], `dikekalkan.`]; return { q: `Susun semula perkataan di bawah bagi membina struktur ayat majmuk bertingkat yang gramatis:`, parts: [...ayat], correctOrder: [...ayat] }; }) };
+        BANK_SOALAN[3][8] = { tajuk: "Pemahaman Petikan", jenis: "mcq", ikon: "fa-book", soalan: Array.from({length: 20}, (_, i) => ({ q: `Petikan: Masyarakat Malaysia terkenal dengan nilai ${bks3_abstrak[i]} sejak dahulu lagi. Apakah nilai murni yang disebut dalam petikan tersebut?`, a: [bks3_abstrak[i], "Sifat angkuh", "Sifat tamak"], c: 0 })) };
+        BANK_SOALAN[3][9] = { tajuk: "Ejaan Perkataan Pinjaman", jenis: "mcq", ikon: "fa-magnifying-glass", soalan: Array.from({length: 20}, (_, i) => { let senarai_eja = [["Ambulans","Ambulan"],["Bas","Bes"],["Teksi","Tekse"],["Sains","Sain"],["Klinik","Klenik"],["Zoo","Zu"],["Radio","Redio"],["Televisyen","Tv"],["Komputer","Komputor"],["Telefon","Talifon"],["Muzium","Musium"],["Restoran","Rastoran"],["Sukan","Suken"],["Sekolah","Sekolah_salah"],["Sijil","Sijel"],["Gred","Grid"],["Emas","Emes"],["Perak","Perek"],["Gangsa","Gangse"],["Kuiz","Kues"]]; return { q: `Manakah ejaan perkataan pinjaman istilah moden yang tepat (Set ke-${i+1})?`, a: [senarai_eja[i%20][0], senarai_eja[i%20][1]], c: 0 }; }) };
+        BANK_SOALAN[3][10] = { tajuk: "Kuiz Akhir", jenis: "mcq", ikon: "fa-trophy", soalan: Array.from({length: 20}, (_, i) => ({ q: `Soalan Standard Penilaian Pentaksiran Holistik Tahap 1 KSSR: Berikan simpulan bahasa bagi individu bermaksud '${bks3_simpulan[i][1]}'.`, a: [bks3_simpulan[i][0], "kaki bangku", "hidung tinggi", "kepala batu"], c: 0 })) };
 
         let tahunSemasa = 1;
         let topikSemasa = 1;
@@ -584,6 +606,7 @@
             const dataTopik = BANK_SOALAN[tahunSemasa][idTopik];
             senaraiSoalanAktif = [...dataTopik.soalan];
             
+            // Rawak Kedudukan Soalan Supaya Pengalaman Unik
             for (let i = senaraiSoalanAktif.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [senaraiSoalanAktif[i], senaraiSoalanAktif[j]] = [senaraiSoalanAktif[j], senaraiSoalanAktif[i]];
@@ -612,15 +635,22 @@
             const dataTopik = BANK_SOALAN[tahunSemasa][topikSemasa];
 
             if (dataTopik.jenis === "mcq") {
+                // Rawak Jawapan Pilihan MCQ Supaya Kedudukan 'A' Sentiasa Bertukar
+                let senaraiPilihan = soalanData.a.map((pilihan, idx) => ({ teks: pilihan, asal: idx }));
+                for (let i = senaraiPilihan.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [senaraiPilihan[i], senaraiPilihan[j]] = [senaraiPilihan[j], senaraiPilihan[i]];
+                }
+
                 area.innerHTML = `
                     <div class="text-center my-4">
                         <p class="text-xl md:text-2xl font-bold text-slate-800 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300 inline-block w-full">${soalanData.q}</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                        ${soalanData.a.map((pilihan, idx) => `
-                            <button onclick="semakJawapanMCQ(${idx})" class="bg-blue-50 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-100/50 p-4 rounded-2xl font-bold text-left text-slate-700 transition shadow-sm btn-bounce text-base flex items-center">
+                        ${senaraiPilihan.map((obj, idx) => `
+                            <button onclick="semakJawapanMCQLanjutan(${obj.asal}, ${soalanData.c})" class="bg-blue-50 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-100/50 p-4 rounded-2xl font-bold text-left text-slate-700 transition shadow-sm btn-bounce text-base flex items-center">
                                 <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3 text-xs">${String.fromCharCode(65 + idx)}</span>
-                                ${pilihan}
+                                ${obj.teks}
                             </button>
                         `).join('')}
                     </div>
@@ -696,9 +726,8 @@
             }
         }
 
-        function semakJawapanMCQ(idxPilihan) {
-            const soalanData = senaraiSoalanAktif[indexSoalanSemasa];
-            if (idxPilihan === soalanData.c) {
+        function semakJawapanMCQLanjutan(idxDipilih, idxBetul) {
+            if (idxDipilih === idxBetul) {
                 skorAktivitiSemasa += 10;
                 document.getElementById('game-score').innerText = skorAktivitiSemasa;
                 tunjukMaklumBalas(true);
