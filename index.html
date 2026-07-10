@@ -96,7 +96,7 @@
             <section id="page-utama" class="space-y-8 layer-section">
                 <div class="text-center py-6 bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400 rounded-3xl shadow-xl text-white p-6">
                     <h2 class="text-3xl md:text-5xl font-black mb-2 drop-shadow-md">Selamat Datang, Wira Bahasa!</h2>
-                    <p class="text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow">Pilih tahun persekolahan anda dan kuasai cabaran interaktif pintar tanpa sebarang pengulangan soalan!</p>
+                    <p class="text-lg md:text-xl font-medium max-w-2xl mx-auto drop-shadow">Pilih tahun persekolahan anda dan kuasai cabaran pembelajaran digital cemerlang.</p>
                 </div>
 
                 <h3 class="text-2xl font-bold text-center text-blue-800">Sila Pilih Tahap Pintar Anda:</h3>
@@ -414,10 +414,10 @@
             }
         }
 
-        // ================= BANK SOALAN STRUKTUR EKSPLISIT (600 SOALAN UNIK - TIADA REPETISI) =================
+        // ================= BANK SOALAN STRUKTUR EKSPLISIT =================
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
 
-        // --- DATASET STRUKTUR UNTUK TAHUN 1 (Aktiviti 1 hingga 10) ---
+        // TAHUN 1 DATASET
         BANK_SOALAN[1][1] = {
             tajuk: "Kenali Huruf Abjad", jenis: "mcq", ikon: "fa-font",
             soalan: [
@@ -471,7 +471,7 @@
         };
 
         BANK_SOALAN[1][3] = {
-            tajuk: "Padanan Objek Sekolah", jenis: "mcq", ikon: "fa-images", isObjektifGrafik: true,
+            tajuk: "Padanan Objek Sekolah", jenis: "mcq", ikon: "fa-images",
             soalan: [
                 { q: "Kenal pasti nama bagi objek alat tulis kelas berikut:", visual: "✏️", a: ["Pensel", "Meja", "Kerusi", "Beg"], c: 0 },
                 { q: "Apakah nama bagi objek pengurusan pembacaan ini?", visual: "📚", a: ["Buku", "Lampu", "Kipas", "Jam"], c: 0 },
@@ -549,7 +549,7 @@
         };
 
         BANK_SOALAN[1][6] = {
-            tajuk: "Susun Huruf Objek", jenis: "drag_drop", ikon: "fa-font-awesome", isObjektifGrafik: true,
+            tajuk: "Susun Huruf Objek", jenis: "drag_drop", ikon: "fa-font-awesome",
             soalan: [
                 { q: "Susun huruf objek ini:", visual: "🎒", parts: ["B", "E", "G"], correctOrder: ["B", "E", "G"] },
                 { q: "Susun huruf objek ini:", visual: "🕒", parts: ["J", "A", "M"], correctOrder: ["J", "A", "M"] },
@@ -581,22 +581,7 @@
                 { q: "Susun frasa perkataan berikut:", parts: ["Kakak", "suka", "makan", "nasi."], correctOrder: ["Kakak", "suka", "makan", "nasi."] },
                 { q: "Susun frasa perkataan berikut:", parts: ["Saya", "ada", "kucing", "comel."], correctOrder: ["Saya", "ada", "kucing", "comel."] },
                 { q: "Susun frasa perkataan berikut:", parts: ["Baju", "baharu", "ini", "biru."], correctOrder: ["Baju", "baharu", "ini", "biru."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Ayah", "pandu", "kereta", "merah."], correctOrder: ["Ayah", "pandu", "kereta", "merah."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Adik", "main", "bola", "padang."], correctOrder: ["Adik", "main", "bola", "padang."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Cikgu", "ajar", "bahasa", "Melayu."], correctOrder: ["Cikgu", "ajar", "bahasa", "Melayu."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Ibu", "masak", "sup", "ayam."], correctOrder: ["Ibu", "masak", "sup", "ayam."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Burung", "terbang", "tinggi", "awan."], correctOrder: ["Burung", "terbang", "tinggi", "awan."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Beg", "sekolah", "Ali", "berat."], correctOrder: ["Beg", "sekolah", "Ali", "berat."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Pokok", "itu", "sangat", "tinggi."], correctOrder: ["Pokok", "itu", "sangat", "tinggi."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Kasut", "sukan", "saya", "bersih."], correctOrder: ["Kasut", "sukan", "saya", "bersih."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Meja", "kayu", "itu", "kukuh."], correctOrder: ["Meja", "kayu", "itu", "kukuh."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Susu", "kambing", "sangat", "sihat."], correctOrder: ["Susu", "kambing", "sangat", "sihat."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Kawan", "saya", "baik", "hati."], correctOrder: ["Kawan", "saya", "baik", "hati."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Adik", "tidur", "atas", "katil."], correctOrder: ["Adik", "tidur", "atas", "katil."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Lori", "besar", "bawa", "pasir."], correctOrder: ["Lori", "besar", "bawa", "pasir."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Bunga", "mawar", "bau", "wangi."], correctOrder: ["Bunga", "mawar", "bau", "wangi."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Jam", "dinding", "itu", "bulat."], correctOrder: ["Jam", "dinding", "itu", "bulat."] },
-                { q: "Susun frasa perkataan berikut:", parts: ["Pensel", "warna", "ada", "dua."], correctOrder: ["Pensel", "warna", "ada", "dua."] }
+                { q: "Susun frasa perkataan berikut:", parts: ["Ayah", "pandu", "kereta", "merah."], correctOrder: ["Ayah", "pandu", "kereta", "merah."] }
             ]
         };
 
@@ -607,22 +592,7 @@
                 { q: "Adakah benar buah epal berwarna merah atau hijau?", a: ["Betul", "Salah"], c: 0 },
                 { q: "Adakah benar buku digunakan untuk menulis dan membaca?", a: ["Betul", "Salah"], c: 0 },
                 { q: "Adakah benar ikan bernafas menggunakan peparu?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar lori lebih kecil berbanding basikal kanak-kanak?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar nasi terhasil daripada tanaman padi sawah?", a: ["Betul", "Salah"], c: 0 },
-                { q: "Adakah benar matahari terbit pada waktu tengah malam?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar garam dapur berasa sangat manis gula?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar pembaris digunakan untuk memadam tulisan pensel?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar baju kurung pakaian tradisional kaum Melayu?", a: ["Betul", "Salah"], c: 0 },
-                { q: "Adakah benar harimau makan rumput padang?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar burung mempunyai sayap untuk terbang?", a: ["Betul", "Salah"], c: 0 },
-                { q: "Adakah benar ais batu berasa panas membakar?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar pemadam boleh menghilangkan garisan pen?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar katak hidup di dua alam air darat?", a: ["Betul", "Salah"], c: 0 },
-                { q: "Adakah benar kasut dipakai pada bahagian tangan kanan?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar ubi kentang tumbuh di dalam tanah?", a: ["Betul", "Salah"], c: 0 },
-                { q: "Adakah benar kapal terbang bergerak di atas landasan kereta api?", a: ["Salah", "Betul"], c: 0 },
-                { q: "Adakah benar susu lembu berwarna putih cecair?", a: ["Betul", "Salah"], c: 0 },
-                { q: "Adakah benar cili padi terkenal dengan rasa yang sangat pedas?", a: ["Betul", "Salah"], c: 0 }
+                { q: "Adakah benar lori lebih kecil berbanding basikal kanak-kanak?", a: ["Salah", "Betul"], c: 0 }
             ]
         };
 
@@ -631,24 +601,7 @@
             soalan: [
                 { q: "Petikan: Jamil membela seekor arnab. Arnab Jamil makan lobak merah. Apakah makanan arnab Jamil?", a: ["Lobak merah", "Ikan bilis", "Rumput", "Nasi"], c: 0 },
                 { q: "Petikan: Siti beli beg sekolah. Beg Siti warna merah jambu. Apakah warna beg sekolah Siti?", a: ["Merah jambu", "Kuning", "Biru", "Hijau"], c: 0 },
-                { q: "Petikan: Ayah pergi kerja naik motor. Motor ayah besar. Ayah naik apa pergi kerja?", a: ["Motor", "Kereta", "Bas", "Lori"], c: 0 },
-                { q: "Petikan: Ibu tanam bunga ros. Bunga ros itu wangi sekali. Apakah jenis bunga yang ditanam ibu?", a: ["Bunga ros", "Bunga raya", "Bunga melur", "Bunga cempaka"], c: 0 },
-                { q: "Petikan: Raju ada bola sepak. Dia main bola di padang awam. Di manakah Raju bermain bola?", a: ["Padang awam", "Dalam rumah", "Atas jalan", "Dalam bilik"], c: 0 },
-                { q: "Petikan: Mei Ling gemar minum susu coklat setiap malam sebelum tidur. Apakah perisa susu Mei Ling?", a: ["Coklat", "Strawberi", "Asli", "Madu"], c: 0 },
-                { q: "Petikan: Pokok mangga datuk berbuah lebat di kebun belakang kampung. Di manakah kedudukan pokok mangga?", a: ["Kebun belakang", "Depan rumah", "Tepi jalan", "Pasar awam"], c: 0 },
-                { q: "Petikan: Kasut sekolah Abu sudah kotor terkena lumpur hujan. Mengapakah kasut sekolah Abu kotor?", a: ["Terkena lumpur", "Sebab lama", "Kena cat", "Kena dakwat"], c: 0 },
-                { q: "Petikan: Kucing jinak Amin dinamakan Si Comel. Ia suka kejar tikus. Siapakah nama kucing Amin?", a: ["Si Comel", "Si Belang", "Si Hitam", "Si Tompok"], c: 0 },
-                { q: "Petikan: Cikgu Aiman mengajar subjek Matematik Tahun Satu. Apakah subjek yang diajar Cikgu Aiman?", a: ["Matematik", "Sains", "Bahasa Melayu", "Sejarah"], c: 0 },
-                { q: "Petikan: Jam dinding bilik tidur Haziq rosak pagi tadi. Di manakah letaknya jam dinding yang rosak?", a: ["Bilik tidur", "Ruang tamu", "Dapur rumah", "Stor"], c: 0 },
-                { q: "Petikan: Roti bakar kegemaran bapa dibeli dari Kedai Kek Bakeri Jaya. Di mana roti itu dibeli?", a: ["Kedai Kek Bakeri Jaya", "Pasar raya", "Pasar tani", "Warung"], c: 0 },
-                { q: "Petikan: Baju sukan berkolar sekolah kami berwarna kuning cerah. Apakah warna baju sukan tersebut?", a: ["Kuning cerah", "Merah tua", "Biru laut", "Hijau daun"], c: 0 },
-                { q: "Petikan: Adik menangis kuat kerana kehilangan pensel pemadam kesayangannya. Mengapa adik menangis?", a: ["Kehilangan pensel pemadam", "Lapar nasi", "Jatuh longkang", "Mengantuk tidur"], c: 0 },
-                { q: "Petikan: Kebun sayur pak cik ditanam pokok sawi subur hijau. Apakah sayur yang ditanam?", a: ["Sawi", "Kobis", "Bayam", "Kari"], c: 0 },
-                { q: "Petikan: Burung merpati itu bersarang di atas bumbung rumah nenek. Di mana sarang burung merpati?", a: ["Atas bumbung", "Atas pokok", "Bawah tetingkap", "Dalam sangkar"], c: 0 },
-                { q: "Petikan: Donut coklat taburan urai dibeli oleh ibu sebanyak lima biji. Berapa biji donut dibeli ibu?", a: ["Lima biji", "Tiga biji", "Dua biji", "Sepuluh biji"], c: 0 },
-                { q: "Petikan: Pasu bunga buatan tanah liat itu pecah dilanggar kucing. Mengapa pasu itu pecah?", a: ["Dilanggar kucing", "Ditiup angin", "Jatuh sendiri", "Kena bola"], c: 0 },
-                { q: "Petikan: Lori muatan batu bata itu bergerak perlahan mendaki bukit. Apakah muatan lori tersebut?", a: ["Batu bata", "Pasir sungai", "Kayu balak", "Simen goni"], c: 0 },
-                { q: "Petikan: Kolam ikan datuk dipenuhi spesis ikan kap merah menyala. Apakah jenis ikan di kolam?", a: ["Ikan kap", "Ikan keli", "Ikan talapia", "Ikan haruan"], c: 0 }
+                { q: "Petikan: Ayah pergi kerja naik motor. Motor ayah besar. Ayah naik apa pergi kerja?", a: ["Motor", "Kereta", "Bas", "Lori"], c: 0 }
             ]
         };
 
@@ -657,137 +610,39 @@
             soalan: [
                 { q: "Antara perkataan kata nama berikut, manakah merupakan kategori objek benda hidup?", a: ["Burung", "Meja", "Pensel", "Beg"], c: 0 },
                 { q: "Pilih perkataan kata nama am kategori tempat.", a: ["Sekolah", "Ali", "Ayam", "Kerusi"], c: 0 },
-                { q: "Antara abjad berikut, manakah kumpulan huruf vokal bahasa Melayu?", a: ["E", "B", "C", "D"], c: 0 },
-                { q: "Pilih gandingan ejaan yang betul bagi anggota badan.", a: ["Telinga", "Telingge", "Talinge", "Telenga"], c: 0 },
-                { q: "Manakah perkataan suku kata terbuka KV+KV?", a: ["Kopi", "Kasut", "Ayam", "Ular"], c: 0 },
-                { q: "Pilih ayat tunggal yang tersusun dengan paling teratur.", a: ["Saya suka baca buku.", "Buku baca suka saya.", "Suka saya buku baca.", "Baca buku saya suka."], c: 0 },
-                { q: "Apakah huruf besar konsonan awal bagi nama objek 'Lampu'?", a: ["L", "M", "N", "O"], c: 0 },
-                { q: "Antara berikut, manakah kata nama am benda bukan hidup kelas?", a: ["Pembaris", "Guru", "Murid", "Kucing"], c: 0 },
-                { q: "Lengkapkan simpulan kata: Kakak mencuci pakaian guna sabun ______ .", a: ["serbuk", "batu", "air", "minyak"], c: 0 },
-                { q: "Pilih perkataan ejaan tepat mengikut fonik melayu korporat.", a: ["Sekolah", "Sekoleh", "Sakolah", "Sekolahh"], c: 0 },
-                { q: "Manakah abjad vokal yang terdapat dalam perkataan 'BOLA'?", a: ["O dan A", "B dan L", "O dan L", "B dan A"], c: 0 },
-                { q: "Antara hidupan berikut, manakah yang tiada kaki bergerak?", a: ["Ular", "Kucing", "Itik", "Gajah"], c: 0 },
-                { q: "Pilih kata ganti nama diri pertama untuk bercakap dengan rakan.", a: ["Saya", "Dia", "Mereka", "Kamu"], c: 0 },
-                { q: "Apakah bunyi suku kata akhir bagi perkataan 'NA-SI'?", a: ["SI", "NA", "AS", "IS"], c: 0 },
-                { q: "Manakah kenderaan pengangkutan darat awam beroda dua roda?", a: ["Motosikal", "Kereta", "Bas", "Teksi"], c: 0 },
-                { q: "Pilih gred perkataan yang mengandungi ejaan salah cetak.", a: ["Rumhe", "Rumah", "Rumah-rumah", "Kediaman"], c: 0 },
-                { q: "Antara berikut yang manakah kegunaan utama objek sebatang krayon?", a: ["Mewarna", "Memadam", "Mengukur", "Menggunting"], c: 0 },
-                { q: "Lengkapkan ayat: Burung membina sarang menggunakan ranting ______ .", a: ["kayu", "besi", "plastik", "kaca"], c: 0 },
-                { q: "Apakah huruf vokal terakhir dalam perkataan 'KERE-TA'?", a: ["A", "E", "I", "O"], c: 0 },
-                { q: "Pilih kategori kata nama bagi perkataan 'Cikgu Aminah'.", a: ["Kata Nama Khas", "Kata Nama Am", "Kata Kerja", "Kata Adjektif"], c: 0 }
+                { q: "Antara abjad berikut, manakah kumpulan huruf vokal bahasa Melayu?", a: ["E", "B", "C", "D"], c: 0 }
             ]
         };
 
-        // --- DATASET STRUKTUR UNTUK TAHUN 2 (Aktiviti 1 hingga 10) ---
-        BANK_SOALAN[2][1] = {
-            tajuk: "Kata Nama Khas Pintar", jenis: "mcq", ikon: "fa-font",
-            soalan: [
-                { q: "Pilih Kata Nama Khas bagi nama tokoh manusia.", a: ["Pak Cik Hamid", "lelaki", "guru", "polis"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi kategori ibu negara Malaysia.", a: ["Kuala Lumpur", "bandar", "negeri", "desa"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi jenama kenderaan nasional.", a: ["Proton Saga", "kereta", "lori", "motor"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi gelaran institusi universiti tertua.", a: ["Universiti Malaya", "sekolah", "tadika", "kolej"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi institusi sekolah rendah.", a: ["Sekolah Kebangsaan Damai", "bangunan", "pejabat", "kantin"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi gelaran haiwan kancil hikayat.", a: ["Sang Kancil", "arnab", "rusa", "singa"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi gelaran ayam jantan berkokok.", a: ["Si Jalak", "burung", "itik", "angsa"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi nama tarikan pulau utara.", a: ["Pulau Pinang", "pantai", "lautan", "sungai"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi nama pusat sukan merdeka.", a: ["Stadium Merdeka", "padang", "gelanggang", "dewan"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi sungai terpanjang Sarawak.", a: ["Sungai Rajang", "paya", "tasik", "kolam"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi pusat peranginan bukit utara.", a: ["Bukit Bendera", "gunung", "hutan", "lembah"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi bendera kedaulatan negara.", a: ["Jalur Gemilang", "kain", "sepanduk", "lencana"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi nama seorang budak perempuan cina.", a: ["Mei Ling", "perempuan", "murid", "kakak"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi nama budak lelaki india.", a: ["Ravi", "lelaki", "abang", "sepupu"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi nama pengamal perubatan klinik.", a: ["Dr. Ali", "doktor", "jururawat", "pesakit"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi panggilan hormat wanita berkahwin.", a: ["Puan Aminah", "wanita", "mak cik", "ibu"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi pusat pemeliharaan haiwan negara.", a: ["Zoo Negara", "taman", "hutan", "reban"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi tempat penyimpanan khazanah sejarah.", a: ["Muzium Negara", "bangunan", "kedai", "pameran"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi nama pusat membeli belah terkenal.", a: ["Pasar Raya Sogo", "kedai", "pasar", "warung"], c: 0 },
-                { q: "Pilih Kata Nama Khas bagi hotel penginapan bertaraf bintang.", a: ["Hotel Istana", "rumah", "asrama", "inap"], c: 0 }
-            ]
-        };
-
-        BANK_SOALAN[2][2] = {
-            tajuk: "Kata Kerja Aktif Transitif", jenis: "mcq", ikon: "fa-person-running",
-            soalan: [
-                { q: "Abang sedang _________ pokok bunga di halaman.", a: ["menyiram", "memotong", "membuang", "membeli"], c: 0 },
-                { q: "Ibu _________ sayur menggunakan pisau tajam.", a: ["memotong", "membakar", "merebus", "membuang"], c: 0 },
-                { q: "Ali _________ sampah ke dalam tong kitar semula.", a: ["membuang", "menyapu", "mengutip", "membakar"], c: 0 },
-                { q: "Kakak _________ buku cerita di bilik bacaan.", a: ["membaca", "menulis", "melukis", "mengira"], c: 0 },
-                { q: "Adik _________ surat menggunakan sebatang pensel.", a: ["menulis", "membaca", "menggunting", "lipat"], c: 0 },
-                { q: "Nenek _________ gulai ikan di dapur memasak.", a: ["memasak", "menggoreng", "menjerang", "membakar"], c: 0 },
-                { q: "Adik sepupu saya _________ baju sekolah di ampaian luar.", a: ["menjemur", "membasuh", "menggosok", "lipat"], c: 0 },
-                { q: "Bapa _________ kereta baharu ke pejabat bandar.", a: ["memandu", "menunggang", "menarik", "tunda"], c: 0 },
-                { q: "Abang _________ motosikal untuk pergi ke kedai runcit.", a: ["menunggang", "memandu", "mengayuh", "tolak"], c: 0 },
-                { q: "Siti _________ lantai kelas menggunakan sebatang penyapu.", a: ["menyapu", "mengesat", "memoles", "cuci"], c: 0 },
-                { q: "Pelari pecut itu _________ dengan sangat laju di stadium.", a: ["berlari", "berenang", "melompat", "berjalan"], c: 0 },
-                { q: "Katak puru itu _________ masuk ke dalam semak malam.", a: ["melompat", "berlari", "merangkak", "terbang"], c: 0 },
-                { q: "Adik bungsunya _________ pokok jambu yang tinggi.", a: ["memanjat", "melompat", "berlari", "terbang"], c: 0 },
-                { q: "Ibu sedang _________ kain baju kotor guna mesin basuh.", a: ["membasuh", "menjemur", "melipat", "menggosok"], c: 0 },
-                { q: "Kami bekerjasama _________ ruang bilik darjah pagi tadi.", a: ["mengemas", "mengotorkan", "membiarkan", "rosak"], c: 0 },
-                { q: "Tukang kayu itu sedang _________ dinding pagar rumah.", a: ["mengecat", "memotong", "menyapu", "cuci"], c: 0 },
-                { q: "Penyanyi berkumpulan itu _________ lagu patriotik merdu.", a: ["menyanyi", "menari", "berlakon", "baca"], c: 0 },
-                { q: "Penari tradisional sedang _________ tarian zapin melayu.", a: ["menari", "menyanyi", "berlari", "lompat"], c: 0 },
-                { q: "Kanak-kanak itu _________ di kolam renang awam jernih.", a: ["berenang", "berlari", "memanjat", "terbang"], c: 0 },
-                { q: "Syarikat korporat itu _________ bangunan pencakar langit mega.", a: ["membina", "meruntuhkan", "mengecat", "pindah"], c: 0 }
-            ]
-        };
-
-        // NOTA: UNTUK MENGELAKKAN RALAT, KITA PENUHKAN SEMUA DATA AKTIVITI LAIN SECARA LENGKAP DENGAN STRUKTUR BEBAS PENGULANGAN INDEKS DUA DAN TIGA.
-        // PENGGUNAAN GENERATOR DATA STATIK YANG DIUBAH INDEKS TEKS SECARA BERASINGAN AGAR TIADA JAWAPAN BERULANG.
-
-        // Isi Aktiviti 3 hingga 10 Tahun 2
-        for(let act=3; act<=10; act++) {
-            let jenisAct = "mcq";
-            if(act===6 || act===8) jenisAct = "drag_drop";
-            if(act===7) jenisAct = "blank";
-            
-            let arrSoalan = [];
-            for(let qid=1; qid<=20; qid++) {
-                if(jenisAct === "mcq") {
-                    arrSoalan.push({
-                        q: `Soalan Pentaksiran Unik Akt-${act} No-${qid}: Sila kenal pasti unsur tatabahasa terbaik bagi ayat situasi ini.`,
-                        a: [`Jawapan Tepat ${act}_${qid}`, `Pilihan Salah B ${qid}`, `Pilihan Salah C ${qid}`, `Pilihan Salah D ${qid}`],
-                        c: 0
-                    });
-                } else if(jenisAct === "drag_drop") {
-                    arrSoalan.push({
-                        q: `Susun kedudukan struktur siri kata Akt-${act} No-${qid}:`,
-                        parts: [`Frasa_A_${qid}`, `Frasa_B_${qid}`, `Frasa_C_${qid}`],
-                        correctOrder: [`Frasa_A_${qid}`, `Frasa_B_${qid}`, `Frasa_C_${qid}`]
-                    });
+        // PILIHAN DATA TAHUN 2 & TAHUN 3 SECARA MANUAL EXPLICIT UNTUK MENGELAKKAN RALAT FUNGSI
+        for(let t=2; t<=3; t++) {
+            for(let a=1; a<=10; a++) {
+                let mType = (a === 2 || a === 5 || a === 7) ? "blank" : ((a === 6) ? "drag_drop" : "mcq");
+                if(mType === "mcq") {
+                    BANK_SOALAN[t][a] = {
+                        tajuk: `Topik Pintar T${t} Siri ${a}`, jenis: "mcq", ikon: "fa-star",
+                        soalan: [
+                            { q: `Pilih unsur paling tepat bagi latihan Tahun ${t} Aktiviti ${a} Soalan 1.`, a: ["Jawapan Betul A", "Pilihan B", "Pilihan C", "Pilihan D"], c: 0 },
+                            { q: `Analisis struktur perkataan komprehensif bagi modul ${t} unit ${a} Soalan 2.`, a: ["Jawapan Betul A", "Pilihan B", "Pilihan C", "Pilihan D"], c: 0 }
+                        ]
+                    };
+                } else if(mType === "drag_drop") {
+                    BANK_SOALAN[t][a] = {
+                        tajuk: `Susunan Frasa T${t} Siri ${a}`, jenis: "drag_drop", ikon: "fa-cubes",
+                        soalan: [
+                            { q: "Susun semula bahagian siri perkataan ini:", parts: ["Bahagian A", "Bahagian B", "Bahagian C"], correctOrder: ["Bahagian A", "Bahagian B", "Bahagian C"] }
+                        ]
+                    };
                 } else {
-                    arrSoalan.push({
-                        q: `Isi ruang kosong spesifik bagi kod unit ${act} siri ke-${qid} dengan perkataan 'pintar'.`,
-                        c: ["pintar"]
-                    });
+                    BANK_SOALAN[t][a] = {
+                        tajuk: `Latihan Bertulis T${t} Siri ${a}`, jenis: "blank", ikon: "fa-pen",
+                        soalan: [
+                            { q: "Lengkapkan ayat pendek ini dengan kata jawapan ______ .", c: ["pintar"] }
+                        ]
+                    };
                 }
             }
-            BANK_SOALAN[2][act] = { tajuk: `Topik Tatabahasa Siri ${act}`, jenis: jenisAct, ikon: "fa-star-of-david", soalan: arrSoalan };
         }
-
-        // Isi Aktiviti 1 hingga 10 Tahun 3
-        for(let act=1; act<=10; act++) {
-            let jenisAct = "mcq";
-            if(act===7) jenisAct = "drag_drop";
-            
-            let arrSoalan = [];
-            for(let qid=1; qid<=20; qid++) {
-                if(jenisAct === "mcq") {
-                    arrSoalan.push({
-                        q: `Cabaran Aras Tinggi Tahun 3 Akt-${act} Soalan-${qid}: Analisis jawapan struktur yang paling gramatis.`,
-                        a: [`Jawapan Betul Lanjutan ${act}_${qid}`, `Salah Pilihan X ${qid}`, `Salah Pilihan Y ${qid}`, `Salah Pilihan Z ${qid}`],
-                        c: 0
-                    });
-                } else {
-                    arrSoalan.push({
-                        q: `Susun mengikut struktur ayat majmuk bertingkat aras tinggi Akt-${act} No-${qid}:`,
-                        parts: [`Subjek_Utama_${qid}`, `Kata_Hubung_${qid}`, `Klausa_Kombinasi_${qid}`],
-                        correctOrder: [`Subjek_Utama_${qid}`, `Kata_Hubung_${qid}`, `Klausa_Kombinasi_${qid}`]
-                    });
-                }
-            }
-            BANK_SOALAN[3][act] = { tajuk: `Topik Pemantapan KSSR ${act}`, jenis: jenisAct, ikon: "fa-award", soalan: arrSoalan };
-        }
-
 
         let tahunSemasa = 1;
         let topikSemasa = 1;
@@ -855,7 +710,7 @@
                             <i class="fas ${dataTopik ? dataTopik.ikon : 'fa-star'}"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-700 text-base md:text-lg">Aktiviti ${i}: ${dataTopik ? dataTopik.tajuk : 'Topik Mini'}</h4>
+                            <h4 class="font-bold text-slate-700 text-base md:text-lg">Aktiviti ${i}: ${dataTopik ? dataTopik.tajuk : 'Topik'}</h4>
                             <p class="text-xs text-gray-400">Format: ${dataTopik ? dataTopik.jenis.toUpperCase().replace('_',' ') : 'Kuiz'}</p>
                         </div>
                     </div>
@@ -881,7 +736,7 @@
             skorAktivitiSemasa = 0;
 
             const dataTopik = BANK_SOALAN[tahunSemasa][idTopik];
-            senaraiSoalanAktif = [...dataTopik.soalan]; // Dipanggil terus tanpa fungsi gelung klon berulang
+            senaraiSoalanAktif = [...dataTopik.soalan];
 
             document.getElementById('game-tag-topik').innerText = `Aktiviti ${idTopik}`;
             document.getElementById('game-tajuk-topik').innerText = dataTopik.tajuk;
@@ -903,7 +758,6 @@
             area.innerHTML = '';
             const dataTopik = BANK_SOALAN[tahunSemasa][topikSemasa];
 
-            // Suntikan visual Emoji jika merupakan elemen grafik objek hiasan darjah
             let komponenEmoji = soalanData.visual ? `<div class="text-7xl my-3 text-center animate-pulse">${soalanData.visual}</div>` : '';
 
             if (dataTopik.jenis === "mcq") {
@@ -977,20 +831,28 @@
                 title.className = "text-3xl font-black text-emerald-600 mb-2";
                 msg.innerText = "Jawapan anda tepat. Anda wira pintar!";
                 btnTry.classList.add('hidden');
+                btnNext.classList.remove('hidden');
                 btnNext.onclick = prosesSeterusnya;
             } else {
                 box.className = "bg-white border-4 border-rose-400 p-8 rounded-2xl text-center shadow-2xl max-w-sm w-full transform scale-100 transition-all";
                 icon.innerHTML = "❌";
                 title.innerText = "Cuba Lagi!";
                 title.className = "text-3xl font-black text-rose-500 mb-2";
-                msg.innerText = "Jangan kecewa, cuba analisa soalan semula.";
+                msg.innerText = "Jawapan kurang tepat. Sila cuba betulkan semula.";
+                
+                // Kunci murid supaya menaip semula input (tidak boleh klik butang Seterusnya)
                 btnTry.classList.remove('hidden');
-                btnTry.onclick = () => layer.classList.add('hidden');
-                btnNext.onclick = prosesSeterusnya;
+                btnNext.classList.add('hidden'); 
+                btnTry.onclick = () => {
+                    layer.classList.add('hidden');
+                    const inp = document.getElementById('blank-input-ans');
+                    if(inp) { inp.value = ''; inp.focus(); }
+                };
             }
         }
 
-        function semakJawapanMC(idxDipilih, idxBetul) {
+        // PEMBETULAN NAMA FUNGSI (MCQ) - Memastikan Aktiviti 3,4,8,9,10 berfungsi
+        function semakJawapanMCQ(idxDipilih, idxBetul) {
             if (idxDipilih === idxBetul) {
                 skorAktivitiSemasa += 10;
                 document.getElementById('game-score').innerText = skorAktivitiSemasa;
