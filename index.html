@@ -210,7 +210,7 @@
 
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
                         <button onclick="janaSijil()" class="bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition btn-bounce flex items-center justify-center">
-                            <i class="fas fa-print mr-2"></i> Cetak / Muat Turun Sijil
+                            <i class="fas fa-print mr-2"></i> Cetak / Muat Tunrun Sijil
                         </button>
                         <button onclick="paparHalaman('utama')" class="bg-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition btn-bounce flex items-center justify-center">
                             <i class="fas fa-home mr-2"></i> Kembali ke Menu Utama
@@ -264,7 +264,7 @@
     </div>
 
     <script>
-        // CONFIG FIREBASE MILIK ANDA
+        // CONFIG FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCnVtlsculpdbdjOb7Cm7H3xdRIkNjTUMs",
             authDomain: "cabaran-cilik-bahasa.firebaseapp.com",
@@ -285,16 +285,12 @@
         // Pantau Status Autentikasi Pengguna
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // Pengguna telah log masuk
                 penggunaSemasa = user;
                 document.getElementById('page-login').classList.add('hidden');
                 document.getElementById('main-app-content').classList.remove('hidden');
                 document.getElementById('user-display-name').innerText = user.displayName || user.email;
-                
-                // Ambil kemajuan murid berdasarkan UID mereka dari database cloud
                 muatKemajuanDariFirebase(user.uid);
             } else {
-                // Pengguna belum log masuk / telah log keluar
                 penggunaSemasa = null;
                 document.getElementById('main-app-content').classList.add('hidden');
                 document.getElementById('page-login').classList.remove('hidden');
@@ -442,7 +438,7 @@
             }
         }
 
-        // DATA SOALAN AUTOMATIK (600 SOALAN)
+        // DATA SOALAN AUTOMATIK
         const BANK_SOALAN = { 1: {}, 2: {}, 3: {} };
         
         // --- TAHUN 1 ---
