@@ -986,31 +986,6 @@
                 <text x="950" y="745" font-family="'Arial', sans-serif" font-size="14" fill="#6b7280" text-anchor="middle">${tarikh}</text>
             </svg>
             `;
-
-            // Proses pemancaran data blob menjadi fail imej fizikal (PNG) terus ke dalam pelayar web tanpa ralat sandaran
-            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
-            const imejPangkin = new Image();
-            imejPangkin.onload = function() {
-                const kanvasSimpanan = document.createElement('canvas');
-                kanvasSimpanan.width = 1200;
-                kanvasSimpanan.height = 800;
-                const ctx = kanvasSimpanan.getContext('2d');
-                ctx.drawImage(imejPangkin, 0, 0);
-                
-                const urlPngMuktamad = kanvasSimpanan.toDataURL('image/png');
-                
-                const muatTurunPautan = document.createElement('a');
-                muatTurunPautan.href = urlPngMuktamad;
-                muatTurunPautan.download = `Sijil_Cilik_Bahasa_${nama.replace(/\s+/g, '_')}.png`;
-                document.body.appendChild(muatTurunPautan);
-                muatTurunPautan.click();
-                
-                document.body.removeChild(muatTurunPautan);
-                URL.revokeObjectURL(url);
-            };
-            imejPangkin.src = url;
         }
     </script>
 </body>
